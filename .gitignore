@@ -20,7 +20,6 @@ db.*
 media/
 # config  files
 auth.py
-config.py
 *.env
 p.py
 practic/
