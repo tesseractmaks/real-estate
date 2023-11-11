@@ -1,32 +1,33 @@
-from sqlalchemy.orm import Mapped
-from pydantic import EmailStr
+from sqlalchemy.ext.associationproxy import association_proxy
+from sqlalchemy.orm import Mapped, relationship, backref
 
 from app_real_estate.db import Base
-from .profile import ProfileModel
+
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from app_real_estate.models import Profile, AssociateRatings, AssociateFeedback
 
 
-class UserModel(Base):
-    email: Mapped[EmailStr]
+class User(Base):
+    __tablename__ = "users"
+    email: Mapped[str]
     password: Mapped[str]
     is_active: Mapped[bool]
 
-    def __str__(self):
-        return f"{self.email}"
+    profile = relationship("Profile", uselist=False, back_populates="users")
+
+    properties = relationship("Property", uselist=False, back_populates="users")
+
+    ratings: Mapped[list["AssociateRatings"]] = relationship(back_populates="user")
+
+    # feedback_relation = relationship("AssociateFeedback", backref="users")
+    # feedback = association_proxy("feedback_relation", "profiles")
+    profiles: Mapped[list["AssociateFeedback"]] = relationship(back_populates="user")
 
 
-class UserRatingModel(Base):
-    agent: Mapped[int]
-    likes: Mapped[int]
+    # def __str__(self):
+    #     return f"{self.email}"
 
-
-class UserFeedbackModel(Base):
-    author: Mapped[int]
-    agent: Mapped[int]
-    feedback: Mapped[str]
-
-
-class UserAgentModel(Base):
-    agent: Mapped[int]
-    post: Mapped[str]
 
 

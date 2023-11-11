@@ -8,7 +8,7 @@ from pydantic import EmailStr
 from app_real_estate.db import Base
 
 
-class MainModel(Base):
+class Main(Base):
     email: Mapped[EmailStr]
     phone: Mapped[int]
     about_content: Mapped[str]
@@ -16,7 +16,7 @@ class MainModel(Base):
     staff_content: Mapped[str]
 
 
-class StaffModel(Base):
+class Staff(Base):
     first_name: Mapped[str]
     last_name: Mapped[str]
     post: Mapped[str]

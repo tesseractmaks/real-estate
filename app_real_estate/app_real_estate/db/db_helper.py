@@ -25,7 +25,7 @@ class DatabaseHelper:
         )
         return session
 
-    async def get_scoped_dependensy(self) -> AsyncSession:
+    async def scoped_session_dependency(self) -> AsyncSession:
         session = self.get_scoped_session()
         yield session
         await session.remove()

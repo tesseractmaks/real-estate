@@ -1,0 +1,17 @@
+from fastapi import APIRouter
+from .api_v1.endpoints.user import router as user_router
+from .api_v1.endpoints.profile import router as profile_router
+from .api_v1.endpoints.rating_user import router as rating_router
+from .api_v1.endpoints.feedback_user import router as feedback_router
+from .api_v1.endpoints.category import router as category_router
+from .api_v1.endpoints.property import router as property_router
+from .api_v1.endpoints.posts_user import router as post_router
+
+router = APIRouter()
+router.include_router(router=user_router, prefix="/users")
+router.include_router(router=profile_router, prefix="/profiles")
+router.include_router(router=rating_router, prefix="/ratings")
+router.include_router(router=feedback_router, prefix="/feedbacks")
+router.include_router(router=category_router, prefix="/categories")
+router.include_router(router=property_router, prefix="/properties")
+router.include_router(router=post_router, prefix="/posts")

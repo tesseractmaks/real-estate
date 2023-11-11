@@ -8,11 +8,11 @@ from pydantic import EmailStr
 from app_real_estate.db import Base
 
 
-class AuthorModel(Base):
+class Author(Base):
     author: Mapped[int] = ""
 
 
-class PostModel(Base):
+class Post(Base):
     author: Mapped[int] = ""
     content: Mapped[str]
     photo: Mapped[str]
@@ -23,21 +23,19 @@ class PostModel(Base):
     views: Mapped[int]
 
 
-class LikeModel(Base):
+class Like(Base):
     likes: Mapped[int] = ""
     post: Mapped[int]
 
 
-class CommentModel(Base):
+class Comment(Base):
     author: Mapped[int] = ""
     post: Mapped[int] = ""
     content: Mapped[str]
 
 
-class TagModel(Base):
+class Tag(Base):
     title: Mapped[str]
-
-
 
 
 

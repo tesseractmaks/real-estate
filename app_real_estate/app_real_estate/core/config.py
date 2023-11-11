@@ -7,7 +7,7 @@ class Setting(BaseSettings):
     db_username: str = "postgres"
     db_password: str = "qwerty"
     db_name: str = "estate_db"
-    db_echo: str = True
+    db_echo: bool = True
 
 
 settings = Setting()
