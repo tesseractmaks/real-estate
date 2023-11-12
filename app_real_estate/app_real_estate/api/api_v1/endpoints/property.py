@@ -1,11 +1,15 @@
-from fastapi import APIRouter, status, Depends
+import os
+import shutil
+
+from fastapi import APIRouter, status, Depends, UploadFile, File
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app_real_estate.crud import (
     read_properties_db,
     create_property_db,
     update_property_db,
-    delete_property_db
+    delete_property_db,
+    update_file_property,
 )
 from app_real_estate.db import db_helper
 from app_real_estate.schemas import (
@@ -51,18 +55,46 @@ async def create_property(
     return await create_property_db(session=session, property_in=property_in)
 
 
+@router.patch(
+    "/upload/{property_id}",
+    status_code=status.HTTP_201_CREATED
+)
+async def upload_file_profile(
+        _property: PropertySchema = Depends(property_by_id),
+        session: AsyncSession = Depends(db_helper.scoped_session_dependency),
+        photo: UploadFile = File(...),
+):
+    # cwd = os.getcwd()
+    path_image_dir = f"img/properties/{_property.id}/"
+    full_image_path = os.path.join(path_image_dir, photo.filename)
+
+    if not os.path.exists(path_image_dir):
+        os.makedirs(path_image_dir, exist_ok=True)
+
+    file_name = full_image_path.replace(photo.filename, f"{photo.filename}.png")
+
+    with open(file_name, "wb") as img:
+        shutil.copyfileobj(photo.file, img)
+
+    return await update_file_property(
+        session=session,
+        _property=_property,
+        url_file=file_name,
+    )
+
+
 @router.put(
     "/{property_id}",
     response_model=PropertySchema
 )
 async def update_property(
         property_update: PropertyUpdateSchema,
-        property: PropertySchema = Depends(property_by_id),
+        _property: PropertySchema = Depends(property_by_id),
         session: AsyncSession = Depends(db_helper.scoped_session_dependency)
 ):
     return await update_property_db(
         session=session,
-        property=property,
+        _property=_property,
         property_update=property_update
     )
 
@@ -78,7 +110,7 @@ async def update_property_partial(
 ):
     return await update_property_db(
         session=session,
-        property=_property,
+        _property=_property,
         property_update=property_update,
         partial=True
     )

@@ -29,6 +29,7 @@ __all__ = (
     "delete_property_db",
     "read_properties_db",
     "update_property_db",
+    "update_file_property",
     "read_post_by_id_db",
     "create_post_db",
     "delete_post_db",
@@ -80,7 +81,8 @@ from .property import (
     read_properties_db,
     create_property_db,
     update_property_db,
-    delete_property_db
+    delete_property_db,
+    update_file_property,
 )
 
 from .posts_user import (

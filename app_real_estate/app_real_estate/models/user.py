@@ -21,8 +21,6 @@ class User(Base):
 
     ratings: Mapped[list["AssociateRatings"]] = relationship(back_populates="user")
 
-    # feedback_relation = relationship("AssociateFeedback", backref="users")
-    # feedback = association_proxy("feedback_relation", "profiles")
     profiles: Mapped[list["AssociateFeedback"]] = relationship(back_populates="user")
 
 
