@@ -35,6 +35,7 @@ __all__ = (
     "delete_post_db",
     "read_posts_db",
     "update_post_db",
+    "read_user_by_username_db",
 )
 
 from .user import (
@@ -42,7 +43,8 @@ from .user import (
     read_users_db,
     create_user_db,
     update_user_db,
-    delete_user_db
+    delete_user_db,
+    read_user_by_username_db
 )
 from .profile import (
     read_profile_by_id_db,

@@ -106,3 +106,5 @@ async def property_by_id(
     raise HTTPException(
         status_code=status.HTTP_404_NOT_FOUND, detail="not found..."
     )
+
+

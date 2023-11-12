@@ -14,5 +14,5 @@ from .depends_endps import (user_by_id,
                             feedback_by_id,
                             category_by_id,
                             property_by_id,
-                            post_by_id,
+                            post_by_id
                             )

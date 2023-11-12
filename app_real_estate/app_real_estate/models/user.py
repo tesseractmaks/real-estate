@@ -11,6 +11,7 @@ if TYPE_CHECKING:
 
 class User(Base):
     __tablename__ = "users"
+
     email: Mapped[str]
     password: Mapped[str]
     is_active: Mapped[bool]
@@ -24,8 +25,6 @@ class User(Base):
     profiles: Mapped[list["AssociateFeedback"]] = relationship(back_populates="user")
 
 
+
     # def __str__(self):
     #     return f"{self.email}"
-
-
-

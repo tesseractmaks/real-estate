@@ -4,8 +4,10 @@ from hypercorn.config import Config
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
+# from starlette.middleware.cors import CORSMiddleware
 
 from api import router as router_v1
+from api import router_token
 from app_real_estate.core import settings
 from app_real_estate.db import connect_create_if_exist
 from app_real_estate.db import init_db
@@ -24,6 +26,22 @@ app.include_router(
     router=router_v1,
     prefix=settings.api_v1_prefix
 )
+app.include_router(
+    router=router_token
+)
+
+# origins = [
+#     "http://localhost",
+#     "http://localhost:8080",
+# ]
+#
+# app.add_middleware(
+#     CORSMiddleware,
+#     allow_origins=origins,
+#     allow_credentials=True,
+#     allow_methods=["*"],
+#     allow_headers=["*"],
+# )
 
 
 config = Config()
