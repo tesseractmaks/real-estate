@@ -31,6 +31,7 @@ class Like(Base):
     id: Mapped[int] = "unique(user_id, post_id)"
     user_id: Mapped[int] = "FK"
     post_id: Mapped[int] = "FK"
+    comment_id: Mapped[int] = "FK"
 
 
 class Comment(Base):

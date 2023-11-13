@@ -1,9 +1,13 @@
+from pymongo.mongo_client import MongoClient
+from pymongo.server_api import ServerApi
+from datetime import datetime
 import asyncpg
 from sqlalchemy import insert, inspect, select, Result
 
 # from app_real_estate.models import User, Profile, UserFeedback, Category, Property, AssotiateRatings
 from .base_class import Base
 from .db_helper import db_helper
+from app_real_estate.core import blog_validator, author_validator
 
 
 async def connect_create_if_exist(user, password, db_name):
@@ -19,7 +23,6 @@ async def connect_create_if_exist(user, password, db_name):
 
 
 async def init_db():
-
     async with db_helper.engine.begin() as conn:
         tables = await conn.run_sync(
             lambda sys_conn: inspect(sys_conn).get_table_names()
@@ -27,7 +30,90 @@ async def init_db():
         if not tables:
             await conn.run_sync(Base.metadata.create_all)
     # await conn.commit()
-    #     add_test_data(conn)
+    # add_test_data(conn)
+
+
+# MongoDB
+
+# uri = "mongodb+srv://admin:qwerty1@cluster0.b7f96.mongodb.net/?retryWrites=true&w=majority"
+uri = "mongodb://localhost:27017/"
+client = MongoClient(uri)
+try:
+    client.admin.command('ping')
+    print("Pinged your deployment. You successfully connected to MongoDB!")
+except Exception as exc:
+    print(exc)
+
+# Creating a new database
+blog_db = client.blog
+
+
+def create_post_collection():
+    try:
+        blog_db.create_collection("blog")
+    except Exception as exc:
+        print(exc)
+    blog_db.command("collMod", "blog", validator=blog_validator)
+
+
+def create_author_collection():
+    try:
+        blog_db.create_collection("author")
+    except Exception as exc:
+        print(exc)
+    blog_db.command("collMod", "author", validator=author_validator)
+
+
+def insert_test_bulk_data():
+    authors = [
+        {
+            "first_name": "1gku",
+            "last_name": "1gku"
+        },
+        {
+            "first_name": "2gku",
+            "last_name": "1gku"
+        },
+    ]
+
+    author_collection = blog_db.author
+    author_ids = author_collection.insert_many(authors).inserted_ids
+    print(f"Author IDs: {author_ids}")
+
+    posts = [
+        {
+            "author": author_ids[0],
+            "content": "mustbea date andisrequired",
+            "photo": "mustbea date andisrequired",
+            "published": datetime.now(),
+            "category": ["mustbea", "date", "andisrequired"],
+            "comments": [
+                {"author": "6551d30fa7aa0c8d6fd99fbf", "content": "mustbea date,andisrequired"},
+                {"author": "7551d30fa7aa0c8d6fd99fb", "content": "stbea at,andisr"},
+            ],
+            "tags": ["mustbea", "date", "andisrequired"],
+            "views": 6,
+            "likes": 2,
+        },
+        {
+            "author": author_ids[1],
+            "content": "2mustbea date andisrequired",
+            "photo": "2mustbea date andisrequired",
+            "published": datetime.now(),
+            "category": ["mustbea", "date", "andisrequired"],
+            "comments": [
+                {"author": "26551d30fa7aa0c8d6fd99fbf", "content": "mustbea date,andisrequired"},
+                {"author": "27551d30fa7aa0c8d6fd99fb", "content": "stbea at,andisr"},
+            ],
+            "tags": ["2mustbea", "date", "andisrequired"],
+            "views": 7,
+            "likes": 3,
+        }
+    ]
+
+    posts_collection = blog_db.book
+    posts_collection.insert_many(posts_collection)
+
 
 
     # await add_test_data1()
@@ -40,7 +126,6 @@ async def init_db():
     # await add_test_data5()
     # # await add_test_data6()
     # await add_test_data11()
-
 
 # def add_test_data(conn):
 #     # async with db_helper.engine.begin() as conn:
@@ -140,12 +225,10 @@ async def init_db():
 #         stmt = select(User).order_by(User.id)
 #         result: Result = await conn.execute(stmt)
 #         print(result.fetchall())
-        # products = result.scalars().all()
-        # print(list(products))
-    # return list(products)
+# products = result.scalars().all()
+# print(list(products))
+# return list(products)
 
 
-
-    # async def read_users_by_id_db(session: AsyncSession, user_id: int):
-    #     return await session.get(User, user_id)
-
+# async def read_users_by_id_db(session: AsyncSession, user_id: int):
+#     return await session.get(User, user_id)
