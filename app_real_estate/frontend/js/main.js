@@ -198,6 +198,43 @@ $(window).on('load', function() {
         preloader: false,
     });
 
+let ItemForm = document.getElementsByClassName("filter-form")[0]
+
+// console.log(ItemForm[0].elements)
+ItemForm.addEventListener('submit', async function(e) {
+	e.preventDefault();
+	// console.log(ItemForm.base.value)
+
+
+	const response =  await fetch('http://127.0.0.1:8000/api/v1/users/', {
+		method: 'POST',
+		headers: { 'Content-Type': 'application/json' },
+		body: JSON.stringify({
+		email: ItemForm.base.value,
+		password: ItemForm.base.value,
+		is_active: true,
+		})
+	});
+	const data = await response.json();
+	console.log(data)
+	});
+
+let Items = document.querySelector(".hero-section a")
+console.log(Items)
+
+Items.addEventListener('click', async function(e) {
+let  response = await fetch('http://127.0.0.1:8000/api/v1/users/');
+let storage = await response.json();
+
+storage.forEach(function(elem) {
+	console.log(elem)
+
+})
+})
+
+
 
 })(jQuery);
+
+
 

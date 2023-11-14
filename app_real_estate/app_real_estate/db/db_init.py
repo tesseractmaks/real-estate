@@ -1,3 +1,4 @@
+from bson import ObjectId
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 from datetime import datetime
@@ -37,6 +38,7 @@ async def init_db():
 
 # uri = "mongodb+srv://admin:qwerty1@cluster0.b7f96.mongodb.net/?retryWrites=true&w=majority"
 uri = "mongodb://localhost:27017/"
+
 client = MongoClient(uri)
 try:
     client.admin.command('ping')
@@ -48,15 +50,15 @@ except Exception as exc:
 blog_db = client.blog
 
 
-def create_post_collection():
+def create_post_collection(blog_db=blog_db):
     try:
-        blog_db.create_collection("blog")
+        blog_db.create_collection("post")
     except Exception as exc:
         print(exc)
-    blog_db.command("collMod", "blog", validator=blog_validator)
+    blog_db.command("collMod", "post", validator=blog_validator)
 
 
-def create_author_collection():
+def create_author_collection(blog_db=blog_db):
     try:
         blog_db.create_collection("author")
     except Exception as exc:
@@ -64,55 +66,88 @@ def create_author_collection():
     blog_db.command("collMod", "author", validator=author_validator)
 
 
-def insert_test_bulk_data():
-    authors = [
-        {
-            "first_name": "1gku",
-            "last_name": "1gku"
-        },
-        {
-            "first_name": "2gku",
-            "last_name": "1gku"
-        },
-    ]
+def create_main_collection():
+    try:
+        blog_db.create_collection("main")
+    except Exception as exc:
+        print(exc)
 
-    author_collection = blog_db.author
-    author_ids = author_collection.insert_many(authors).inserted_ids
-    print(f"Author IDs: {author_ids}")
+
+def insert_test_bulk_data(blog_db=blog_db):
+    author = {
+        "first_name": "1gku",
+        "last_name": "1gku"
+    }
+
+    # author_ids = blog_db.author.insert_many(author).inserted_ids
+    author_id = blog_db.author.insert_one(author).inserted_id
+    print(f"Author IDs: {author_id}")
 
     posts = [
         {
-            "author": author_ids[0],
+            "author": author_id,
             "content": "mustbea date andisrequired",
             "photo": "mustbea date andisrequired",
             "published": datetime.now(),
             "category": ["mustbea", "date", "andisrequired"],
             "comments": [
-                {"author": "6551d30fa7aa0c8d6fd99fbf", "content": "mustbea date,andisrequired"},
-                {"author": "7551d30fa7aa0c8d6fd99fb", "content": "stbea at,andisr"},
+                {
+                    "_id": ObjectId(),
+                    "author": blog_db.author.find_one({"_id": author_id}, {"first_name": 1}),
+                    "published": datetime.now(),
+                    "content": "mustbea date,andisrequired",
+                    "likes": 1,
+                    "replay": [
+                        {
+                            "_id": ObjectId(),
+                            "author": blog_db.author.find_one({"_id": author_id}, {"first_name": 1}),
+                            "comment_id": ObjectId(),
+                            "published": datetime.now(),
+                            "content": "mustbea date,andisrequired",
+                            "likes": 3,
+                        },
+                        {
+                            "_id": ObjectId(),
+                            "author": blog_db.author.find_one({"_id": author_id}, {"first_name": 1}),
+                            "replay_id": ObjectId(),
+                            "published": datetime.now(),
+                            "content": "mustbea date,andisrequired",
+                            "likes": 2,
+                        }
+                    ]
+                },
+
+                # {"author": author_ids[1], "content": "mustbea date,andisrequired"},
+                # {"author": author_ids[0], "content": "stbea at,andisr"},
             ],
             "tags": ["mustbea", "date", "andisrequired"],
             "views": 6,
             "likes": 2,
         },
-        {
-            "author": author_ids[1],
-            "content": "2mustbea date andisrequired",
-            "photo": "2mustbea date andisrequired",
-            "published": datetime.now(),
-            "category": ["mustbea", "date", "andisrequired"],
-            "comments": [
-                {"author": "26551d30fa7aa0c8d6fd99fbf", "content": "mustbea date,andisrequired"},
-                {"author": "27551d30fa7aa0c8d6fd99fb", "content": "stbea at,andisr"},
-            ],
-            "tags": ["2mustbea", "date", "andisrequired"],
-            "views": 7,
-            "likes": 3,
-        }
+        # {
+        #     "author": author_ids[1],
+        #     "content": "2mustbea date andisrequired",
+        #     "photo": "2mustbea date andisrequired",
+        #     "published": datetime.now(),
+        #     "category": ["mustbea", "date", "andisrequired"],
+        #     "comments": [
+        #         {"author": author_ids[0], "content": "mustbea date,andisrequired"},
+        #         {"author": author_ids[1], "content": "stbea at,andisr"},
+        #     ],
+        #     "tags": ["2mustbea", "date", "andisrequired"],
+        #     "views": 7,
+        #     "likes": 3,
+        # }
     ]
 
-    posts_collection = blog_db.book
-    posts_collection.insert_many(posts_collection)
+    posts_collection = blog_db.post
+    posts_collection.insert_many(posts)
+
+
+create_author_collection()
+create_post_collection()
+create_main_collection()
+insert_test_bulk_data()
 
 
 
