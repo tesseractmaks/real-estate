@@ -1,3 +1,6 @@
+import json
+import os
+
 from bson import ObjectId
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
@@ -81,20 +84,20 @@ def insert_test_bulk_data(blog_db=blog_db):
 
     # author_ids = blog_db.author.insert_many(author).inserted_ids
     author_id = blog_db.author.insert_one(author).inserted_id
-    print(f"Author IDs: {author_id}")
-
+    # print(f"Author IDs: {author_id}")
+    #
     posts = [
         {
             "author": author_id,
             "content": "mustbea date andisrequired",
             "photo": "mustbea date andisrequired",
-            "published": datetime.now(),
+            "published": str(datetime.now()),
             "category": ["mustbea", "date", "andisrequired"],
             "comments": [
                 {
                     "_id": ObjectId(),
                     "author": blog_db.author.find_one({"_id": author_id}, {"first_name": 1}),
-                    "published": datetime.now(),
+                    "published": str(datetime.now()),
                     "content": "mustbea date,andisrequired",
                     "likes": 1,
                     "replay": [
@@ -102,7 +105,7 @@ def insert_test_bulk_data(blog_db=blog_db):
                             "_id": ObjectId(),
                             "author": blog_db.author.find_one({"_id": author_id}, {"first_name": 1}),
                             "comment_id": ObjectId(),
-                            "published": datetime.now(),
+                            "published": str(datetime.now()),
                             "content": "mustbea date,andisrequired",
                             "likes": 3,
                         },
@@ -110,7 +113,7 @@ def insert_test_bulk_data(blog_db=blog_db):
                             "_id": ObjectId(),
                             "author": blog_db.author.find_one({"_id": author_id}, {"first_name": 1}),
                             "replay_id": ObjectId(),
-                            "published": datetime.now(),
+                            "published": str(datetime.now()),
                             "content": "mustbea date,andisrequired",
                             "likes": 2,
                         }
@@ -124,7 +127,7 @@ def insert_test_bulk_data(blog_db=blog_db):
             "views": 6,
             "likes": 2,
         },
-        # {
+    #     # {
         #     "author": author_ids[1],
         #     "content": "2mustbea date andisrequired",
         #     "photo": "2mustbea date andisrequired",
@@ -139,15 +142,24 @@ def insert_test_bulk_data(blog_db=blog_db):
         #     "likes": 3,
         # }
     ]
-
+    #
     posts_collection = blog_db.post
     posts_collection.insert_many(posts)
+
+
+def insert_test_data(filename):
+    with open(filename) as file:
+        data = json.load(file)
+    main_collection = blog_db.main
+    main_collection.insert_one(data)
 
 
 create_author_collection()
 create_post_collection()
 create_main_collection()
 insert_test_bulk_data()
+filename = os.path.abspath("./db/main_site.json")
+insert_test_data(filename)
 
 
 

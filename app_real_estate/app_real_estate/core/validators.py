@@ -19,8 +19,8 @@ blog_validator = {
             },
 
             "published": {
-                "bsonType": "date",
-                "description": "must be a date and is required"
+                "bsonType": "string",
+                "description": "must be a string and is required"
             },
 
             "category": {
@@ -43,8 +43,8 @@ blog_validator = {
                             "description": "must be an objectId",
                         },
                         "published": {
-                            "bsonType": "date",
-                            "description": "must be a date and is required"
+                            "bsonType": "string",
+                            "description": "must be a string and is required"
                         },
 
                         "content": {

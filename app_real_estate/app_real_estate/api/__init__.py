@@ -7,6 +7,7 @@ from .api_v1.endpoints.category import router as category_router
 from .api_v1.endpoints.property import router as property_router
 from .api_v1.endpoints.posts_user import router as post_router
 from .api_v1.endpoints.token import router as token_router
+from .api_v1.endpoints.blog import router as blog_router
 
 router = APIRouter()
 router_token = APIRouter()
@@ -17,5 +18,6 @@ router.include_router(router=feedback_router, prefix="/feedbacks")
 router.include_router(router=category_router, prefix="/categories")
 router.include_router(router=property_router, prefix="/properties")
 router.include_router(router=post_router, prefix="/posts")
+router.include_router(router=blog_router, prefix="/blog")
 router_token.include_router(router=token_router)
 # router_token.include_router(router=token_router, prefix="/token")

@@ -11,15 +11,12 @@ from api import router_token
 from app_real_estate.core import settings
 from app_real_estate.db import connect_create_if_exist
 from app_real_estate.db import init_db
-from app_real_estate.models.main_content import insert_test_data
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     await connect_create_if_exist(settings.db_username, settings.db_password, settings.db_name)
     await init_db()
-    filename = "/home/tesseract/Documents/PycharmProjects/python_Projects/portfolio/real_estate_project/real-estate/app_real_estate/app_real_estate/models/main_site.json"
-    insert_test_data(filename)
     yield
 
 
