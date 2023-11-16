@@ -6,11 +6,10 @@ from app_real_estate.crud import (
     read_post_by_id_db,
     create_post_db,
     update_post_db,
-    unset_element_of_array_post_db,
-    unset_field_post_db,
-    delete_post_db
+    delete_post_db, create_comment_db, update_comment_db, delete_comment_db
 )
-# from app_real_estate.schemas import PostBlogSchema
+from app_real_estate.schemas import PostBlogSchema, PostBlogCreateSchema, PostBlogUpdateSchema, CommentSchema, \
+    CommentUpdateSchema, PostBlogCommentSchema
 
 from app_real_estate.auth import get_current_active_user
 
@@ -19,12 +18,11 @@ router = APIRouter(tags=["Blog"])
 
 @router.get(
     "/",
-    # response_model=list[PostBlogSchema]
+    response_model=list[PostBlogCommentSchema]
 )
 async def read_posts(
         # current_user=Depends(get_current_active_user),
 ):
-
     # print(x)
     # print()
     return await read_posts_db()
@@ -32,9 +30,10 @@ async def read_posts(
 
 @router.get(
     "/{post_id}/",
+    response_model=PostBlogCommentSchema
 )
 async def read_post_by_id(
-        post_id: Any,
+        post_id: str,
         # current_user=Depends(get_current_active_user),
 ):
     return await read_post_by_id_db(post_id=post_id)
@@ -45,7 +44,7 @@ async def read_post_by_id(
     status_code=status.HTTP_201_CREATED
 )
 async def create_post(
-        post_in: Any,
+        post_in: PostBlogCreateSchema,
         # current_user=Depends(get_current_active_user),
 ):
     return await create_post_db(post_in=post_in)
@@ -55,8 +54,8 @@ async def create_post(
     "/{post_id}",
 )
 async def update_post(
-        post_update: Any,
-        post_id: Any,
+        post_update: PostBlogUpdateSchema,
+        post_id: str,
         # current_user=Depends(get_current_active_user),
 ):
     return await update_post_db(
@@ -66,40 +65,65 @@ async def update_post(
 
 
 @router.delete(
-    "/field/{post_id}",
-)
-async def update_unset_field_post(
-        post_update: Any,
-        post_id: Any,
-        # current_user=Depends(get_current_active_user),
-):
-    return await unset_field_post_db(
-        post_update=post_update,
-        post_id=post_id
-    )
-
-
-@router.delete(
-    "/element/{post_id}",
-)
-async def update_element_of_array_post(
-        post_update: Any,
-        post_id: Any,
-        # current_user=Depends(get_current_active_user),
-):
-    return await unset_element_of_array_post_db(
-        post_update=post_update,
-        post_id=post_id
-    )
-
-
-@router.delete(
     "/{post_id}",
 )
 async def delete_post(
-        post_id: Any,
+        post_id: str,
         # current_user=Depends(get_current_active_user),
 ):
     return await delete_post_db(
+        post_id=post_id
+    )
+
+
+# comments
+@router.post(
+    "/comment/{post_id}",
+)
+async def create_comment(
+        comment_in: CommentSchema,
+        post_id: str,
+        # current_user=Depends(get_current_active_user),
+):
+    return await create_comment_db(post_id=post_id, comment_in=comment_in)
+
+
+@router.post(
+    "/comment/replay/{post_id}/{comment_id}",
+)
+async def create_comment(
+        comment_in: CommentSchema,
+        post_id: str,
+        # current_user=Depends(get_current_active_user),
+):
+    return await create_comment_db(post_id=post_id, comment_in=comment_in)
+
+
+@router.patch(
+    "/comment/{post_id}/{comment_id}",
+)
+async def update_comment(
+        comment_update: CommentUpdateSchema,
+        post_id: str,
+        comment_id: str,
+        # current_user=Depends(get_current_active_user),
+):
+    return await update_comment_db(
+        comment_update=comment_update,
+        post_id=post_id,
+        comment_id=comment_id
+    )
+
+
+@router.delete(
+    "/comment/{post_id}/{comment_id}",
+)
+async def delete_comment(
+        post_id: str,
+        comment_id: str,
+        # current_user=Depends(get_current_active_user),
+):
+    return await delete_comment_db(
+        comment_id=comment_id,
         post_id=post_id
     )

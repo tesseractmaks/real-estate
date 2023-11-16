@@ -39,10 +39,11 @@ __all__ = (
     "read_posts_db",
     "read_post_by_id_db",
     "update_post_db",
-    "unset_element_of_array_post_db",
-    "unset_field_post_db",
     "create_post_db",
     "delete_post_db",
+    "create_comment_db",
+    "update_comment_db",
+    "delete_comment_db"
 )
 
 from .user import (
@@ -107,7 +108,8 @@ from .blog import (
     read_post_by_id_db,
     create_post_db,
     update_post_db,
-    unset_element_of_array_post_db,
-    unset_field_post_db,
-    delete_post_db
+    delete_post_db,
+    create_comment_db,
+    update_comment_db,
+    delete_comment_db
 )

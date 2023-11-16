@@ -24,10 +24,17 @@ __all__ = (
     "Token",
     "TokenData",
     "UserInDB",
-    # "PostBlogSchema",
+    "PostBlogSchema",
+    "PostBlogCreateSchema",
+    "PostBlogUpdateSchema",
+    "PostBlogCommentSchema",
+    "CommentSchema",
+    "CommentUpdateSchema",
+    "CommentReplaySchema"
 )
 
-# from .blog import PostBlogSchema
+from .blog import PostBlogSchema, PostBlogCreateSchema, PostBlogUpdateSchema, PostBlogCommentSchema
+from .blog import CommentSchema, CommentUpdateSchema, CommentReplaySchema
 from .user import UserInDB, UserSchema, UserUpdateSchema, UserCreateSchema, UserUpdatePartialSchema, UserResponseSchema
 from .token import Token,  TokenData
 from .feedback_user import FeedbackUserSchema

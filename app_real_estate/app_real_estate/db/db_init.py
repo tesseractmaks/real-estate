@@ -58,7 +58,7 @@ def create_post_collection(blog_db=blog_db):
         blog_db.create_collection("post")
     except Exception as exc:
         print(exc)
-    blog_db.command("collMod", "post", validator=blog_validator)
+    # blog_db.command("collMod", "post", validator=blog_validator)
 
 
 def create_author_collection(blog_db=blog_db):
@@ -66,7 +66,7 @@ def create_author_collection(blog_db=blog_db):
         blog_db.create_collection("author")
     except Exception as exc:
         print(exc)
-    blog_db.command("collMod", "author", validator=author_validator)
+    # blog_db.command("collMod", "author", validator=author_validator)
 
 
 def create_main_collection():
@@ -88,41 +88,41 @@ def insert_test_bulk_data(blog_db=blog_db):
     #
     posts = [
         {
-            "author": author_id,
+            "author": blog_db.author.find_one({"_id": author_id}, {"first_name": 1}),
             "content": "mustbea date andisrequired",
             "photo": "mustbea date andisrequired",
             "published": str(datetime.now()),
             "category": ["mustbea", "date", "andisrequired"],
-            "comments": [
-                {
-                    "_id": ObjectId(),
-                    "author": blog_db.author.find_one({"_id": author_id}, {"first_name": 1}),
-                    "published": str(datetime.now()),
-                    "content": "mustbea date,andisrequired",
-                    "likes": 1,
-                    "replay": [
-                        {
-                            "_id": ObjectId(),
-                            "author": blog_db.author.find_one({"_id": author_id}, {"first_name": 1}),
-                            "comment_id": ObjectId(),
-                            "published": str(datetime.now()),
-                            "content": "mustbea date,andisrequired",
-                            "likes": 3,
-                        },
-                        {
-                            "_id": ObjectId(),
-                            "author": blog_db.author.find_one({"_id": author_id}, {"first_name": 1}),
-                            "replay_id": ObjectId(),
-                            "published": str(datetime.now()),
-                            "content": "mustbea date,andisrequired",
-                            "likes": 2,
-                        }
-                    ]
-                },
+            # "comments": [
+            #     {
+            #         "_id": ObjectId(),
+            #         "author": blog_db.author.find_one({"_id": author_id}, {"first_name": 1}),
+            #         "published": str(datetime.now()),
+            #         "content": "mustbea date,andisrequired",
+            #         "likes": 1,
+            #         "replay": [
+            #             {
+            #                 "_id": ObjectId(),
+            #                 "author": blog_db.author.find_one({"_id": author_id}, {"first_name": 1}),
+            #                 "comment_id": ObjectId(),
+            #                 "published": str(datetime.now()),
+            #                 "content": "mustbea date,andisrequired",
+            #                 "likes": 3,
+            #             },
+            #             {
+            #                 "_id": ObjectId(),
+            #                 "author": blog_db.author.find_one({"_id": author_id}, {"first_name": 1}),
+            #                 "replay_id": ObjectId(),
+            #                 "published": str(datetime.now()),
+            #                 "content": "mustbea date,andisrequired",
+            #                 "likes": 2,
+            #             }
+            #         ]
+            #     },
 
                 # {"author": author_ids[1], "content": "mustbea date,andisrequired"},
                 # {"author": author_ids[0], "content": "stbea at,andisr"},
-            ],
+            # ],
             "tags": ["mustbea", "date", "andisrequired"],
             "views": 6,
             "likes": 2,
