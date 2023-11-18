@@ -88,12 +88,12 @@ def insert_test_bulk_data(blog_db=blog_db):
     #
     posts = [
         {
-            "author": blog_db.author.find_one({"_id": author_id}, {"first_name": 1}),
+            "author": blog_db.author.find_one({"_id": author_id}),
             "content": "mustbea date andisrequired",
             "photo": "mustbea date andisrequired",
             "published": str(datetime.now()),
             "category": ["mustbea", "date", "andisrequired"],
-            # "comments": [
+            "comments": [],
             #     {
             #         "_id": ObjectId(),
             #         "author": blog_db.author.find_one({"_id": author_id}, {"first_name": 1}),
