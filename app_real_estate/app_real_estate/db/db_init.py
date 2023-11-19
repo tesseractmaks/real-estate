@@ -50,6 +50,7 @@ except Exception as exc:
     print(exc)
 
 # Creating a new database
+estate_db = client.estate
 blog_db = client.blog
 
 
@@ -69,11 +70,20 @@ def create_author_collection(blog_db=blog_db):
     # blog_db.command("collMod", "author", validator=author_validator)
 
 
+def insert_data(filename):
+    with open(filename) as file:
+        data = json.load(file)
+    main_collection = estate_db.main
+    main_collection.insert_one(data)
+
+
 def create_main_collection():
     try:
-        blog_db.create_collection("main")
+        estate_db.create_collection("main")
     except Exception as exc:
         print(exc)
+    filename = os.path.relpath("db/main_site.json")
+    insert_data(filename)
 
 
 def insert_test_bulk_data(blog_db=blog_db):
