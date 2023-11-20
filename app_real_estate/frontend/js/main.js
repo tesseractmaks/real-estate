@@ -105,6 +105,156 @@ async function heroSection() {
 	container.append(h2, p, link)
 };
 
+
+// Feature section
+
+async function feturesSection() {
+
+	let  response = await fetch('http://127.0.0.1:8000/api/v1/properties/');
+	const propertyData = await response.json();
+
+	let itemElement = document.querySelector(".feature-section")
+	let row = itemElement.querySelector(".row")
+
+	propertyData.forEach(function(element){
+
+		let divCol = document.createElement("div")
+		divCol.classList.add("col-lg-4")
+		divCol.classList.add("col-md-6")
+
+		let divFeature = document.createElement("div")
+		divFeature.classList.add("feature-item")
+
+		let divFeaturePic = document.createElement("div")
+		divFeaturePic.classList.add("feature-pic")
+		divFeaturePic.classList.add("set-bg")
+		divFeaturePic.setAttribute("data-setbg", element["photo"])
+		divFeaturePic.setAttribute("style", `background-image: url(${element["photo"]});`)
+
+		let divSale = document.createElement("div")
+		if (element["status"] == "sale") {
+			divSale.classList.add("sale-notic")
+			divSale.textContent = "FOR RENT"
+		};
+		if (element["status"] == "rent") {
+			divSale.classList.add("rent-notic")
+			divSale.textContent = "FOR SALE"
+		};
+
+		divFeaturePic.append(divSale)
+
+
+		let divFeatureText = document.createElement("div")
+		divFeatureText.classList.add("feature-text")
+
+		let divTextCenter = document.createElement("div")
+		divTextCenter.classList.add("text-center")
+		divTextCenter.classList.add("feature-title")
+		let h5 = document.createElement("h5")
+		h5.textContent = element["street"]
+
+		let p = document.createElement("p")
+		let i = document.createElement("i")
+		i.classList.add("fa")
+		i.classList.add("fa-map-marker")
+		p.textContent = ` ${element["city"]}, ${element["state"]} ${element["postal_code"]}`
+		p.prepend(i)
+		divTextCenter.append(h5, p)
+
+
+		let divRoomW = document.createElement("div")
+		divRoomW.classList.add("room-info-warp")
+
+		let divRoom1 = document.createElement("div")
+		divRoom1.classList.add("room-info")
+
+		let divRfL = document.createElement("div")
+		divRfL.classList.add("rf-left")
+
+		let p1 = document.createElement("p")
+		let i1 = document.createElement("i")
+		i1.classList.add("fa")
+		i1.classList.add("fa-th-large")
+		p1.textContent = `${element["house_area"]} Square foot`
+		p1.prepend(i1)
+
+		let p2 = document.createElement("p")
+		let i2 = document.createElement("i")
+		i2.classList.add("fa")
+		i2.classList.add("fa-bed")
+		p2.textContent = `${element["bedrooms"]} Bedrooms`
+		p2.prepend(i2)
+		divRfL.append(p1, p2)
+
+		let divRfR = document.createElement("div")
+		divRfR.classList.add("rf-right")
+
+		let pR1 = document.createElement("p")
+		let iR1 = document.createElement("i")
+		iR1.classList.add("fa")
+		iR1.classList.add("fa-car")
+		pR1.textContent = `${element["garages"]} Garages`
+		pR1.prepend(iR1)
+
+		let pR2 = document.createElement("p")
+		let iR2 = document.createElement("i")
+		iR2.classList.add("fa")
+		iR2.classList.add("fa-bath")
+		pR2.textContent = `${element["bathrooms"]} Bathrooms`
+		pR2.prepend(iR2)
+		divRfR.append(pR1, pR2)
+
+
+		let divRoom2 = document.createElement("div")
+		divRoom2.classList.add("room-info")
+
+		let divU = document.createElement("div")
+		divU.classList.add("rf-left")
+
+		let pU = document.createElement("p")
+		let iU = document.createElement("i")
+		iU.classList.add("fa")
+		iU.classList.add("fa-user")
+		let a = document.createElement("a")
+		a.setAttribute("href", "#")
+		a.textContent = element["agent_id"]
+		pU.append(a)
+		pU.prepend(iU)
+
+		divU.append(pU)
+
+		let divC = document.createElement("div")
+		divC.classList.add("rf-right")
+
+		let pC = document.createElement("p")
+		let iC = document.createElement("i")
+		iC.classList.add("fa")
+		iC.classList.add("fa-clock-o")
+		pC.textContent = `${element["time_published"]} days ago`
+		pC.prepend(iC)
+		divC.append(pC)
+
+		let button = document.createElement("a")
+		button.setAttribute("href", "#")
+		button.classList.add("room-price")
+		button.textContent = element["price"]
+
+		divRoom2.append(divU, divC)
+		divRoom1.append(divRfL, divRfR)
+		divRoomW.append(divRoom1, divRoom2)
+
+		
+		divFeatureText.append(divTextCenter, divRoomW, button)
+		divFeature.append(divFeaturePic, divFeatureText)
+		divCol.append(divFeature)
+
+
+	row.append(divCol)
+});
+
+};
+
+
 // Services section
 
 async function servicesSection() {
@@ -192,15 +342,229 @@ async function reviewSection() {
 		reviewSlider.append(div3)
 	});
 	return reviewSlider
-
 };
+
+// Clients section 
+
+async function clientsSection() {
+
+	let element = main_site["clients"]
+	let itemElement = document.querySelector(".clients-section")
+	let clientsSlider = itemElement.querySelector(".clients-slider")
+
+	clientsSlider.classList.add("owl-carousel")
+	clientsSlider.classList.add("owl-loaded")
+	clientsSlider.classList.add("owl-drag")
+
+	element.forEach(function(elem, idx) {
+		let link = document.createElement("a")
+		link.setAttribute("href", "https://ya.ru")
+		let img = document.createElement("img")
+		img.setAttribute("src", elem)
+		img.setAttribute("alt", "client")
+		link.append(img)
+		clientsSlider.append(link)
+	});
+	return clientsSlider
+};
+
+// Footer section
+
+
+async function footerSection() {
+
+	let element = main_site["footer"]
+
+	let itemElement = document.querySelector(".footer-section")
+	let rowElement = itemElement.querySelector(".row")
+
+	for(let idx = 0; idx < 4; idx++) {
+		let divCol = document.createElement("div")
+			divCol.classList.add("col-lg-3")
+			divCol.classList.add("col-md-6")
+			divCol.classList.add("footer-widget")
+
+        if (idx == 0){
+
+			let img = document.createElement("img")
+			img.setAttribute("src", element["image"])
+			img.setAttribute("alt", "logo")
+
+			let p = document.createElement("p")
+			p.textContent = element["p"]
+			let divLinks = document.createElement("div")
+			divLinks.classList.add("social")
+
+			element["socialLinks"].forEach(function(elem, idx) {
+
+				let a = document.createElement("a")
+				a.setAttribute("href", elem)
+				let i = document.createElement("i")
+				i.classList.add("fa")
+				if (idx == 0){i.classList.add("fa-facebook")}
+				if (idx == 1){i.classList.add("fa-twitter")}
+				if (idx == 2){i.classList.add("fa-instagram")}
+				if (idx == 3){i.classList.add("fa-pinterest")}
+				if (idx == 4){i.classList.add("fa-linkedin")}
+				a.append(i)
+				divLinks.append(a)
+			});
+	  		divCol.append(img, p, divLinks)
+		};
+		rowElement.append(divCol)
+
+		if (idx == 1){
+
+			let divContact = document.createElement("div")
+			divContact.classList.add("contact-widget")
+
+			let h5 = document.createElement("h5")
+			h5.classList.add("fw-title")
+			h5.textContent = "CONTACT US"
+			divContact.append(h5)
+
+			element["contacts"].forEach(function(elem, idx) {
+				let p = document.createElement("p");
+				let i = document.createElement("i")
+				i.classList.add("fa")
+				if (idx == 0){
+					p.textContent = elem
+					i.classList.add("fa-map-marker")
+				};
+				if (idx == 1){
+					p.textContent = elem
+					i.classList.add("fa-phone")
+				};
+				if (idx == 2){
+					p.textContent = elem
+					i.classList.add("fa-envelope")
+				};
+				if (idx == 3){
+					p.textContent = elem
+					i.classList.add("fa-clock-o")
+				};
+				p.prepend(i)
+				divContact.append(p)
+			});
+			divCol.prepend(divContact)
+		};
+		
+
+		if (idx == 2){
+
+			let divDouble = document.createElement("div")
+			divDouble.classList.add("double-menu-widget")
+
+			let h5 = document.createElement("h5")
+			h5.classList.add("fw-title")
+			h5.textContent = "POPULAR PLACES"
+			divDouble.append(h5)
+
+			let ul = document.createElement("ul")
+
+			element["popularPlacesLinks"][0].forEach(function(elem, idx) {
+				let li = document.createElement("li");
+				let a = document.createElement("a");
+				a.setAttribute("href", "https://ya.ru")
+				a.textContent = elem["title"]
+				li.append(a)
+				
+				ul.append(li)
+			});
+			divDouble.append(ul)
+			let ul2 = document.createElement("ul")
+
+			element["popularPlacesLinks"][1].forEach(function(elem, idx) {
+				let li = document.createElement("li");
+				let a = document.createElement("a");
+				a.setAttribute("href", "https://ya.ru")
+				a.textContent = elem["title"]
+				li.append(a)
+				
+				ul2.append(li)
+			});
+			divDouble.append(ul2)
+			divCol.append(divDouble)
+		};	
+		rowElement.append(divCol)
+	
+	if (idx == 3){
+
+		let divNewslatter = document.createElement("div")
+		divNewslatter.classList.add("newslatter-widget")
+
+		let h5 = document.createElement("h5")
+		h5.classList.add("fw-title")
+		h5.textContent = "NEWSLETTER"
+
+		let p = document.createElement("p")
+		p.textContent = "Subscribe your email to get the latest news and new offer also discount"
+		let form = document.createElement("form")
+		form.classList.add("footer-newslatter-form")
+		let input = document.createElement("input")
+		input.setAttribute("type", "text")
+		input.setAttribute("placeholder", "Email address")
+		let button = document.createElement("button")
+		let i = document.createElement("i")
+			i.classList.add("fa")
+			i.classList.add("fa-send")
+			button.append(i)
+		form.append(input, button)
+		divNewslatter.append(h5, p, form)
+		divCol.append(divNewslatter)
+
+	};
+	rowElement.append(divCol)
+	};
+};
+
+
+async function footerBbottom() {
+
+	let element = main_site["footer"]
+	
+
+	let itemElement = document.querySelector(".footer-section")
+	let containerElement = itemElement.querySelector(".container")
+
+
+		let divBottom = document.createElement("div")
+		divBottom.classList.add("footer-bottom")
+
+		let nav = document.createElement("div")
+		nav.classList.add("footer-nav")
+
+		let divCopyright = document.createElement("div")
+		divCopyright.classList.add("copyright")
+
+		let p = document.createElement("p")
+		p.innerHTML = `Copyright &copy ${new Date().getFullYear()} All rights reserved `
+		divCopyright.append(p)
+		let ul = document.createElement("ul")
+
+		element["footerBottom"].forEach(function(elem, idx) {
+			let li = document.createElement("li");
+			let a = document.createElement("a");
+			a.setAttribute("href", elem["link"])
+			a.textContent = elem["text"]
+			li.append(a)
+			ul.append(li)
+		});
+		nav.append(ul)
+		divBottom.append(nav, divCopyright)
+		containerElement.append(divBottom)
+	};
+
+
 
 headerTopLeft()
 headerTopRight()
 mainMenu()
 heroSection()
 servicesSection()
-
+footerSection()
+footerBbottom()
+feturesSection()
 
 
 // jQuery
@@ -250,10 +614,7 @@ $('.gallery').masonry({
 --------------------*/
 
 
-
 $('.review-slider').append(reviewSection())
-
-
 $('.review-slider').owlCarousel({
 	loop: true,
 	margin: 0,
@@ -264,6 +625,7 @@ $('.review-slider').owlCarousel({
 });
 
 
+$('.clients-slider').append(clientsSection())
 $('.clients-slider').owlCarousel({
 	loop:true,
 	autoplay:true,
@@ -332,7 +694,7 @@ function syncPosition(el) {
 	}
 	if(current > count) {
 		current = 0;
-	}
+	} 
 
 	//end block
 	sync2.find(".owl-item").removeClass("current").eq(current).addClass("current");

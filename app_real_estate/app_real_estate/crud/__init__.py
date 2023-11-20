@@ -1,5 +1,6 @@
 __all__ = (
     "read_user_by_id_db",
+    "read_user_by_username_db",
     "read_users_db",
     "create_user_db",
     "update_user_db",
@@ -30,17 +31,19 @@ __all__ = (
     "read_properties_db",
     "update_property_db",
     "update_file_property",
-    "read_post_by_id_db",
+
     "create_post_db",
     "delete_post_db",
     "read_posts_db",
-    "update_post_db",
-    "read_user_by_username_db",
-    "read_posts_db",
     "read_post_by_id_db",
     "update_post_db",
-    "create_post_db",
-    "delete_post_db",
+
+    "read_posts_blog_db",
+    "read_post_blog_by_id_db",
+    "create_post_blog_db",
+    "update_post_blog_db",
+    "delete_post_blog_db",
+
     "create_comment_db",
     "update_comment_db",
     "delete_comment_db",
@@ -106,11 +109,11 @@ from .posts_user import (
 )
 
 from .blog import (
-    read_posts_db,
-    read_post_by_id_db,
-    create_post_db,
-    update_post_db,
-    delete_post_db,
+    read_posts_blog_db,
+    read_post_blog_by_id_db,
+    create_post_blog_db,
+    update_post_blog_db,
+    delete_post_blog_db,
 )
 
 from .comment import (

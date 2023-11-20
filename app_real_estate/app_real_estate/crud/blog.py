@@ -24,7 +24,7 @@ async def pasre_to_obj(collect):
     return collection
 
 
-async def read_posts_db() -> list:
+async def read_posts_blog_db() -> list:
     posts = blog_db.post.find()
     collect = str(list(posts))
 
@@ -33,13 +33,13 @@ async def read_posts_db() -> list:
     return res_ob
 
 
-async def read_post_by_id_db(post_id: str) -> PostBlogSchema:
+async def read_post_blog_by_id_db(post_id: str) -> PostBlogSchema:
     collect = blog_db.post.find_one({"_id": ObjectId(post_id)})
     post = await pasre_to_obj(collect)
     return post
 
 
-async def create_post_db(post_in: PostBlogCreateSchema) -> PostBlogCreateSchema:
+async def create_post_blog_db(post_in: PostBlogCreateSchema) -> PostBlogCreateSchema:
     post_collection = blog_db.post
 
 
@@ -57,7 +57,7 @@ async def create_post_db(post_in: PostBlogCreateSchema) -> PostBlogCreateSchema:
     return post_response
 
 
-async def update_post_db(
+async def update_post_blog_db(
         post_update: PostBlogUpdateSchema,
         post_id: str
 ) -> PostBlogUpdateSchema:
@@ -68,7 +68,7 @@ async def update_post_db(
     return post_response
 
 
-async def delete_post_db(post_id: str) -> str:
+async def delete_post_blog_db(post_id: str) -> str:
     blog_db.post.find_one_and_delete({"_id": ObjectId(post_id)})
     return "Delete"
 

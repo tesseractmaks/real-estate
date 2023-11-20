@@ -8,7 +8,7 @@ from datetime import datetime
 import asyncpg
 from sqlalchemy import insert, inspect, select, Result
 
-# from app_real_estate.models import User, Profile, UserFeedback, Category, Property, AssotiateRatings
+from app_real_estate.models import User, Profile, Category, Property, Post
 from .base_class import Base
 from .db_helper import db_helper
 from app_real_estate.core import blog_validator, author_validator
@@ -33,8 +33,107 @@ async def init_db():
         )
         if not tables:
             await conn.run_sync(Base.metadata.create_all)
+
+    await add_test_user_data()
+    await add_test_post_data()
+    await add_test_categories_data()
+    await add_test_profile_data()
+    await add_test_property_data()
+
+    # await add_test_user_data(conn)
+    # await add_test_profile_data(conn)
+
+    # await add_test_user_data()
     # await conn.commit()
     # add_test_data(conn)
+
+
+async def add_test_user_data():
+    async with db_helper.engine.begin() as conn:
+        for _ in range(1, 4):
+            values_data = {
+                "email": "one@mail.ru",
+                "password": "qwerty",
+                "is_active": True,
+            }
+
+            await conn.execute(insert(User).values(values_data))
+        await conn.commit()
+
+
+async def add_test_post_data():
+    async with db_helper.engine.begin() as conn:
+        for _ in range(1, 4):
+            values_data = {
+                "title": "string"
+            }
+
+            await conn.execute(insert(Post).values(values_data))
+        await conn.commit()
+
+
+async def add_test_categories_data():
+    async with db_helper.engine.begin() as conn:
+        for _ in range(1, 4):
+            values_data = {
+                "title": "string"
+            }
+
+            await conn.execute(insert(Category).values(values_data))
+        await conn.commit()
+
+
+async def add_test_profile_data():
+    async with db_helper.engine.begin() as conn:
+        for _ in range(1, 4):
+            values_data = {
+                "user_id": 1,
+                "rating_count": 1,
+                "nickname": "string",
+                "deals_count": 0,
+                "phone": "string",
+                "avatar": "string",
+                "first_name": "string",
+                "last_name": "string",
+                "role": "string",
+                "post": 1
+            }
+
+            await conn.execute(insert(Profile).values(values_data))
+        await conn.commit()
+
+
+async def add_test_property_data():
+    async with db_helper.engine.begin() as conn:
+        for _ in range(1, 24):
+            values_data = {
+                "agent_id": 1,
+                "category_id": 2,
+                "street": "string",
+                "city": "string",
+                "state": "string",
+                "country": "string",
+                "postal_code": 0,
+                "price": 0,
+                "photo": "img/feature/4.jpg",
+                "status": "sale",
+                "house_area": 200,
+                "bedrooms": 10,
+                "garages": 3,
+                "bathrooms": 3,
+                "time_published": datetime.now(),
+                "age": 0,
+                "communicate": "string",
+                "description": "string",
+                "first_floor_area": 10,
+                "second_floor_area": 10,
+                "third_floor_area": 10,
+                "video": "string",
+                "map": "string"
+            }
+
+            await conn.execute(insert(Property).values(values_data))
+        await conn.commit()
 
 
 # MongoDB
@@ -130,14 +229,14 @@ def insert_test_bulk_data(blog_db=blog_db):
             #         ]
             #     },
 
-                # {"author": author_ids[1], "content": "mustbea date,andisrequired"},
-                # {"author": author_ids[0], "content": "stbea at,andisr"},
+            # {"author": author_ids[1], "content": "mustbea date,andisrequired"},
+            # {"author": author_ids[0], "content": "stbea at,andisr"},
             # ],
             "tags": ["mustbea", "date", "andisrequired"],
             "views": 6,
             "likes": 2,
         },
-    #     # {
+        #     # {
         #     "author": author_ids[1],
         #     "content": "2mustbea date andisrequired",
         #     "photo": "2mustbea date andisrequired",
@@ -171,31 +270,34 @@ insert_test_bulk_data()
 filename = os.path.abspath("./db/main_site.json")
 insert_test_data(filename)
 
+# async def add_test_property_data2():
+#     async with db_helper.engine.begin() as conn:
+#         for _ in range(20):
+#             property_values_data = {
+#                 "agent_id": 1,
+#                 "nickname": f"{i}one",
+#                 "user_feedbacks_id": i,
+#                 # "receiving_ratings": 1,
+#             }
+#             await conn.execute(insert(Property).values(property_values_data))
+# Profile.feedback.append(1)
+# await conn.commit()
+# await conn.commit()
+# await conn.close()
 
 
-    # await add_test_data1()
-    #
-    # await add_test_data2()
-    #
-    # # await add_test_data3()
-    #
-    # await add_test_data4()
-    # await add_test_data5()
-    # # await add_test_data6()
-    # await add_test_data11()
-
-# def add_test_data(conn):
-#     # async with db_helper.engine.begin() as conn:
-#     for _ in range(1, 4):
-#         user_values_data = {
-#             "email": "one@mail.ru",
-#             "password": "qwerty",
-#             "is_active": True,
-#         }
-#         conn.execute(insert(User).values(user_values_data))
+# await add_test_data1()
 #
-#     conn.commit()
-#         # await conn.close()
+# await add_test_data2()
+#
+# # await add_test_data3()
+#
+# await add_test_data4()
+# await add_test_data5()
+# # await add_test_data6()
+# await add_test_data11()
+
+
 #
 #
 # async def add_test_data1():
