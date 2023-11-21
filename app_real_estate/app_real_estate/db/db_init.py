@@ -1,5 +1,6 @@
 import json
 import os
+import random
 
 from bson import ObjectId
 from pymongo.mongo_client import MongoClient
@@ -105,24 +106,24 @@ async def add_test_profile_data():
 
 async def add_test_property_data():
     async with db_helper.engine.begin() as conn:
-        for _ in range(1, 24):
+        for _ in range(1, 2):
             values_data = {
                 "agent_id": 1,
                 "category_id": 2,
                 "street": "string",
-                "city": "string",
-                "state": "string",
+                "city": random.choice(["Moscow", "Saint Petersburg", "Tula"]),
+                "state": random.choice(["Moscow area", "Leningradskaya", "Tulskaya"]),
                 "country": "string",
                 "postal_code": 0,
-                "price": 0,
+                "price": random.randint(10000, 80000),
                 "photo": "img/feature/4.jpg",
-                "status": "sale",
-                "house_area": 200,
-                "bedrooms": 10,
-                "garages": 3,
+                "status": random.choice(["sale", "rent"]),
+                "house_area": random.randint(50, 800),
+                "bedrooms": random.randint(1, 6),
+                "garages": 2,
                 "bathrooms": 3,
                 "time_published": datetime.now(),
-                "age": 0,
+                "age": random.randint(1, 16),
                 "communicate": "string",
                 "description": "string",
                 "first_floor_area": 10,
@@ -137,6 +138,15 @@ async def add_test_property_data():
 
 
 # MongoDB
+
+# FastAPI + MongoDB pagination
+
+# @app.get("/items/")
+# async def get_items(page: int = 1, limit: int = 10):
+#     client = MongoClient("mongodb://localhost:27017/")
+#     db = client["mydatabase"]
+#     items = db["items"].find().skip((page - 1) * limit).limit(limit)
+#     return list(items)
 
 # uri = "mongodb+srv://admin:qwerty1@cluster0.b7f96.mongodb.net/?retryWrites=true&w=majority"
 uri = "mongodb://localhost:27017/"

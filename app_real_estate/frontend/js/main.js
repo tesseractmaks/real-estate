@@ -108,16 +108,18 @@ async function heroSection() {
 
 // Feature section
 
-async function feturesSection() {
+async function feturesSection(page=1) {
 
-	let  response = await fetch('http://127.0.0.1:8000/api/v1/properties/');
+	let  response = await fetch(`http://127.0.0.1:8000/api/v1/properties/?page=${page}`);
 	const propertyData = await response.json();
+	
+	
 
 	let itemElement = document.querySelector(".feature-section")
 	let row = itemElement.querySelector(".row")
+	row.innerHTML = ""
 
-	propertyData.forEach(function(element){
-
+	propertyData["items"].forEach(function(element){
 		let divCol = document.createElement("div")
 		divCol.classList.add("col-lg-4")
 		divCol.classList.add("col-md-6")
@@ -250,9 +252,91 @@ async function feturesSection() {
 
 
 	row.append(divCol)
-});
-
+	});
+	await pagination(propertyData, page)
 };
+
+// Pagination
+
+async function pagination(propertyData, currentPage) {
+	
+	if (propertyData["pages"] > 0){
+
+		let divPagina = document.querySelector(".site-pagination")
+		divPagina.innerHTML = ""
+
+		let aPreview = document.createElement("a")
+		let iLeft = document.createElement("i")
+
+		aPreview.setAttribute("href", `?page=${propertyData["page"] - 1}`)
+		
+		iLeft.classList.add("fa")
+		iLeft.classList.add("fa-angle-left")
+
+		aPreview.append(iLeft)
+
+		let aNext = document.createElement("a")
+		let iRight = document.createElement("i")
+
+		aNext.setAttribute("href", `?page=${propertyData["page"] + 1}`)
+		
+		iRight.classList.add("fa")
+		iRight.classList.add("fa-angle-right")
+		aNext.append(iRight)
+
+		let liNext = document.createElement("li")
+		liNext.setAttribute("style", "display: inline-block")
+		liNext.append(aNext)
+		let ul = document.createElement("ul")
+		ul.setAttribute("style", "list-style-type: none")
+
+		let liPreview = document.createElement("li")
+		liPreview.setAttribute("style", "display: none")
+		
+		if (propertyData["page"] > 1) {
+			liPreview.style.display = "inline-block"
+			liPreview.append(aPreview)
+			};
+			ul.append(liPreview)
+
+		for (let element = 1; element <= propertyData["pages"]; element++) {
+
+			let a = document.createElement("a")
+			let li = document.createElement("li")
+			a.setAttribute("style", "display='none'")
+			li.setAttribute("style", "display='none'")
+			
+			
+			if (element >= (propertyData["page"] - 2) && element <= (propertyData["page"] + 2)) {
+				a.setAttribute("href", `?page=${element}`)
+				a.textContent = element
+				li.setAttribute("style", "display: inline-block")
+				li.append(a)
+				ul.append(li)
+			};
+			if (element == propertyData["page"]) {
+				a.removeAttribute("href")
+				a.style.color = "#d4d2d2"
+			};
+		};
+		if (currentPage == propertyData["pages"]) {
+			liNext.style.display = "none"
+		};
+		ul.append(liNext)
+		divPagina.append(ul)
+	};
+};
+
+
+document.querySelector('.site-pagination').addEventListener('click', function (e) {
+	if (e.target.tagName == "A") {
+	  e.preventDefault();
+	  let page = e.target.href.at(-1);
+	  window.scrollTo({ top: 1900, behavior: 'smooth' })
+	  feturesSection(page=page)
+	}
+  });
+
 
 
 // Services section
@@ -565,6 +649,8 @@ servicesSection()
 footerSection()
 footerBbottom()
 feturesSection()
+
+
 
 
 // jQuery

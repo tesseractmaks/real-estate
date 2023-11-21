@@ -1,8 +1,13 @@
 import os
 import shutil
 
-from fastapi import APIRouter, status, Depends, UploadFile, File
+from fastapi import APIRouter, status, Depends, UploadFile, File, Query
+from fastapi_pagination import add_pagination  # , paginate
+from fastapi_pagination.ext.sqlalchemy import paginate
+from app_real_estate.core import Page
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import select
+from app_real_estate.models import Property
 
 from app_real_estate.crud import (
     read_properties_db,
@@ -25,12 +30,19 @@ router = APIRouter(tags=["Properties"])
 
 @router.get(
     "/",
-    response_model=list[PropertySchema]
+    response_model=Page[PropertySchema]
 )
 async def read_properties(
-        session: AsyncSession = Depends(db_helper.scoped_session_dependency)
+        session: AsyncSession = Depends(db_helper.scoped_session_dependency),
 ):
-    return await read_properties_db(session=session)
+    properties = await read_properties_db(session=session)
+    # return paginate(properties)
+    # return await paginate(session, select(Property).order_by(Property.id))
+    print(properties.pages)
+    return properties
+
+
+add_pagination(router)
 
 
 @router.get(

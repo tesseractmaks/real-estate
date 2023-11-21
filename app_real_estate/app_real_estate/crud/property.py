@@ -1,6 +1,10 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.engine import Result
 from sqlalchemy import select, update
+from sqlalchemy.orm import query, Session
+
+from fastapi_pagination.ext.sqlalchemy import paginate
+from fastapi_pagination import Params
 
 from app_real_estate.models import Property
 from app_real_estate.schemas import (
@@ -11,11 +15,15 @@ from app_real_estate.schemas import (
 )
 
 
-async def read_properties_db(session: AsyncSession) -> list[PropertySchema]:
+async def read_properties_db(session: AsyncSession):
     stmt = select(Property).order_by(Property.id)
-    result: Result = await session.execute(stmt)
-    properties = result.scalars().all()
-    return list(properties)
+    return await paginate(session, stmt)
+
+# async def read_properties_db(session: AsyncSession):
+#     stmt = select(Property).order_by(Property.id)
+#     result: Result = await session.execute(stmt)
+#     properties = result.scalars().all()
+#     return list(properties)
 
 
 async def read_property_by_id_db(session: AsyncSession, property_id: int) -> PropertySchema | None:
