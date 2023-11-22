@@ -7,7 +7,11 @@ from fastapi_pagination.ext.sqlalchemy import paginate
 from app_real_estate.core import Page
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
+from fastapi_filter import FilterDepends
+
 from app_real_estate.models import Property
+from app_real_estate.schemas import PropertyFilter
+
 
 from app_real_estate.crud import (
     read_properties_db,
@@ -21,7 +25,8 @@ from app_real_estate.schemas import (
     PropertySchema,
     PropertyCreateSchema,
     PropertyUpdateSchema,
-    PropertyUpdatePartialSchema
+    PropertyUpdatePartialSchema,
+PropertyResponseSchema
 )
 from .depends_endps import property_by_id
 
@@ -30,12 +35,13 @@ router = APIRouter(tags=["Properties"])
 
 @router.get(
     "/",
-    response_model=Page[PropertySchema]
+    response_model=Page[PropertyResponseSchema]
 )
 async def read_properties(
         session: AsyncSession = Depends(db_helper.scoped_session_dependency),
-):
-    properties = await read_properties_db(session=session)
+        property_filter: PropertyFilter = FilterDepends(PropertyFilter)
+) -> list:
+    properties = await read_properties_db(session=session, property_filter=property_filter)
     # return paginate(properties)
     # return await paginate(session, select(Property).order_by(Property.id))
     print(properties.pages)

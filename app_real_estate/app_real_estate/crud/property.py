@@ -11,12 +11,18 @@ from app_real_estate.schemas import (
     PropertySchema,
     PropertyCreateSchema,
     PropertyUpdateSchema,
-    PropertyUpdatePartialSchema
+    PropertyUpdatePartialSchema,
+    PropertyFilter
 )
 
 
-async def read_properties_db(session: AsyncSession):
-    stmt = select(Property).order_by(Property.id)
+async def read_properties_db(session: AsyncSession, property_filter: PropertyFilter):
+
+    print(property_filter, "===========")
+
+    stmt = property_filter.filter(select(Property))
+    # stmt = select(Property).order_by(Property.id)
+
     return await paginate(session, stmt)
 
 # async def read_properties_db(session: AsyncSession):

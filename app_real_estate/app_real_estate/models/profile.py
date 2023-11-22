@@ -16,6 +16,7 @@ class Profile(Base):
 
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
     users = relationship("User", uselist=False, back_populates="profile")
+    # properties = relationship("Property", uselist=False, back_populates="profile_agent")
 
     # users: Mapped[list["User"]] = relationship(secondary="associate_feedbacks", back_populates="profiles")
 

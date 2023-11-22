@@ -2,6 +2,7 @@ import json
 import os
 import random
 
+import sqlalchemy
 from bson import ObjectId
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
@@ -75,9 +76,9 @@ async def add_test_post_data():
 
 async def add_test_categories_data():
     async with db_helper.engine.begin() as conn:
-        for _ in range(1, 4):
+        for i in ["flat", "house"]:
             values_data = {
-                "title": "string"
+                "title": i
             }
 
             await conn.execute(insert(Category).values(values_data))
@@ -106,10 +107,10 @@ async def add_test_profile_data():
 
 async def add_test_property_data():
     async with db_helper.engine.begin() as conn:
-        for _ in range(1, 2):
+        for _ in range(1, 54):
             values_data = {
                 "agent_id": 1,
-                "category_id": 2,
+                "category_id": random.randint(1, 2),
                 "street": "string",
                 "city": random.choice(["Moscow", "Saint Petersburg", "Tula"]),
                 "state": random.choice(["Moscow area", "Leningradskaya", "Tulskaya"]),

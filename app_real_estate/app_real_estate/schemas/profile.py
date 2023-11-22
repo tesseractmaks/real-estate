@@ -16,6 +16,10 @@ class ProfileSchema(BaseModel):
     post:  int | None = None
 
 
+class ProfileResponseSchema(ProfileSchema):
+    ...
+
+
 class ProfileCreateSchema(ProfileSchema):
     ...
 

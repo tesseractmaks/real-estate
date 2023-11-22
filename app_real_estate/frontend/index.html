@@ -1,23 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 	<title>LERAMIZ - Landing Page Template</title>
 	<meta charset="UTF-8">
 	<meta name="description" content="LERAMIZ Landing Page Template">
 	<meta name="keywords" content="LERAMIZ, unica, creative, html">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<!-- Favicon -->   
-	<link href="img/favicon.ico" rel="shortcut icon"/>
+	<!-- Favicon -->
+	<link href="img/favicon.ico" rel="shortcut icon" />
 
 	<!-- Google Fonts -->
 	<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro" rel="stylesheet">
 
 	<!-- Stylesheets -->
-	<link rel="stylesheet" href="css/bootstrap.min.css"/>
-	<link rel="stylesheet" href="css/font-awesome.min.css"/>
-	<link rel="stylesheet" href="css/animate.css"/>
-	<link rel="stylesheet" href="css/owl.carousel.css"/>
-	<link rel="stylesheet" href="css/style.css"/>
+	<link rel="stylesheet" href="css/bootstrap.min.css" />
+	<link rel="stylesheet" href="css/font-awesome.min.css" />
+	<link rel="stylesheet" href="css/animate.css" />
+	<link rel="stylesheet" href="css/owl.carousel.css" />
+	<link rel="stylesheet" href="css/style.css" />
 
 
 	<!--[if lt IE 9]>
@@ -26,18 +27,19 @@
 	<![endif]-->
 
 </head>
+
 <body>
 	<!-- Page Preloder -->
 	<div id="preloder">
 		<div class="loader"></div>
 	</div>
-	
+
 	<!-- Header section -->
 	<header class="header-section">
 		<div class="header-top">
 			<div class="container">
 				<div class="row">
-					
+
 					<div class="col-lg-6 header-top-left"></div>
 					<div class="col-lg-6 text-lg-right header-top-right">
 						<div class="top-social">
@@ -85,12 +87,22 @@
 	<div class="filter-search">
 		<div class="container">
 			<form class="filter-form">
-				<input id="base" type="text" placeholder="Enter a street name, address number or keyword">
-				<select>
-					<option value="City">City</option>
+				<input id="inCity" type="text" placeholder="Enter city">
+				<input id="inState" type="text" placeholder="Enter state">
+				<select id="rentSaleFlat">
+					<option id="rent">rent</option>
+					<option id="sale">sale</option>
 				</select>
-				<select>
-					<option value="City">State</option>
+				<select id="sellFlatHouse">
+					<option id="flat" value="1">flat</option>
+					<option id="house" value="2">house</option>
+				</select>
+				<select id="sellRooms">
+					<option id="1room">1-room</option>
+					<option id="2room">2-room</option>
+					<option id="3room">3-room</option>
+					<option id="4room">4-room</option>
+					<option id="5room">5-room</option>
 				</select>
 				<button type="submit" class="site-btn fs-submit">SEARCH</button>
 			</form>
@@ -99,7 +111,7 @@
 	<!-- Filter form section end -->
 
 
-	
+
 	<!-- Gallery section -->
 	<section class="gallery-section spad">
 		<div class="container">
@@ -133,7 +145,7 @@
 						<p>50 Properties</p>
 					</div>
 				</a>
-				
+
 			</div>
 		</div>
 	</section>
@@ -160,7 +172,7 @@
 			<div class="review-slider owl-carousel owl-item owl-loaded owl-drag">
 			</div>
 		</div>
-	</section> 
+	</section>
 	<!-- Review section end-->
 
 
@@ -256,7 +268,7 @@
 	<!-- feature category section end-->
 
 
-	
+
 	<!-- Services section -->
 	<section class="services-section spad set-bg" data-setbg="img/service-bg.jpg">
 		<div class="container">
@@ -292,26 +304,31 @@
 						<span><i class="fa fa-user"></i>Amanda Seyfried</span>
 						<span><i class="fa fa-clock-o"></i>25 Jun 201</span>
 					</div>
-					<p>Integer luctus diam ac scerisque consectetur. Vimus dotnetact euismod lacus sit amet. Aenean interdus mid vitae maximus...</p>
+					<p>Integer luctus diam ac scerisque consectetur. Vimus dotnetact euismod lacus sit amet. Aenean
+						interdus mid vitae maximus...</p>
 				</div>
-				
+
 				<div class="col-lg-4 col-md-6 blog-item">
 					<img src="img/blog/2.jpg" alt="">
-					<h5><a href="single-blog.html">Taylor Swift is selling her $2.95 million Beverly Hills mansion</a></h5>
+					<h5><a href="single-blog.html">Taylor Swift is selling her $2.95 million Beverly Hills mansion</a>
+					</h5>
 					<div class="blog-meta">
 						<span><i class="fa fa-user"></i>Amanda Seyfried</span>
 						<span><i class="fa fa-clock-o"></i>25 Jun 201</span>
 					</div>
-					<p>Integer luctus diam ac scerisque consectetur. Vimus dotnetact euismod lacus sit amet. Aenean interdus mid vitae maximus...</p>
+					<p>Integer luctus diam ac scerisque consectetur. Vimus dotnetact euismod lacus sit amet. Aenean
+						interdus mid vitae maximus...</p>
 				</div>
 				<div class="col-lg-4 col-md-6 blog-item">
 					<img src="img/blog/3.jpg" alt="">
-					<h5><a href="single-blog.html">NYC luxury housing market saturated with inventory, says celebrity realtor</a></h5>
+					<h5><a href="single-blog.html">NYC luxury housing market saturated with inventory, says celebrity
+							realtor</a></h5>
 					<div class="blog-meta">
 						<span><i class="fa fa-user"></i>Amanda Seyfried</span>
 						<span><i class="fa fa-clock-o"></i>25 Jun 201</span>
 					</div>
-					<p>Integer luctus diam ac scerisque consectetur. Vimus dotnetact euismod lacus sit amet. Aenean interdus mid vitae maximus...</p>
+					<p>Integer luctus diam ac scerisque consectetur. Vimus dotnetact euismod lacus sit amet. Aenean
+						interdus mid vitae maximus...</p>
 				</div>
 			</div>
 		</div>
@@ -330,11 +347,11 @@
 	<footer class="footer-section set-bg" data-setbg="img/footer-bg.jpg">
 		<div class="container">
 			<div class="row"></div>
-			</div>
+		</div>
 		</div>
 	</footer>
 	<!-- Footer section end -->
-                                        
+
 	<!--====== Javascripts & Jquery ======-->
 	<script src="js/jquery-3.2.1.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>
@@ -344,4 +361,5 @@
 	<script defer src="js/main.js"></script>
 
 </body>
+
 </html>
