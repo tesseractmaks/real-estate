@@ -90,6 +90,8 @@ $(window).on('load', function () {
 
 	async function mainMenu() {
 		let itemElement = document.querySelector(".main-menu")
+		let siteLogo = document.querySelector(".site-logo")
+		siteLogo["href"] = "index.html"
 
 		let links = main_site["header"]["mainMenu"]
 
@@ -351,10 +353,9 @@ $(window).on('load', function () {
 	let timerImg = setInterval(() =>slowSlider(), seconds);
 
 
-	// SliderFeatures()
+	// Slider features Detail
 
 	function singleList(detailData){
-		console.log(detailData.street, "====")
 		let divSingleList = document.createElement("div")
 		divSingleList.classList.add("single-list-content")
 
@@ -485,9 +486,114 @@ $(window).on('load', function () {
 		pDescr.textContent = `${detailData.description}`
 		divDescr.append(pDescr)
 
-		divSingleList.append(h3, divRowProperty, h3Descr, divDescr)
+		let accordionPlanContent = accordionPlan(detailData)
+
+		divSingleList.append(h3, divRowProperty, h3Descr, divDescr, accordionPlanContent)
 		return divSingleList
 	};
+
+
+	// Accordion features Detail
+
+	function accordionPlan(detailData) {
+		// let accordion = document.querySelector("#accordion")
+		// let span = accordion.querySelector("#headingOne .panel-link span")
+		// span.textContent = `${detailData.house_area} Square foot`
+		// console.log(span)
+
+		let  h3Title = document.createElement("h3")
+		h3Title.classList.add("sl-sp-title")
+		h3Title.classList.add("bd-no")
+		h3Title.textContent = "Floor plans"
+
+		
+		let  divAccordion = document.createElement("div")
+		divAccordion.setAttribute("id","accordion")
+		divAccordion.classList.add("plan-accordion")
+		let counterFloors = 1;
+		if(detailData.first_floor_area > 0){
+			counterFloors++
+		};
+		if(detailData.second_floor_area > 0){
+			counterFloors++
+		};
+		if(detailData.third_floor_area > 0){
+			counterFloors++
+		};
+		// console.log(counterFloors)
+		for(let item = 1; item < counterFloors; item++){
+
+			let  divPanel = document.createElement("div")
+			divPanel.classList.add("panel")
+			
+			let  divPanelHeader = document.createElement("div")
+			divPanelHeader.classList.add("panel-header")
+			divPanelHeader.setAttribute("id","headingOne")
+
+			let  button = document.createElement("button")
+			button.classList.add("panel-link")
+			if(item == 1){
+				button.classList.add("active")
+			};
+
+			button.setAttribute("data-toggle","collapse")
+			button.setAttribute("data-target",`#collapse${item}`)
+			button.setAttribute("aria-expanded","false")
+			button.setAttribute("aria-controls",`collapse${item}`)
+			if(item == 1){
+				button.textContent = "First Floor:"
+			};
+			if(item == 2){
+				button.textContent = "Second Floor:"
+			};
+			if(item == 3){
+				button.textContent = "Third Floor:"
+			};
+			
+
+			let  span = document.createElement("span")
+			span.textContent = `${detailData.house_area} Square foot`
+			let  i = document.createElement("i")
+			i.classList.add("fa")
+			i.classList.add("fa-angle-down")
+			button.append(span, i)
+			divPanelHeader.append(button)
+
+
+			let divCollapse = document.createElement("div")
+			divCollapse.classList.add("collapse")
+			if(item == 1){
+				divCollapse.classList.add("show")
+				divCollapse.setAttribute("aria-labelledby", "headingOne")
+			};
+			if(item == 2){
+				divCollapse.setAttribute("aria-labelledby", "headingTwo")
+			};
+			if(item == 3){
+				divCollapse.setAttribute("aria-labelledby", "headingThree")
+			};
+			
+			divCollapse.setAttribute("id",`collapse${item}`)
+			
+			divCollapse.setAttribute("data-parent", "#accordion")
+
+			let divPanelBody = document.createElement("div")
+			divPanelBody.classList.add("panel-body")
+
+			let img = document.createElement("img")
+			img.setAttribute("src", "img/plan-sketch.jpg")
+			img.setAttribute("alt", "img")
+			divPanelBody.append(img)
+			divCollapse.append(divPanelBody)
+
+
+			divPanel.append(divPanelHeader, divCollapse)
+			divAccordion.append(divPanel)
+		};
+		return divAccordion
+	};
+
+
 
 	async function slDetailFeatures() {
 		let currentPage = "currentPage"
@@ -571,6 +677,7 @@ $(window).on('load', function () {
 			divslider.append(divAreaSlider)
 
 			let singleListContent = singleList(detailData)
+			
 
 			colSlider.prepend(divslider, singleListContent)
 			pointsSlider ()
@@ -584,6 +691,7 @@ $(window).on('load', function () {
 			mainBlockSliderRun.addEventListener("mouseleave", ()=>{
 				timerImg = setInterval(() =>slowSlider(), seconds);
 			});
+
 		};
 	
 	};
@@ -1388,6 +1496,7 @@ $(window).on('load', function () {
 	$('.panel-link').on('click', function (e) {
 		$('.panel-link').removeClass('active');
 		var $this = $(this);
+		
 		if (!$this.hasClass('active')) {
 			$this.addClass('active');
 		}
