@@ -17,6 +17,7 @@ __all__ = (
     "PropertyUpdatePartialSchema",
     "PropertyCreateSchema",
     "PropertyResponseSchema",
+    "CitiesSchema",
     "PostUpdatePartialSchema",
     "PostSchema",
     "PostUpdateSchema",
@@ -43,7 +44,7 @@ from .comment import CommentAllSchema, CommentSchema, CommentUpdateSchema, Comme
 from .user import UserInDB, UserSchema, UserUpdateSchema, UserCreateSchema, UserUpdatePartialSchema, UserResponseSchema
 from .token import Token,  TokenData
 from .feedback_user import FeedbackUserSchema
-from .property import PropertySchema, PropertyCreateSchema, PropertyUpdateSchema, PropertyUpdatePartialSchema, PropertyResponseSchema
+from .property import PropertySchema, PropertyCreateSchema, PropertyUpdateSchema, PropertyUpdatePartialSchema, PropertyResponseSchema, CitiesSchema
 from .profile import ProfileSchema, ProfileUpdateSchema, ProfileCreateSchema, ProfileUpdatePartialSchema
 from .rating_user import RatingSchema
 from .category import CategorySchema, CategoryCreateSchema, CategoryUpdateSchema, CategoryUpdatePartialSchema

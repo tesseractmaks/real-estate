@@ -1,17 +1,19 @@
 import os
 import shutil
+import urllib
 
-from fastapi import APIRouter, status, Depends, UploadFile, File, Query
-from fastapi_pagination import add_pagination  # , paginate
-from fastapi_pagination.ext.sqlalchemy import paginate
+from fastapi import APIRouter, status, Depends, UploadFile, File
+from fastapi_pagination import add_pagination
+
+from fastapi import Request
+
 from app_real_estate.core import Page
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select
 from fastapi_filter import FilterDepends
 
-from app_real_estate.models import Property
-from app_real_estate.schemas import PropertyFilter
+from urllib.parse import urlparse
 
+from app_real_estate.schemas import PropertyFilter, CitiesSchema
 
 from app_real_estate.crud import (
     read_properties_db,
@@ -19,6 +21,7 @@ from app_real_estate.crud import (
     update_property_db,
     delete_property_db,
     update_file_property,
+count_cities_db
 )
 from app_real_estate.db import db_helper
 from app_real_estate.schemas import (
@@ -26,26 +29,38 @@ from app_real_estate.schemas import (
     PropertyCreateSchema,
     PropertyUpdateSchema,
     PropertyUpdatePartialSchema,
-PropertyResponseSchema
+    PropertyResponseSchema
 )
 from .depends_endps import property_by_id
 
 router = APIRouter(tags=["Properties"])
 
 
+def get_tail_url(url):
+    parse_path_url = urlparse(url)
+    path_clean = urllib.parse.unquote(parse_path_url.path)
+    url_tail_url = os.path.split(path_clean)
+    return url_tail_url[-1]
+
+
+@router.get("/count-sities", response_model=CitiesSchema)
 @router.get(
     "/",
     response_model=Page[PropertyResponseSchema]
 )
 async def read_properties(
+        request: Request,
         session: AsyncSession = Depends(db_helper.scoped_session_dependency),
-        property_filter: PropertyFilter = FilterDepends(PropertyFilter)
-) -> list:
+        property_filter: PropertyFilter = FilterDepends(PropertyFilter),
+) -> list | list[tuple]:
+
+    if get_tail_url(request.scope["route"].path) == "count-sities":
+       cities = await count_cities_db(session=session)
+       return cities
+    print(property_filter, "=====-----")
+
     properties = await read_properties_db(session=session, property_filter=property_filter)
-    # return paginate(properties)
-    # return await paginate(session, select(Property).order_by(Property.id))
-    print(properties.pages)
-    return properties
+    return await properties
 
 
 add_pagination(router)

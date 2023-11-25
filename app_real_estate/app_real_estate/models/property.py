@@ -1,4 +1,6 @@
-from sqlalchemy.orm import Mapped, mapped_column, relationship, backref
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy.dialects.postgresql import ARRAY
+from sqlalchemy import String
 from sqlalchemy import ForeignKey, func
 # from pydantic import EmailStr
 # from pymongo.mongo_client import MongoClient
@@ -46,7 +48,7 @@ class Property(Base):
     country: Mapped[str] = mapped_column(default="", server_default="")
     postal_code: Mapped[int] = mapped_column(nullable=True)
     price: Mapped[int] = mapped_column(nullable=True)
-    photo: Mapped[str] = mapped_column(default="", server_default="")
+    photo: Mapped[list | None] = mapped_column(ARRAY(String))
     status: Mapped[str] = mapped_column(default="", server_default="")
     house_area: Mapped[int] = mapped_column(nullable=True)
     bedrooms: Mapped[int] = mapped_column(nullable=True)

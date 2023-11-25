@@ -1,8 +1,10 @@
 from datetime import datetime
-from typing import Any
-
 from pydantic import BaseModel, ConfigDict
 from . import UserSchema, UserResponseSchema
+
+
+class CitiesSchema(BaseModel):
+    cities: list[tuple]
 
 
 class CategorySchema(BaseModel):
@@ -12,7 +14,7 @@ class CategorySchema(BaseModel):
 
 class PropertySchema(BaseModel):
     model_config = ConfigDict(extra="allow")
-
+    id: int
     agent_id: int
     category_id: int
     street: str | None = None
@@ -21,7 +23,7 @@ class PropertySchema(BaseModel):
     country: str | None = None
     postal_code: int | None = 0
     price: int | None = 0
-    photo: str | None = None
+    photo: list[str] | None = None
     status: str | None = None
     house_area: int | None = 0
     bedrooms: int | None = 0

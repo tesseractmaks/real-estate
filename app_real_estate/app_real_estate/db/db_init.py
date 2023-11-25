@@ -107,17 +107,18 @@ async def add_test_profile_data():
 
 async def add_test_property_data():
     async with db_helper.engine.begin() as conn:
-        for _ in range(1, 54):
+        for _ in range(1, 154):
             values_data = {
                 "agent_id": 1,
                 "category_id": random.randint(1, 2),
                 "street": "string",
-                "city": random.choice(["Moscow", "Saint Petersburg", "Tula"]),
+                "city": random.choice(["Moscow", "Saint Petersburg", "Tula", "Kursk", "Omsk", "Tver", "Oryol"]),
                 "state": random.choice(["Moscow area", "Leningradskaya", "Tulskaya"]),
                 "country": "string",
                 "postal_code": 0,
                 "price": random.randint(10000, 80000),
-                "photo": "img/feature/4.jpg",
+                "photo": ["img/single-list-slider/2.jpg", "img/single-list-slider/3.jpg", "img/single-list-slider/4.jpg",
+                          "img/single-list-slider/5.jpg"],
                 "status": random.choice(["sale", "rent"]),
                 "house_area": random.randint(50, 800),
                 "bedrooms": random.randint(1, 6),

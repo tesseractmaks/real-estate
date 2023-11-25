@@ -1,15 +1,15 @@
 from __future__ import annotations
-from pydantic import conint
+from pydantic import conint, ConfigDict
 from math import ceil
 
 from typing import Generic, TypeVar, Any, Awaitable, Callable, Dict, Optional, Sequence, Union
+
 from typing_extensions import TYPE_CHECKING, Literal, TypeAlias
 
 from fastapi import Query
 from fastapi_pagination.bases import AbstractPage, AbstractParams
 from fastapi_pagination.default import Page as BasePage, Params as BaseParams
 from fastapi_pagination.utils import create_pydantic_model
-
 
 Cursor: TypeAlias = Union[str, bytes]
 ParamsType: TypeAlias = Literal["cursor", "limit-offset"]
@@ -35,10 +35,14 @@ class Params(BaseParams):
 
 
 class Page(BasePage[T], AbstractPage[T], Generic[T]):
+    model_config = ConfigDict(arbitrary_types_allowed=True, from_attributes=True)
+
     page: Optional[GreaterEqualOne]
     size: Optional[GreaterEqualOne]
     pages: Optional[GreaterEqualZero] = None
+
     __params_type__ = Params
+
 
     @classmethod
     def create(

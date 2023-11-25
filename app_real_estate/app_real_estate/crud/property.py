@@ -1,10 +1,7 @@
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.engine import Result
-from sqlalchemy import select, update
-from sqlalchemy.orm import query, Session
+from sqlalchemy import select, update, func
 
 from fastapi_pagination.ext.sqlalchemy import paginate
-from fastapi_pagination import Params
 
 from app_real_estate.models import Property
 from app_real_estate.schemas import (
@@ -16,14 +13,22 @@ from app_real_estate.schemas import (
 )
 
 
-async def read_properties_db(session: AsyncSession, property_filter: PropertyFilter):
+async def count_cities_db(session: AsyncSession):
+    stmt_group = select(Property.city, func.count(1)).group_by(Property.city).order_by(func.count(1).desc()).limit(4)
+    result = await session.execute(stmt_group)
+    cities = result.all()
+    return dict({"cities": cities})
 
-    print(property_filter, "===========")
+
+async def read_properties_db(session: AsyncSession, property_filter: PropertyFilter):
+    if property_filter.category_id == 0:
+        property_filter.category_id = None
+    if property_filter.bedrooms == 0:
+        property_filter.bedrooms = None
+
 
     stmt = property_filter.filter(select(Property))
-    # stmt = select(Property).order_by(Property.id)
-
-    return await paginate(session, stmt)
+    return paginate(session, stmt)
 
 # async def read_properties_db(session: AsyncSession):
 #     stmt = select(Property).order_by(Property.id)
