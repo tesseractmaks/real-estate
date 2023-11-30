@@ -34,14 +34,13 @@ origins = [
     "http://127.0.0.1",
     "http://127.0.0.1:8000",
     "http://127.0.0.1:5050",
-    "http://127.0.0.1:8000/api/v1/users/",
 ]
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
     allow_credentials=True,
-    allow_methods=["*"],
+    allow_methods=["GET", "OPTIONS", "HEAD", "POST"],
     allow_headers=["*"],
 )
 
