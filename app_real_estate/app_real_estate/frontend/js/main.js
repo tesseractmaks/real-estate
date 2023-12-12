@@ -105,8 +105,6 @@ pageContainer.innerHTML = ""
 pageContainer.append(mainPage)
 
 
-console.log(pageContainer,"++++---==")
-
 
 app.innerHTML = ""
 app.append(
@@ -125,7 +123,7 @@ app.append(
 
 
 let counterPointsSlow = 0;
-let counterSlow = 0;
+// let counterSlow = 0;
 
 // pointsSlider()
 
@@ -168,7 +166,7 @@ function slowSlider() {
 
 
 // let counterPointsSlow = 0;
-// let counterSlow = 0;
+let counterSlow = 0;
 
 function slowSlider2() {
 	// let points = document.querySelectorAll(".point")
@@ -201,7 +199,7 @@ function slowSlider2() {
 	// };
 };
 
-
+slowSlider2()
 
 
 // let seconds = 1000 * 3

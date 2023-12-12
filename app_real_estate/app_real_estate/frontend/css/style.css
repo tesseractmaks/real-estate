@@ -11,11 +11,15 @@
 
 html,
 body {
+    margin: 0;
+    padding: 0;
 	height: 100%;
 	font-family: 'Source Sans Pro', sans-serif;
 	-webkit-font-smoothing: antialiased;
 	font-smoothing: antialiased;
+
 }
+
 
 h1,
 h2,
@@ -24,6 +28,7 @@ h4,
 h5,
 h6 {
 	margin: 0;
+	padding: 0;
 	font-weight: 600;
 	color: #252525;
 }
@@ -121,6 +126,7 @@ ol {
 	color: #fff;
 }
 
+
 /*---------------------
 	Commom elements
 -----------------------*/
@@ -217,20 +223,25 @@ ol {
 ---------------------*/
 
 .header-section {
+
 	position: absolute;
 	width: 100%;
 	left: 0;
 	top: 0;
 	z-index: 99;
+	
 }
 
 .header-top {
-	padding: 12px 0;
+
+	padding: 25px 0;
 	border-bottom: 1px solid #667792;
 	margin-bottom: 40px;
+	overflow: hidden;
 }
 
 .top-info {
+
 	font-size: 14px;
 	color: #fff;
 	display: inline-block;
@@ -245,6 +256,8 @@ ol {
 }
 
 .top-social {
+	margin: 0;
+	overflow: hidden;
 	display: inline-block;
 }
 
@@ -281,6 +294,7 @@ ol {
 }
 
 .main-menu {
+
 	float: right;
 	list-style: none;
 }
@@ -464,7 +478,7 @@ ol {
 .services-section {
 	padding: 30px;
 	padding-top: 50px;
-	height: 550px;
+	height: 530px;
 
 }
 
@@ -480,6 +494,25 @@ ol {
 .service-item:last-child {
 	margin-bottom: 0;
 }
+
+.service-item p {
+	width: 390px;
+}
+
+
+.col-lg-6 img{
+	max-width: 95%;
+	/* top: 5px; */
+	padding-left: 220px;
+}
+
+.col-lg-5 {
+	bottom: 25px;
+	padding-top: 0;
+	margin-left: 100px;
+
+}
+
 
 .service-item i {
 	height: 60px;
@@ -740,8 +773,9 @@ ol {
 	display:none;
 } */
 
-.review-item>* {
-	display: none;
+
+.review-item {
+	/* display: none; */
 	animation-name: Animation;
 	animation-duration: 20s;
 	animation-delay: -0.1;
@@ -749,6 +783,10 @@ ol {
 	animation-iteration-count: 100;
 	/* transition-property: right, left;  */
 
+}
+
+.review-item {
+	display: none;
 }
 
 

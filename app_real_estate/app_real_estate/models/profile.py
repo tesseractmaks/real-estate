@@ -1,4 +1,4 @@
-from sqlalchemy.orm import mapped_column, Mapped, relationship, backref
+from sqlalchemy.orm import mapped_column, Mapped, relationship
 from sqlalchemy import ForeignKey, func, Column, Integer
 from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy_utils import aggregated

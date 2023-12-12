@@ -97,7 +97,6 @@ export async function gallerySection() {
                 "status": rentSale,
                 "rooms": +room
             }
-            console.log(cityName,"---==")
            
             // if (cityName) {
             //     let cityElem = document.querySelector("#inCity")
@@ -108,7 +107,6 @@ export async function gallerySection() {
             // console.log(feturesBlock,"---==")
             // await render(feturesBlock)
             pageContainer.innerHTML = ""
-
 
     
             let feturesBlockNew =  await mainContainer(feturesBlock, cityName)

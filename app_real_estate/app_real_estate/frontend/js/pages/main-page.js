@@ -86,7 +86,6 @@ export async function mainContainer(feturesBloc, cityName="") {
         galleryBlock.setAttribute("style", "display: none")};
 
     
-    
     // // Review section
     const reviewBlock = await reviewSection()
     

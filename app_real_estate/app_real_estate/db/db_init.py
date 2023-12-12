@@ -1,19 +1,20 @@
 import json
 import os
 import random
-
-import sqlalchemy
-from bson import ObjectId
-from pymongo.mongo_client import MongoClient
-from pymongo.server_api import ServerApi
+# from pymongo.server_api import ServerApi
 from datetime import datetime
+
 import asyncpg
-from sqlalchemy import insert, inspect, select, Result
+# import sqlalchemy
+from pymongo.mongo_client import MongoClient
+from sqlalchemy import insert, inspect
 
 from app_real_estate.models import User, Profile, Category, Property, Post
 from .base_class import Base
 from .db_helper import db_helper
-from app_real_estate.core import blog_validator, author_validator
+
+
+# from app_real_estate.core import blog_validator, author_validator
 
 
 async def connect_create_if_exist(user, password, db_name):

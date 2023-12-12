@@ -375,7 +375,7 @@ export async function slDetailFeatures() {
         containerDetail.append(rowDetail)
         sectionDetail.append(containerDetail)
 
-
+        
         pointsSlider(divArrowLeft, divArrowRight, divPoint, divImgArea)
         // pointsSlider()
 
@@ -390,7 +390,6 @@ export async function slDetailFeatures() {
         // });
 
     };
-    console.log(sectionDetail)
     return sectionDetail
 
 };
