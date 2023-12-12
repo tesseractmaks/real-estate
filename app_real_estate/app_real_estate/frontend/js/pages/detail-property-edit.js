@@ -1,15 +1,17 @@
 import { jsonToData, setStorageData, deleteStorageData } from "../utils.js"
-import { detailNew } from "./detail-property-edit.js"
+import { formElement, formInputElement, textareaElement } from "../components/form.js"
 import { aIelements, anyIelements } from "../components/elements.js"
 import { buttonElement } from "../components/button.js"
-import { pageContainer } from "../main.js"
+
 // Slider features Detail
 
-function singleList(detailData) {
+export async function detailNew(detailData) {
     
     // let filter = document.querySelector(".filter-search")
     // console.log(filter)
     // filter.classList.add("filter-search-hide")
+    let containerForm = document.createElement("div")
+    containerForm.classList.add("container")
 
     let divSingleList = document.createElement("div")
     divSingleList.classList.add("single-list-content")
@@ -17,135 +19,199 @@ function singleList(detailData) {
     let divRow = document.createElement("div")
     divRow.classList.add("row")
 
-    let divCol8 = document.createElement("div")
-    divCol8.classList.add("col-xl-8")
-    divCol8.classList.add("sl-title")
+    let buttonSave = await buttonElement("сохранить", "saveButton", "save")
 
-    let h2 = document.createElement("h2")
-    h2.textContent = detailData.street
+   
+    const formElem = formElement(buttonSave)
+    formElem.classList.add("form-edit")
+    formElem.classList.add("col-lg-8")
+    formElem.classList.add("single-list-page")
 
-    let p = document.createElement("p")
-    let i = document.createElement("i")
-    i.classList.add("fa")
-    i.classList.add("fa-map-marker")
-    p.textContent = `${detailData.city}, ${detailData.state} ${detailData.postal_code}`
-    p.prepend(i)
-    divCol8.append(h2, p)
 
-    let divCol4 = document.createElement("div")
-    let a = document.createElement("a")
-    a.setAttribute("href", "#")
-    a.textContent = detailData.price
-    a.classList.add("price-btn")
-    divCol4.classList.add("col-xl-4")
-    divCol4.append(a)
+    let listContent = [
+        {"улица": detailData.street, "id": "srteet"},
+        {"город": detailData.city, "id": "city"},
+        {"область": detailData.state, "id": "state"},
+        {"индекс": detailData.postal_code, "id": "postal_code"},
+        {"цена": detailData.price, "id": "price"},
+        {"площадь": detailData.house_area, "id": "house_area"},
+        {"количество комнат": detailData.bedrooms, "id": "bedrooms"},
+        {"количество гаражей": detailData.garages, "id": "garages"},
+        {"категория": detailData.category_id, "id": "title"},
+        {"количество ванных комнат": detailData.bathrooms, "id": "bathrooms"},
+        {"возраст": detailData.age, "id": "age"},
+        {"описание": detailData.description, "id": "description"},
+    ]
 
-    divRow.append(divCol8, divCol4)
-    divSingleList.append(divRow)
+    listContent.forEach(function(item){
+        let idElement = Object.values(item)[1]
+        let labelText = Object.keys(item)[0]
+        let typeName = Object.values(item)[1]
+        let placeholderTitle = Object.keys(item)[0]
+        let inputElem;
+        let typeInput;
+        
+        if (Object.values(item)[1] == "description") {
+            inputElem = textareaElement(
+                idElement, 
+                labelText, 
+                typeName,
+                placeholderTitle
+                )
+            };
+        if (("postal_code", "price", "house_area", "bedrooms", "garages", "bathrooms", "age").includes(Object.values(item)[1])){
+            typeInput = "number"} else {
+                typeInput = "text"
+            }
+            
+        
+            inputElem = formInputElement(
+                idElement, 
+                labelText, 
+                typeInput,
+                typeName,
+                placeholderTitle
+                )
+            formElem.prepend(inputElem)
+        divRow.append(formElem)
+        
+    })
+    
+    
+
+    // let divCol8 = document.createElement("div")
+    // divCol8.classList.add("col-xl-8")
+    // divCol8.classList.add("sl-title")
+
+    // let h2 = document.createElement("h2")
+    // h2.textContent = detailData.street
+
+    // let p = document.createElement("p")
+    // let i = document.createElement("i")
+    // i.classList.add("fa")
+    // i.classList.add("fa-map-marker")
+    // p.textContent = `${detailData.city}, ${detailData.state} ${detailData.postal_code}`
+    // p.prepend(i)
+    // divCol8.append(h2, p)
+
+    // let divCol4 = document.createElement("div")
+    // let a = document.createElement("a")
+    // a.setAttribute("href", "#")
+    // a.textContent = detailData.price
+    // a.classList.add("price-btn")
+    // divCol4.classList.add("col-xl-4")
+    // divCol4.append(a)
+
+
+
+    // divRow.append(divCol8, divCol4)
+    containerForm.append(divRow)
+    divSingleList.append(containerForm)
+
 
 
     // Property Details
 
-    let h3 = document.createElement("h3")
-    h3.classList.add("sl-sp-title")
-    h3.textContent = "Property Details"
+    // let h3 = document.createElement("h3")
+    // h3.classList.add("sl-sp-title")
+    // h3.textContent = "Property Details"
 
-    let divRowProperty = document.createElement("div")
-    divRowProperty.classList.add("row")
-    divRowProperty.classList.add("property-details-list")
-
-
-    let div461 = document.createElement("div")
-    div461.classList.add("col-md-4")
-    div461.classList.add("col-sm-6")
-
-    let pLarge = document.createElement("p")
-    pLarge.textContent = `${detailData.house_area} Square foot`
-    let iLarge = document.createElement("i")
-    iLarge.classList.add("fa")
-    iLarge.classList.add("fa-th-large")
-    pLarge.prepend(iLarge)
-
-    let pBed = document.createElement("p")
-    pBed.textContent = `${detailData.bedrooms} Bedrooms`
-    let iBed = document.createElement("i")
-    iBed.classList.add("fa")
-    iBed.classList.add("fa-bed")
-    pBed.prepend(iBed)
-
-    let pUser = document.createElement("p")
-    pUser.textContent = "---"
-    // pUser.textContent = `${detailData.users.profile.first_name} Bedrooms`
-    let iUser = document.createElement("i")
-    iUser.classList.add("fa")
-    iUser.classList.add("fa-user")
-    pUser.prepend(iUser)
-
-    div461.append(pLarge, pBed, pUser)
+    // let divRowProperty = document.createElement("div")
+    // divRowProperty.classList.add("row")
+    // divRowProperty.classList.add("property-details-list")
 
 
-    let div462 = document.createElement("div")
-    div462.classList.add("col-md-4")
-    div462.classList.add("col-sm-6")
+    // let div461 = document.createElement("div")
+    // div461.classList.add("col-md-4")
+    // div461.classList.add("col-sm-6")
 
-    let pCar = document.createElement("p")
-    pCar.textContent = `${detailData.garages} Garages`
-    let iCar = document.createElement("i")
-    iCar.classList.add("fa")
-    iCar.classList.add("fa-car")
-    pCar.prepend(iCar)
+    // let pLarge = document.createElement("p")
+    // pLarge.textContent = `${detailData.house_area} Square foot`
+    // let iLarge = document.createElement("i")
+    // iLarge.classList.add("fa")
+    // iLarge.classList.add("fa-th-large")
+    // pLarge.prepend(iLarge)
 
-    let pBuilding = document.createElement("p")
-    // pBuilding.textContent = `${detailData.categories.title}`
-    pBuilding.textContent = `-re--`
-    let iBuilding = document.createElement("i")
-    iBuilding.classList.add("fa")
-    iBuilding.classList.add("fa-building-o")
-    pBuilding.prepend(iBuilding)
+    // let pBed = document.createElement("p")
+    // pBed.textContent = `${detailData.bedrooms} Bedrooms`
+    // let iBed = document.createElement("i")
+    // iBed.classList.add("fa")
+    // iBed.classList.add("fa-bed")
+    // pBed.prepend(iBed)
 
-    let pClock = document.createElement("p")
-    pClock.textContent = `${detailData.time_published} days ago`
-    let iClock = document.createElement("i")
-    iClock.classList.add("fa")
-    iClock.classList.add("fa-clock-o")
-    pClock.prepend(iClock)
+    // let pUser = document.createElement("p")
+    // pUser.textContent = "---"
+    // // pUser.textContent = `${detailData.users.profile.first_name} Bedrooms`
+    // let iUser = document.createElement("i")
+    // iUser.classList.add("fa")
+    // iUser.classList.add("fa-user")
+    // pUser.prepend(iUser)
 
-    div462.append(pCar, pBuilding, pClock)
-
-
-    let div4Bath = document.createElement("div")
-    div4Bath.classList.add("col-md-4")
-
-    let pBath = document.createElement("p")
-    pBath.textContent = `${detailData.bathrooms} Bathrooms`
-    let iBath = document.createElement("i")
-    iBath.classList.add("fa")
-    iBath.classList.add("fa-bath")
-    pBath.prepend(iBath)
-
-    let pTrophy = document.createElement("p")
-    pTrophy.textContent = `${detailData.age} years age`
-    let iTrophy = document.createElement("i")
-    iTrophy.classList.add("fa")
-    iTrophy.classList.add("fa-trophy")
-    pTrophy.prepend(iTrophy)
-
-    div4Bath.append(pBath, pTrophy)
-
-    divRowProperty.append(div461, div462, div4Bath)
+    // div461.append(pLarge, pBed, pUser)
 
 
-    let h3Descr = document.createElement("h3")
-    h3Descr.classList.add("sl-sp-title")
-    let divDescr = document.createElement("div")
-    divDescr.classList.add("description")
-    let pDescr = document.createElement("p")
-    pDescr.textContent = `${detailData.description}`
-    divDescr.append(pDescr)
+    // let div462 = document.createElement("div")
+    // div462.classList.add("col-md-4")
+    // div462.classList.add("col-sm-6")
+
+    // let pCar = document.createElement("p")
+    // pCar.textContent = `${detailData.garages} Garages`
+    // let iCar = document.createElement("i")
+    // iCar.classList.add("fa")
+    // iCar.classList.add("fa-car")
+    // pCar.prepend(iCar)
+
+    // let pBuilding = document.createElement("p")
+    // // pBuilding.textContent = `${detailData.categories.title}`
+    // pBuilding.textContent = `-re--`
+    // let iBuilding = document.createElement("i")
+    // iBuilding.classList.add("fa")
+    // iBuilding.classList.add("fa-building-o")
+    // pBuilding.prepend(iBuilding)
+
+    // let pClock = document.createElement("p")
+    // pClock.textContent = `${detailData.time_published} days ago`
+    // let iClock = document.createElement("i")
+    // iClock.classList.add("fa")
+    // iClock.classList.add("fa-clock-o")
+    // pClock.prepend(iClock)
+
+    // div462.append(pCar, pBuilding, pClock)
+
+
+    // let div4Bath = document.createElement("div")
+    // div4Bath.classList.add("col-md-4")
+
+    // let pBath = document.createElement("p")
+    // pBath.textContent = `${detailData.bathrooms} Bathrooms`
+    // let iBath = document.createElement("i")
+    // iBath.classList.add("fa")
+    // iBath.classList.add("fa-bath")
+    // pBath.prepend(iBath)
+
+    // let pTrophy = document.createElement("p")
+    // pTrophy.textContent = `${detailData.age} years age`
+    // let iTrophy = document.createElement("i")
+    // iTrophy.classList.add("fa")
+    // iTrophy.classList.add("fa-trophy")
+    // pTrophy.prepend(iTrophy)
+
+    // div4Bath.append(pBath, pTrophy)
+
+    // divRowProperty.append(div461, div462, div4Bath)
+
+
+    // let h3Descr = document.createElement("h3")
+    // h3Descr.classList.add("sl-sp-title")
+    // let divDescr = document.createElement("div")
+    // divDescr.classList.add("description")
+    // let pDescr = document.createElement("p")
+    // pDescr.textContent = `${detailData.description}`
+    // divDescr.append(pDescr)
 
     let accordionPlanContent = accordionPlan(detailData)
 
-    divSingleList.append(h3, divRowProperty, h3Descr, divDescr, accordionPlanContent)
+    divSingleList.append(accordionPlanContent)
     return divSingleList
 };
 
@@ -273,7 +339,6 @@ async function breadcrumb() {
     let span = anyIelements("span", "fa-angle-right", "Single Listing")
     containerBread.append(a, span)
     divBread.append(containerBread)
-
     return divBread
 }
 
@@ -285,24 +350,12 @@ export async function slDetailFeatures() {
     console.log(breadcr)
     sectionDetail.append(breadcr)
     sectionDetail.classList.add("page-section")
-    let spanButtons = document.createElement("span")
-    let buttonEdit = await buttonElement("редактировать", "editButton", "edit")
-    let buttonDelete = await buttonElement("удалить", "deleteButton", "delete")
-    let divButton = document.createElement("div")
-    divButton.classList.add("detailButtons")
-
-    spanButtons.append(buttonDelete, buttonEdit)
-    divButton.append(spanButtons)
-
 
     let containerDetail = document.createElement("div")
     containerDetail.classList.add("container")
-    containerDetail.append(divButton)
-    
 
     let rowDetail = document.createElement("div")
     rowDetail.classList.add("row")
-    
 
 
     // let currentPage = "currentPage"
@@ -422,22 +475,6 @@ export async function slDetailFeatures() {
         // });
 
     };
-
-    buttonEdit.addEventListener("click", async function(elem){
-        elem.preventDefault();
-        let sectionNewDetail = await detailNew(detailData)
-        pageContainer.innerHTML = ""
-
-
-        pageContainer.append(
-            sectionNewDetail
-            )
-        
-    
-         return pageContainer
-
-    })
-
     return sectionDetail
 
 };

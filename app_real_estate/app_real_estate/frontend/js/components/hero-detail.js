@@ -1,5 +1,5 @@
 
-export async function heroSection() {
+export async function heroSectionDetail() {
     const section = document.createElement("section")
     section.classList.add("page-top-section", "set-bg")
     section.setAttribute("data-setbg", "../img/page-top-bg.jpg")

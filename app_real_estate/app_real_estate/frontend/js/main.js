@@ -8,13 +8,14 @@
 // import { jsonToData, setStorageData, deleteStorageData } from "./utils.js"
 import { getHeader } from "./components/header.js"
 import { heroSection } from "./components/hero.js"
+import { heroSectionDetail } from "./components/hero-detail.js"
 // import { filterFormSection } from './components/filter-form.js'
 // import { gallerySection } from './components/gallery.js'
 // import { feturesSection } from "./components/fetures-section.js"
 // import { reviewSection } from "./components/review-slider.js"
 // import { servicesSection } from "./components/services.js"
 import { slDetailFeatures } from "./pages/detail-property.js"
-// import { pointsSlider } from "./pages/detail-property.js"
+import { detailNew } from "./pages/detail-property-edit.js"
 
 import {  mainContainer  } from "./pages/main-page.js"
 
@@ -69,8 +70,10 @@ pageContainer.innerHTML = ""
 // Header section 
 export const headerSection = getHeader(mainSite)
 
-// Hero section 
+// Hero section
 export const heroBlock = heroSection(mainSite)
+// Hero section Detail
+export const heroBlockDetail =await heroSectionDetail()
 
 // Filter form section
 // const filterForm = filterFormSection()
@@ -95,25 +98,40 @@ const mainPage = await mainContainer()
 // Footer section
 export const footerBlock = await footerSection(mainSite)
 const detailBlock = await slDetailFeatures()
+// export const detailBlockEdit = detailNew()
 
 // main.append(feturesBlock, servicesBlock, reviewBlock, footerBlock)
 
-
+// pageContainer.innerHTML = ""
+pageContainer.append(detailBlock)
+// pageContainer.append(detailBlockEdit)
 // pageContainer.append(heroBlockDetail, detailBlock)
-pageContainer.innerHTML = ""
-// if (mainPage !="undefined") {
-pageContainer.append(mainPage)
 
 
 
 app.innerHTML = ""
 app.append(
 	headerSection, 
+	heroBlockDetail,
 	
 	// filterForm,
 	pageContainer,
 	footerBlock,
 	)
+
+
+// if (mainPage !="undefined") {
+// pageContainer.append(mainPage)
+
+
+// app.innerHTML = ""
+// app.append(
+// 	headerSection, 
+	
+// 	// filterForm,
+// 	pageContainer,
+// 	footerBlock,
+// 	)
 
 
 

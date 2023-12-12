@@ -1,4 +1,14 @@
 
+export function anyIelements(tagname, faClass, textPart1="") {
+    let any = document.createElement(tagname)
+    any.textContent = textPart1
+    let i = document.createElement("i")
+    i.classList.add("fa")
+    i.classList.add(faClass)
+    any.prepend(i)
+    return any
+};
+
 export function pIelements(faClass, textPart1="", textPart2="") {
     let p = document.createElement("p")
     p.textContent = text
