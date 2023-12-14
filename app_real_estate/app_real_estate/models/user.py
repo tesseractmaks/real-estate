@@ -1,7 +1,6 @@
-from sqlalchemy.ext.associationproxy import association_proxy
-from sqlalchemy.orm import Mapped, relationship, backref
-
+from sqlalchemy.orm import mapped_column, Mapped, relationship
 from app_real_estate.db import Base
+from sqlalchemy import ForeignKey
 
 from typing import TYPE_CHECKING
 
@@ -16,14 +15,14 @@ class User(Base):
     password: Mapped[str]
     is_active: Mapped[bool]
 
-    profile = relationship("Profile", uselist=False, back_populates="users")
+    profile = relationship("Profile", uselist=False, back_populates="users", lazy="joined")
+    # profile = relationship("Profile", uselist=False, back_populates="users", lazy="joined")
 
-    properties = relationship("Property", uselist=False, back_populates="users")
-
+    properties = relationship("Property", uselist=False, back_populates="users", lazy="joined")
+    #
     ratings: Mapped[list["AssociateRatings"]] = relationship(back_populates="user")
-
-    profiles: Mapped[list["AssociateFeedback"]] = relationship(back_populates="user")
-
+    #
+    # profiles: Mapped[list["AssociateFeedback"]] = relationship(back_populates="user")
 
 
     # def __str__(self):

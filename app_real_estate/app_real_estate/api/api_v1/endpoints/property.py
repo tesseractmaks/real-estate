@@ -21,7 +21,8 @@ from app_real_estate.crud import (
     update_property_db,
     delete_property_db,
     update_file_property,
-count_cities_db
+    sidebar_properties_db,
+    count_cities_db
 )
 from app_real_estate.db import db_helper
 from app_real_estate.schemas import (
@@ -57,13 +58,18 @@ async def read_properties(
     if get_tail_url(request.scope["route"].path) == "count-sities":
        cities = await count_cities_db(session=session)
        return cities
-    print(property_filter, "=====-----")
+    # print(property_filter, "=====-----")
 
     properties = await read_properties_db(session=session, property_filter=property_filter)
     return await properties
 
-
 add_pagination(router)
+
+@router.get("/sidebar", response_model=list[PropertySchema])
+async def read_property_sidebar(
+        session: AsyncSession = Depends(db_helper.scoped_session_dependency)
+):
+    return await sidebar_properties_db(session=session)
 
 
 @router.get(

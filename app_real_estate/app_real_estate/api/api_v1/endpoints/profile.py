@@ -18,7 +18,8 @@ from app_real_estate.schemas import (
     ProfileSchema,
     ProfileCreateSchema,
     ProfileUpdateSchema,
-    ProfileUpdatePartialSchema
+    ProfileUpdatePartialSchema,
+ProfileResponseSchema
 )
 from .depends_endps import profile_by_id
 
@@ -27,7 +28,8 @@ router = APIRouter(tags=["Profiles"])
 
 @router.get(
     "/",
-    response_model=list[ProfileSchema]
+    # response_model=list[ProfileSchema]
+    response_model=list[ProfileResponseSchema]
 )
 async def read_profiles(
         session: AsyncSession = Depends(db_helper.scoped_session_dependency)

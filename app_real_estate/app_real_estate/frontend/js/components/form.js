@@ -1,9 +1,10 @@
+
 export function formInputElement(
-    idElement, 
-    labelText, 
-    typeInput,
-    typeName,
-    placeholderTitle
+    idElement="", 
+    labelText="", 
+    typeInput="",
+    typeName="",
+    placeholderTitle=""
     ) {
 
     let divInput = document.createElement("div")
@@ -42,6 +43,7 @@ export function textareaElement(
 
     let divTextarea = document.createElement("div")
     divTextarea.classList.add("textarea-form")
+    divTextarea.classList.add("input-form")
     let labelElement = document.createElement("label")
     labelElement.setAttribute("for", idElement)
     labelElement.textContent = labelText

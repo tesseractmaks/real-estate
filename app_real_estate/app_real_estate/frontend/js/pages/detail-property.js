@@ -1,5 +1,6 @@
 import { jsonToData, setStorageData, deleteStorageData } from "../utils.js"
 import { detailNew } from "./detail-property-edit.js"
+import { sidebarAgent } from "../components/sidebar.js"
 import { aIelements, anyIelements } from "../components/elements.js"
 import { buttonElement } from "../components/button.js"
 import { pageContainer } from "../main.js"
@@ -13,6 +14,7 @@ function singleList(detailData) {
 
     let divSingleList = document.createElement("div")
     divSingleList.classList.add("single-list-content")
+    
 
     let divRow = document.createElement("div")
     divRow.classList.add("row")
@@ -282,7 +284,7 @@ async function breadcrumb() {
 export async function slDetailFeatures() {
     const sectionDetail = document.createElement("section")
     let breadcr = await breadcrumb()
-    console.log(breadcr)
+    // console.log(breadcr)
     sectionDetail.append(breadcr)
     sectionDetail.classList.add("page-section")
     let spanButtons = document.createElement("span")
@@ -400,10 +402,11 @@ export async function slDetailFeatures() {
         divslider.append(divAreaSlider)
 
         let singleListContent = singleList(detailData)
+        let sidebarElement = await sidebarAgent()
 
         // console.log(colSlider)
         colSlider.prepend(divslider, singleListContent)
-        rowDetail.append(colSlider)
+        rowDetail.append(colSlider, sidebarElement)
         containerDetail.append(rowDetail)
         sectionDetail.append(containerDetail)
 
@@ -427,6 +430,7 @@ export async function slDetailFeatures() {
         elem.preventDefault();
         let sectionNewDetail = await detailNew(detailData)
         pageContainer.innerHTML = ""
+        
 
 
         pageContainer.append(
@@ -437,6 +441,8 @@ export async function slDetailFeatures() {
          return pageContainer
 
     })
+
+
 
     return sectionDetail
 

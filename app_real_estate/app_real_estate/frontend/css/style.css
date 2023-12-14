@@ -1876,8 +1876,16 @@ i.fa.fa-angle-left {
 	/* display: flex; */
 	justify-content: center;
 	
+}
 
-
+.form-edit-inputs {
+	padding: 70px 30px;
+	border: 1px solid #e1e1e1;
+	border-top: none;
+	width: 750px;
+	/* display: flex; */
+	justify-content: center;
+	
 }
 
 
@@ -1927,13 +1935,13 @@ i.fa.fa-angle-left {
 .saveButton {
 	display: inline-block;
 	border-radius: 3px;
-	border-color: #3b891d;
+	border-color: #30caa0;
 	text-decoration: none;
 	font-size: 22px;
 	font-weight: 400;
 	text-align: center;
 	padding: 16px 42px;
-	background: #45ca30;
+	background: #30caa0;
 	color: #fff;
 	min-width: 200px;
 	width: 244px;
@@ -1941,10 +1949,77 @@ i.fa.fa-angle-left {
 	cursor: pointer;
 }
 
-.input-form {
-	min-width: 400px;
-	padding: 20px;
+.edit-contaner {
+	justify-content: center;
+	display: flex;
+	width: 100%;
 }
+
+.input-form  {
+	min-width: 400px;
+	margin: 20px;
+}
+
+.form-edit .input-form button{
+	margin:0 auto;
+}
+.form-edit :last-child {
+	justify-content: center;
+	display: flex;
+}
+
+.form-edit .input-form textarea, input, label, button {
+	font-size: 1rem;
+    line-height: 1.5;
+}
+
+.form-edit .input-form textarea, input {
+	width: 100%;
+	border: 3px solid #aeabab;
+	padding: 0.8rem;
+  }
+
+ 
+
+.input-form input:focus {
+	border: 3px solid #555;
+	padding: 0.4rem;
+  }
+
+.input-form textarea:focus {
+	border: 3px solid #555;
+	padding: 0.4rem;
+  }
+
+.input-form textarea {
+	height: 200px;
+  }
+
+.input-form label {
+	visibility: hidden;
+	
+	font-weight:600;
+	color: #747171;
+	margin-bottom: 0.4rem;
+	display: block;
+  }
+
+.input-form-sidebar {
+	/* min-width: 400px; */
+	margin: 0;
+	min-width: 270px; 
+	padding: 0px;
+  }
+
+  .input-form-sidebar .input-form {
+	margin: 0;
+  }
+
+.input-form-sidebar textarea.input-form{
+	margin-bottom: 17px;
+	/* padding: 0 20px; */
+  }
+
 
 
 /*-------------------------

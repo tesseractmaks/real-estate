@@ -12,12 +12,16 @@ export async function detailNew(detailData) {
     // filter.classList.add("filter-search-hide")
     let containerForm = document.createElement("div")
     containerForm.classList.add("container")
+    
 
     let divSingleList = document.createElement("div")
     divSingleList.classList.add("single-list-content")
+    
 
     let divRow = document.createElement("div")
     divRow.classList.add("row")
+    divRow.classList.add("edit-contaner")
+    
 
     let buttonSave = await buttonElement("сохранить", "saveButton", "save")
 
@@ -29,6 +33,7 @@ export async function detailNew(detailData) {
 
 
     let listContent = [
+        {"описание": detailData.description, "id": "description"},
         {"улица": detailData.street, "id": "srteet"},
         {"город": detailData.city, "id": "city"},
         {"область": detailData.state, "id": "state"},
@@ -40,7 +45,6 @@ export async function detailNew(detailData) {
         {"категория": detailData.category_id, "id": "title"},
         {"количество ванных комнат": detailData.bathrooms, "id": "bathrooms"},
         {"возраст": detailData.age, "id": "age"},
-        {"описание": detailData.description, "id": "description"},
     ]
 
     listContent.forEach(function(item){
@@ -50,7 +54,21 @@ export async function detailNew(detailData) {
         let placeholderTitle = Object.keys(item)[0]
         let inputElem;
         let typeInput;
-        
+
+        if (["postal_code", "price", "house_area", "bedrooms", "garages", "bathrooms", "age"].includes(Object.values(item)[1])){
+            typeInput = "number"
+            }
+            else {
+                typeInput = "text"
+            }
+            inputElem = formInputElement(
+                idElement, 
+                labelText, 
+                typeInput,
+                typeName,
+                placeholderTitle
+                )
+            
         if (Object.values(item)[1] == "description") {
             inputElem = textareaElement(
                 idElement, 
@@ -59,19 +77,6 @@ export async function detailNew(detailData) {
                 placeholderTitle
                 )
             };
-        if (("postal_code", "price", "house_area", "bedrooms", "garages", "bathrooms", "age").includes(Object.values(item)[1])){
-            typeInput = "number"} else {
-                typeInput = "text"
-            }
-            
-        
-            inputElem = formInputElement(
-                idElement, 
-                labelText, 
-                typeInput,
-                typeName,
-                placeholderTitle
-                )
             formElem.prepend(inputElem)
         divRow.append(formElem)
         

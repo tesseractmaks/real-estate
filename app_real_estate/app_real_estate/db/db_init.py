@@ -31,6 +31,7 @@ async def connect_create_if_exist(user, password, db_name):
 
 async def init_db():
     async with db_helper.engine.begin() as conn:
+        await conn.run_sync(Base.metadata.drop_all)
         tables = await conn.run_sync(
             lambda sys_conn: inspect(sys_conn).get_table_names()
         )
@@ -49,19 +50,6 @@ async def init_db():
     # await add_test_user_data()
     # await conn.commit()
     # add_test_data(conn)
-
-
-async def add_test_user_data():
-    async with db_helper.engine.begin() as conn:
-        for _ in range(1, 4):
-            values_data = {
-                "email": "one@mail.ru",
-                "password": "qwerty",
-                "is_active": True,
-            }
-
-            await conn.execute(insert(User).values(values_data))
-        await conn.commit()
 
 
 async def add_test_post_data():
@@ -88,10 +76,10 @@ async def add_test_categories_data():
 
 async def add_test_profile_data():
     async with db_helper.engine.begin() as conn:
-        for _ in range(1, 4):
+        for i in range(1, 4):
             values_data = {
-                "user_id": 1,
-                "rating_count": 1,
+                "user_id": i,
+                "rating_count": i,
                 "nickname": "string",
                 "deals_count": 0,
                 "phone": "string",
@@ -99,10 +87,24 @@ async def add_test_profile_data():
                 "first_name": "string",
                 "last_name": "string",
                 "role": "string",
-                "post": 1
+                "post": 1,
+
             }
 
             await conn.execute(insert(Profile).values(values_data))
+        await conn.commit()
+
+
+async def add_test_user_data():
+    async with db_helper.engine.begin() as conn:
+        for _ in range(1, 4):
+            values_data = {
+                "email": f"one@mail.ru{_}",
+                "password": "qwerty",
+                "is_active": True,
+            }
+
+            await conn.execute(insert(User).values(values_data))
         await conn.commit()
 
 

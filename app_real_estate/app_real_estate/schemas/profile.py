@@ -1,5 +1,10 @@
+import json
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field, ConfigDict
+from typing import Annotated
+
+
+from app_real_estate.schemas import UserProfileSchema
 
 
 class ProfileSchema(BaseModel):
@@ -16,8 +21,17 @@ class ProfileSchema(BaseModel):
     post:  int | None = None
 
 
+# class UserSchema(BaseModel):
+#     # model_config = ConfigDict(from_attributes=True)
+#     # email: EmailStr
+#     email: str
+#     password: str
+#     is_active: bool
+
+
 class ProfileResponseSchema(ProfileSchema):
-    ...
+
+    users: UserProfileSchema
 
 
 class ProfileCreateSchema(ProfileSchema):

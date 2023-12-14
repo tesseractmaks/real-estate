@@ -1,3 +1,4 @@
+
 export async function getListProperties(page = 1, params = {}) {
     let response;
 
@@ -7,7 +8,6 @@ export async function getListProperties(page = 1, params = {}) {
         };
     };
     
-  
 
     if (JSON.stringify(params) === '{}') {
         response = await fetch(`http://127.0.0.1:8000/api/v1/properties/?page=${page}`);
@@ -20,5 +20,14 @@ export async function getListProperties(page = 1, params = {}) {
     const propertyData = await response.json();
 
 return propertyData
-}
+};
+
+
+
+export async function getSidebarProperties() {
+    let response = await fetch(`http://127.0.0.1:8000/api/v1/properties/sidebar`);
+      
+    const propertyData = await response.json();
+    return propertyData
+};
 

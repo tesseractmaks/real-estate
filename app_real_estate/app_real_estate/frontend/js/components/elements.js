@@ -9,9 +9,9 @@ export function anyIelements(tagname, faClass, textPart1="") {
     return any
 };
 
-export function pIelements(faClass, textPart1="", textPart2="") {
+export function pIelements(faClass, textPart1="") {
     let p = document.createElement("p")
-    p.textContent = text
+    p.textContent = textPart1
     let i = document.createElement("i")
     i.classList.add("fa")
     i.classList.add(faClass)
@@ -27,6 +27,14 @@ export function aIelements(link, faClass, textPart1="", textPart2="") {
     i.classList.add(faClass)
     a.textContent = textPart1 + textPart2
     a.prepend(i)
+    return a
+};
+
+export function aElements(link, aClass, textPart1="", textPart2="") {
+    let a = document.createElement("a")
+    a.classList.add(aClass)
+    a.href = link
+    a.textContent = textPart1 + textPart2
     return a
 };
 

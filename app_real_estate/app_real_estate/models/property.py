@@ -36,8 +36,11 @@ class Property(Base):
     # arbitrary_types_allowed = True
 
     agent_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
+    # agent_id: Mapped[int] = mapped_column(nullable=True)
     # profile_id: Mapped[int] = mapped_column(ForeignKey("profiles.id"))
+
     users = relationship("User", uselist=False, back_populates="properties")
+    # users: Mapped[int] = mapped_column(nullable=True)
 
     category_id: Mapped[int] = mapped_column(ForeignKey("categories.id"))
     categories = relationship("Category", back_populates="properties")

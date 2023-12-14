@@ -32,15 +32,15 @@ class AssociateRatings(Base):
 
 
 
-# class ReceivingRating(Base):
-#     __tablename__ = "receiving_ratings"
-#
-#     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
-#
-#     # profile_id: Mapped[int] = mapped_column(ForeignKey("profiles.id"))
-#     # profiles: Mapped["Profile"] = relationship(secondary="Profile", back_populates="receiving_ratings")
-#
-#     # ratting: Mapped[list["User"]] = relationship(secondary="ratting_relation", back_populates="profiles")
-#
-#     def __str__(self):
-#         return f"{self.user_id}, {self.profile_id}"
+class ReceivingRating(Base):
+    __tablename__ = "receiving_ratings"
+
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
+
+    # profile_id: Mapped[int] = mapped_column(ForeignKey("profiles.id"))
+    # profiles: Mapped["Profile"] = relationship(secondary="Profile", back_populates="receiving_ratings")
+
+    # ratting: Mapped[list["User"]] = relationship(secondary="ratting_relation", back_populates="profiles")
+
+    def __str__(self):
+        return f"{self.user_id}, {self.profile_id}"

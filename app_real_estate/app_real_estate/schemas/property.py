@@ -13,7 +13,7 @@ class CategorySchema(BaseModel):
 
 
 class PropertySchema(BaseModel):
-    model_config = ConfigDict(extra="allow")
+    model_config = ConfigDict(extra="allow", from_attributes=True)
     id: int
     agent_id: int
     category_id: int

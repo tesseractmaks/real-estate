@@ -15,9 +15,9 @@ __all__ = (
     "create_rating_db",
     "update_rating_db",
     "delete_rating_db",
-    "read_feedback_by_id_db",
-    "read_feedbacks_db",
-    "create_feedback_db",
+    # "read_feedback_by_id_db",
+    # "read_feedbacks_db",
+    # "create_feedback_db",
     "update_feedback_db",
     "delete_feedback_db",
     "create_category_db",
@@ -30,6 +30,7 @@ __all__ = (
     "delete_property_db",
     "read_properties_db",
     "update_property_db",
+    "sidebar_properties_db",
     "update_file_property",
     "count_cities_db",
 
@@ -77,9 +78,9 @@ from .rating_user import (
 )
 
 from .feedback_user import (
-    read_feedback_by_id_db,
-    read_feedbacks_db,
-    create_feedback_db,
+    # read_feedback_by_id_db,
+    # read_feedbacks_db,
+    # create_feedback_db,
     update_feedback_db,
     delete_feedback_db
 )
@@ -100,6 +101,7 @@ from .property import (
     delete_property_db,
     update_file_property,
     count_cities_db,
+    sidebar_properties_db,
 )
 
 from .posts_user import (

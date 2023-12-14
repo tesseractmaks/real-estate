@@ -1,6 +1,6 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, update, func
-
+from sqlalchemy.engine import Result
 from fastapi_pagination.ext.sqlalchemy import paginate
 
 from app_real_estate.models import Property
@@ -26,9 +26,15 @@ async def read_properties_db(session: AsyncSession, property_filter: PropertyFil
     if property_filter.bedrooms == 0:
         property_filter.bedrooms = None
 
-
     stmt = property_filter.filter(select(Property))
     return paginate(session, stmt)
+
+
+async def sidebar_properties_db(session: AsyncSession) -> list[PropertySchema]:
+    query = select(Property).order_by(Property.time_published).limit(3)
+    result: Result = await session.execute(query)
+    properties = result.scalars().all()
+    return list(properties)
 
 # async def read_properties_db(session: AsyncSession):
 #     stmt = select(Property).order_by(Property.id)

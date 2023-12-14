@@ -17,14 +17,19 @@ class ProfileSchema(BaseModel):
 
 
 class UserSchema(BaseModel):
-    # model_config = ConfigDict(from_attributes=True)
+    model_config = ConfigDict(from_attributes=True)
     # email: EmailStr
     email: str
     password: str
     is_active: bool
 
 
+class UserProfileSchema(BaseModel):
+    email: str
+
+
 class UserResponseSchema(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
     email: str
     profile: ProfileSchema
 # class UserResponseSchema(BaseModel):

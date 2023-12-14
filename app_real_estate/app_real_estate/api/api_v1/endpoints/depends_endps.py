@@ -7,7 +7,7 @@ from app_real_estate.crud import (
     read_user_by_id_db,
     read_profile_by_id_db,
     read_rating_by_id_db,
-    read_feedback_by_id_db,
+    # read_feedback_by_id_db,
     read_category_by_id_db,
     read_property_by_id_db,
     read_post_by_id_db,
@@ -60,16 +60,16 @@ async def rating_by_id(
     )
 
 
-async def feedback_by_id(
-        feedback_id: Annotated[int, Path],
-        session: AsyncSession = Depends(db_helper.scoped_session_dependency)
-) -> FeedbackUserSchema:
-    feedback = await read_feedback_by_id_db(session=session, feedback_id=feedback_id)
-    if feedback is not None:
-        return feedback
-    raise HTTPException(
-        status_code=status.HTTP_404_NOT_FOUND, detail="not found..."
-    )
+# async def feedback_by_id(
+#         feedback_id: Annotated[int, Path],
+#         session: AsyncSession = Depends(db_helper.scoped_session_dependency)
+# ) -> FeedbackUserSchema:
+#     feedback = await read_feedback_by_id_db(session=session, feedback_id=feedback_id)
+#     if feedback is not None:
+#         return feedback
+#     raise HTTPException(
+#         status_code=status.HTTP_404_NOT_FOUND, detail="not found..."
+#     )
 
 
 async def category_by_id(

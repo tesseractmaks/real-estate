@@ -53,9 +53,6 @@ export async function feturesSection(page = 1, params = {}) {
     // }
     propertyData = propertyData = await getListProperties(page, params);
 
-
-  
-    
     // setStorageData("currentPage", propertyData["items"])
     
     
