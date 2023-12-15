@@ -6,7 +6,7 @@
  import { feturesSection } from "../components/fetures-section.js"
  import { reviewSection } from "../components/review-slider.js"
  import { servicesSection } from "../components/services.js"
- import { heroSection } from "../components/hero.js"
+//  import { heroSection } from "../components/hero.js"
 
  import { mainSiteData } from "../main.js"
 
@@ -58,7 +58,7 @@ export async function mainContainer(feturesBloc, cityName="") {
     
     
     // Hero section 
-    const heroBlock = await heroSection(mainSite)
+    // const heroBlock = await heroSection(mainSite)
     
     // Filter form section
     const filterForm = await filterFormSection(cityName)
@@ -68,7 +68,7 @@ export async function mainContainer(feturesBloc, cityName="") {
 
     
     // Feature section
-    feturesBloc
+    // let feturesBloc;
     let feturesBlock;
 
 
@@ -101,7 +101,7 @@ export async function mainContainer(feturesBloc, cityName="") {
 
 
     mainPage.append(
-        heroBlock,
+        // heroBlock,
         filterForm,
         galleryBlock,
         feturesBlock, 

@@ -32,15 +32,19 @@ app.include_router(
 
 origins = [
     "http://127.0.0.1",
+    "https://127.0.0.1",
     "http://127.0.0.1:8000",
     "http://127.0.0.1:5050",
+    "https://127.0.0.1:5050",
 ]
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins="*",
+    # allow_origins=origins,
     allow_credentials=True,
-    allow_methods=["GET", "OPTIONS", "HEAD", "POST"],
+    # allow_methods=["GET", "OPTIONS", "HEAD", "PATCH", "POST", "DELETE"],
+    allow_methods="*",
     allow_headers=["*"],
 )
 

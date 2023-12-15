@@ -68,6 +68,6 @@ class Property(Base):
     map: Mapped[str] = mapped_column(default="", server_default="")
 
     def __str__(self):
-        return f"{self.agent}, {self.city}, {self.category}"
+        return f"{self.city}"
         # return f"{self.agent}, {self.city}, {self.street}, {self.category}"
 

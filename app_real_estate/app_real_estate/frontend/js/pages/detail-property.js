@@ -1,9 +1,11 @@
 import { jsonToData, setStorageData, deleteStorageData } from "../utils.js"
-import { detailNew } from "./detail-property-edit.js"
+
 import { sidebarAgent } from "../components/sidebar.js"
-import { aIelements, anyIelements } from "../components/elements.js"
-import { buttonElement } from "../components/button.js"
+import { aIelements, anyIelements, buttonElement } from "../components/elements.js"
+
+import { deleteOnePropery } from "../components/list-properties.js"
 import { pageContainer } from "../main.js"
+import { router } from "../main.js"
 // Slider features Detail
 
 function singleList(detailData) {
@@ -270,7 +272,7 @@ async function breadcrumb() {
 
     let containerBread = document.createElement("div")
     containerBread.classList.add("container")
-    let a = aIelements("index.html", "fa-home", "Home")
+    let a = aIelements("/", "fa-home", "Home")
 
     let span = anyIelements("span", "fa-angle-right", "Single Listing")
     containerBread.append(a, span)
@@ -281,15 +283,15 @@ async function breadcrumb() {
 
 
 
-export async function slDetailFeatures() {
+export async function slDetailFeatures(detailData) {
     const sectionDetail = document.createElement("section")
     let breadcr = await breadcrumb()
     // console.log(breadcr)
     sectionDetail.append(breadcr)
     sectionDetail.classList.add("page-section")
     let spanButtons = document.createElement("span")
-    let buttonEdit = await buttonElement("редактировать", "editButton", "edit")
-    let buttonDelete = await buttonElement("удалить", "deleteButton", "delete")
+    let buttonEdit = await buttonElement("редактировать", ["editButton"], "edit")
+    let buttonDelete = await buttonElement("удалить", ["deleteButton"], "delete")
     let divButton = document.createElement("div")
     divButton.classList.add("detailButtons")
 
@@ -326,11 +328,11 @@ export async function slDetailFeatures() {
     // };
 
     let currentPage = "currentPage"
-    let detailData;
+    // let detailData;
     let response;
 
-    response = await fetch(`http://127.0.0.1:8000/api/v1/properties/2/`);
-    detailData = await response.json();
+    // response = await fetch(`http://127.0.0.1:8000/api/v1/properties/2/`);
+    // detailData = await response.json();
 
 
 
@@ -426,21 +428,20 @@ export async function slDetailFeatures() {
 
     };
 
+    buttonDelete.addEventListener("click", async function(elem){
+        elem.preventDefault();
+        console.log(detailData["id"], "=====")
+        await deleteOnePropery(detailData["id"])
+        router.navigate("/")
+        window.location.reload();
+    });
+
     buttonEdit.addEventListener("click", async function(elem){
         elem.preventDefault();
-        let sectionNewDetail = await detailNew(detailData)
-        pageContainer.innerHTML = ""
-        
+        router.navigate("/edit/property/"+ `${detailData["id"]}`)
+    });
 
 
-        pageContainer.append(
-            sectionNewDetail
-            )
-        
-    
-         return pageContainer
-
-    })
 
 
 

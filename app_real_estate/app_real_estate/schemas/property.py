@@ -24,6 +24,7 @@ class PropertySchema(BaseModel):
     postal_code: int | None = 0
     price: int | None = 0
     photo: list[str] | None = None
+    # photo: list[str] | None = None
     status: str | None = None
     house_area: int | None = 0
     bedrooms: int | None = 0

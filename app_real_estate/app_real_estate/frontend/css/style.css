@@ -472,6 +472,10 @@ ol {
 	background: #eca643;
 }
 
+
+
+
+
 /*------------------
   Services section
 /* ---------------------*/
@@ -1865,6 +1869,113 @@ i.fa.fa-angle-left {
 	color: #30caa0;
 	margin-right: 10px;
 }
+/* Upload */
+
+.preview {
+	display: flex;
+	flex-wrap: wrap;
+	padding: .5rem;
+}
+
+.preview-image {
+	margin-top: .5rem;
+	margin-right: .5rem;
+	position: relative;
+	overflow: hidden;
+}
+
+
+.preview-image img {
+	width: 180px;
+	height: auto;
+}
+
+.preview-image:hover .preview-remove {
+	opacity: 1;
+}
+
+.preview-remove {
+	opacity: 0;
+	width: 20px;
+	height: 20px;
+	position: absolute;
+	right: 0;
+	top: 0;
+	font-weight: bold;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: rgba(248, 35, 35, 0.5);
+	cursor: pointer;
+	transition: opacity .22s;
+}
+
+.preview-image.removing {
+	transform: scale(0);
+	transition: transform .3s;
+}
+
+.preview-info {
+	height: 24px;
+	position: absolute;
+	right: 0;
+	bottom: -30px;
+	left: 0;
+	font-size: .8rem;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	background: rgba(115, 113, 113, 0.5);
+	padding: 0 5px;
+	transition: bottom .22s;
+
+}
+
+.preview-image:hover .preview-info {
+	bottom: 0px;
+}
+
+
+.uploadBtn {
+	/* display: inline-block; */
+	/* display: flex; */
+	border-radius: 3px;
+	border-color: #30caa0;
+	text-decoration: none;
+	font-size: 16px;
+	font-weight: 600;
+	text-align: center;
+	background: #30caa0;
+	color: #fff;
+	min-width: 130px;
+	height: 30px;
+	/* margin: 20px; */
+	/* padding: 16px 42px; */
+	cursor: pointer;
+}
+
+.primary {
+	margin-left: 50px;
+}
+
+input[type=file] {
+	display: none;
+}
+
+.preview-info-progress {
+	position: absolute;
+	left: 0;
+	top: 0;
+	bottom: 0;
+	background: rgb(48, 202, 160, 0.5);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	transition: width .22s;
+
+}
+
+
 
 /* Detail Page */
 
@@ -1960,12 +2071,13 @@ i.fa.fa-angle-left {
 	margin: 20px;
 }
 
-.form-edit .input-form button{
+.form-edit .input-form #save{
 	margin:0 auto;
 }
-.form-edit :last-child {
+.form-edit #save {
 	justify-content: center;
 	display: flex;
+	/* display: inline-block; */
 }
 
 .form-edit .input-form textarea, input, label, button {

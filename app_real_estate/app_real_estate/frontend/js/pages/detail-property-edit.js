@@ -1,7 +1,8 @@
 import { jsonToData, setStorageData, deleteStorageData } from "../utils.js"
 import { formElement, formInputElement, textareaElement } from "../components/form.js"
-import { aIelements, anyIelements } from "../components/elements.js"
-import { buttonElement } from "../components/button.js"
+import { aIelements, anyIelements, buttonElement } from "../components/elements.js"
+
+import { upload } from "../components/upload.js"
 
 // Slider features Detail
 
@@ -23,14 +24,18 @@ export async function detailNew(detailData) {
     divRow.classList.add("edit-contaner")
     
 
-    let buttonSave = await buttonElement("сохранить", "saveButton", "save")
+    let buttonSave = await buttonElement("сохранить", ["saveButton"], "save")
 
    
     const formElem = formElement(buttonSave)
     formElem.classList.add("form-edit")
     formElem.classList.add("col-lg-8")
     formElem.classList.add("single-list-page")
-
+    
+    let uploadElem = await upload(["input-form"], ["uploadBtn"], {
+        accept: [".png", ".jpg", ".jpeg", ".gif"]
+    })
+    // console.log(uploadElem)
 
     let listContent = [
         {"описание": detailData.description, "id": "description"},
@@ -77,11 +82,12 @@ export async function detailNew(detailData) {
                 placeholderTitle
                 )
             };
-            formElem.prepend(inputElem)
-        divRow.append(formElem)
+        formElem.prepend(inputElem)
         
     })
-    
+    formElem.prepend(uploadElem)
+    divRow.append(formElem)
+
     
 
     // let divCol8 = document.createElement("div")
@@ -339,7 +345,7 @@ async function breadcrumb() {
 
     let containerBread = document.createElement("div")
     containerBread.classList.add("container")
-    let a = aIelements("index.html", "fa-home", "Home")
+    let a = aIelements("/", "fa-home", "Home")
 
     let span = anyIelements("span", "fa-angle-right", "Single Listing")
     containerBread.append(a, span)

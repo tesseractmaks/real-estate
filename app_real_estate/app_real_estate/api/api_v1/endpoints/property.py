@@ -1,6 +1,7 @@
 import os
 import shutil
 import urllib
+from typing import Any, List, Annotated, Optional
 
 from fastapi import APIRouter, status, Depends, UploadFile, File
 from fastapi_pagination import add_pagination
@@ -65,6 +66,7 @@ async def read_properties(
 
 add_pagination(router)
 
+
 @router.get("/sidebar", response_model=list[PropertySchema])
 async def read_property_sidebar(
         session: AsyncSession = Depends(db_helper.scoped_session_dependency)
@@ -84,42 +86,54 @@ async def read_property_by_id(
 
 @router.post(
     "/",
-    response_model=PropertySchema,
+    # response_model=PropertySchema,
     status_code=status.HTTP_201_CREATED
 )
 async def create_property(
-        property_in: PropertyCreateSchema,
+        # property_in: PropertyCreateSchema,
+        property_in: Any,
         session: AsyncSession = Depends(db_helper.scoped_session_dependency)
 ):
-    return await create_property_db(session=session, property_in=property_in)
+    print(property_in)
+
+    # return await create_property_db(session=session, property_in=property_in)
 
 
 @router.patch(
-    "/upload/{property_id}",
-    status_code=status.HTTP_201_CREATED
+    "/upload/{property_id}/"
+    # status_code=status.HTTP_201_CREATED
 )
 async def upload_file_profile(
         _property: PropertySchema = Depends(property_by_id),
-        session: AsyncSession = Depends(db_helper.scoped_session_dependency),
-        photo: UploadFile = File(...),
+        # session: AsyncSession = Depends(db_helper.scoped_session_dependency),
+        photos: List[UploadFile] = File(...)
 ):
+
+    # print(property_by_id)
+    # print(_property)
+    # print(photos.filename)
     # cwd = os.getcwd()
-    path_image_dir = f"img/properties/{_property.id}/"
-    full_image_path = os.path.join(path_image_dir, photo.filename)
+    # print(files)
 
-    if not os.path.exists(path_image_dir):
-        os.makedirs(path_image_dir, exist_ok=True)
+    for photo in photos:
+        # print(photo.filename)
 
-    file_name = full_image_path.replace(photo.filename, f"{photo.filename}.png")
+        path_image_dir = f"img/properties/{_property.id}/"
+        full_image_path = os.path.join(path_image_dir, photo.filename)
 
-    with open(file_name, "wb") as img:
-        shutil.copyfileobj(photo.file, img)
+        if not os.path.exists(path_image_dir):
+            os.makedirs(path_image_dir, exist_ok=True)
 
-    return await update_file_property(
-        session=session,
-        _property=_property,
-        url_file=file_name,
-    )
+        file_name = full_image_path.replace(photo.filename, f"{photo.filename}.png")
+
+        with open(file_name, "wb") as img:
+            shutil.copyfileobj(photo.file, img)
+        #
+        # return await update_file_property(
+        #     session=session,
+        #     _property=_property,
+        #     url_file=file_name,
+        # )
 
 
 @router.put(
@@ -155,9 +169,9 @@ async def update_property_partial(
     )
 
 
-@router.delete("/{property_id}/", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete("/{property_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_property(
         _property: PropertySchema = Depends(property_by_id),
         session: AsyncSession = Depends(db_helper.scoped_session_dependency)
 ) -> None:
-    await delete_property_db(property=_property, session=session)
+    await delete_property_db(_property=_property, session=session)

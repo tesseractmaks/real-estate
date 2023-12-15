@@ -61,3 +61,48 @@ export function ulAelement(ulClass="", collection="") {
     });
     return ul
 };
+
+export function anyElement(tag, classes = [], content) {
+    const node = document.createElement(tag)
+
+    if (classes.length) {
+        node.classList.add(...classes)
+    }
+
+    if (content) {
+        node.textContent = content
+    }
+    return node
+};
+
+export async function buttonElement(content, classes = [], idElem) {
+    const button = document.createElement("button")
+
+    if (classes.length) {
+        button.classList.add(...classes)
+    }
+
+    if (content) {
+        button.textContent = content
+    }
+
+    if (idElem) {
+        button.id = idElem
+    }
+
+    return button
+}
+
+export async function imgElement(src, alt) {
+    const img = document.createElement("img")
+
+    if (src) {
+        img.src = src
+    }
+
+    if (alt) {
+        img.alt = alt
+    }
+
+    return img
+}

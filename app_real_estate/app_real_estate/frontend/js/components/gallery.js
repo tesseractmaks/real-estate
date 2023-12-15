@@ -107,10 +107,13 @@ export async function gallerySection() {
             // console.log(feturesBlock,"---==")
             // await render(feturesBlock)
             pageContainer.innerHTML = ""
-
     
             let feturesBlockNew =  await mainContainer(feturesBlock, cityName)
             pageContainer.append(feturesBlockNew)
+            const slow = 2000
+            // window.scrollTo({ top: 1000, behavior: 'smooth' })
+            scrollTo(1000,2000)
+
        
            
             // getPageContainer(mainPage)

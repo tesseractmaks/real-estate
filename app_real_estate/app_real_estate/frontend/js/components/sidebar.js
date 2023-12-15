@@ -120,7 +120,7 @@ export async function relatedProperties() {
     divH2.textContent = "Related Property"
     divProperties.append(divH2)
 
-    console.log(propertyData)
+    // console.log(propertyData)
     propertyData.forEach(function (element) {
 
         // for(let i=0; i < 4; i++){

@@ -115,7 +115,7 @@ export function filterFormSection(cityName){
             };
         };
         let page;
-        window.scrollTo({ top: 1900, behavior: 'smooth' })
+        // window.scrollTo({ top: 1900, behavior: 'smooth' })
 
         divContainer.append(filterForm)
         divFilter.append(divContainer)
@@ -131,6 +131,7 @@ export function filterFormSection(cityName){
     
         let feturesBlockNew =  await mainContainer(feturesBlock, city)
         pageContainer.append(feturesBlockNew)
+        window.scrollTo({ top: 1000, behavior: 'smooth' })
         // return feturesBlock
     });
 

@@ -83,7 +83,7 @@ export function mainMenu(main_site) {
     divNavbar.classList.add("site-navbar")
 
     let aLogo = document.createElement("a")
-    aLogo.href = "index.html"
+    aLogo.href = "/"
     aLogo.classList.add("site-logo")
 
     let imgLogo = document.createElement("img")

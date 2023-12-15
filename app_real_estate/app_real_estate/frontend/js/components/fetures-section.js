@@ -10,6 +10,7 @@ import { getListProperties } from "./list-properties.js"
 // import { mainSiteData } from "../main.js"
 import { mainContainer } from '../pages/main-page.js'
 import { pageContainer } from '../main.js'
+import { router } from '../main.js'
 
 
 export async function feturesSection(page = 1, params = {}) {
@@ -65,8 +66,17 @@ export async function feturesSection(page = 1, params = {}) {
         divCol.setAttribute("data-id", `${element["id"]}`)
 
         let button = document.createElement("a")
-        button.setAttribute("href", `./single-list.html` + `?${element["id"]}`)
+        // button.setAttribute("href", `./single-list.html` + `?${element["id"]}`)
         button.setAttribute("id", element["id"])
+
+        button.href = "/detail/"+ `${element["id"]}`
+        // button.setAttribute("data-navigo", true)
+        button.addEventListener("click", function (e) {
+            e.preventDefault()
+            router.navigate("/detail/"+ `${element["id"]}`)
+        })
+
+        
 
         let divFeature = document.createElement("div")
         divFeature.classList.add("feature-item")
@@ -160,7 +170,10 @@ export async function feturesSection(page = 1, params = {}) {
         iU.classList.add("fa")
         iU.classList.add("fa-user")
         let a = document.createElement("a")
-        a.setAttribute("href", "#")
+
+        a.href = "#"
+        // a.setAttribute("data-navigo", true)
+
         a.textContent = element["agent_id"]
         pU.append(a)
         pU.prepend(iU)
@@ -195,6 +208,7 @@ export async function feturesSection(page = 1, params = {}) {
         row.append(divCol)
 
     });
+    
 
 
     // const mainSite = await mainSiteData()
@@ -225,6 +239,7 @@ export async function feturesSection(page = 1, params = {}) {
     let pages = divPagina.childNodes[0].children
     for (let link of pages){
         link.addEventListener('click', async function (e) {
+            console.log("===")
 
             e.preventDefault();
 
@@ -258,7 +273,7 @@ export async function feturesSection(page = 1, params = {}) {
             //      )
             
 
-            window.scrollTo({ top: 1900, behavior: 'smooth' })
+            window.scrollTo({ top: 1000, behavior: 'smooth' })
             // console.log(mainPage,"=")
 
             return feturesBlock

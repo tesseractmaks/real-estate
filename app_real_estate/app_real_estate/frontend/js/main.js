@@ -13,14 +13,16 @@ import { heroSectionDetail } from "./components/hero-detail.js"
 // import { gallerySection } from './components/gallery.js'
 // import { feturesSection } from "./components/fetures-section.js"
 // import { reviewSection } from "./components/review-slider.js"
-// import { servicesSection } from "./components/services.js"
+import { getOnePropery } from "./components/list-properties.js"
 import { slDetailFeatures } from "./pages/detail-property.js"
 import { detailNew } from "./pages/detail-property-edit.js"
+
 
 import {  mainContainer  } from "./pages/main-page.js"
 
 import { footerSection } from "./components/footer-section.js"
 
+export const router = new Navigo('/');
 
 // var window_w = $(window).innerWidth();
 // $(window).on('load', function () {
@@ -66,7 +68,7 @@ export function getPageContainer() {
 	return page
 }
 export const pageContainer =  getPageContainer()
-pageContainer.innerHTML = ""
+// pageContainer.innerHTML = ""
 // Header section 
 export const headerSection = getHeader(mainSite)
 
@@ -97,36 +99,56 @@ const mainPage = await mainContainer()
 
 // Footer section
 export const footerBlock = await footerSection(mainSite)
-const detailBlock = await slDetailFeatures()
+
 // export const detailBlockEdit = detailNew()
 
 // main.append(feturesBlock, servicesBlock, reviewBlock, footerBlock)
 
 // pageContainer.innerHTML = ""
-pageContainer.append(detailBlock)
+// pageContainer.append(detailBlock)
 // pageContainer.append(detailBlockEdit)
 // pageContainer.append(heroBlockDetail, detailBlock)
 
+const mainContaner = document.createElement("contaner")
+router.on('/', function () {
+	mainContaner.innerHTML = ""
+	pageContainer.innerHTML = ""
+	if (mainPage !="undefined") {
+		pageContainer.append(mainPage)}
+		mainContaner.append(heroBlock, pageContainer)
+	});
 
 
-app.innerHTML = ""
-app.append(
-	headerSection, 
-	heroBlockDetail,
+router.on('/detail/:id', async function (e) {
+	console.log(e.data.id)
+	mainContaner.innerHTML = ""
+	pageContainer.innerHTML = ""
+	const detailData = await getOnePropery(e.data.id)
+	const detailBlock = await slDetailFeatures(detailData)
+	pageContainer.append(detailBlock)
+	mainContaner.append(heroBlockDetail, pageContainer)
+  });
+
+router.on('/edit/property/:id', async function (e) {
+	console.log(e.data.id)
+	mainContaner.innerHTML = ""
+	pageContainer.innerHTML = ""
+	const detailData = await getOnePropery(e.data.id)
+
+	let sectionNewDetail = await detailNew(detailData)
+	pageContainer.innerHTML = ""
 	
-	// filterForm,
-	pageContainer,
-	footerBlock,
-	)
+	pageContainer.append(sectionNewDetail)
+	
+	mainContaner.append(heroBlockDetail, pageContainer)
+  });
 
-
-// if (mainPage !="undefined") {
-// pageContainer.append(mainPage)
 
 
 // app.innerHTML = ""
 // app.append(
-// 	headerSection, 
+	// headerSection, 
+// 	heroBlockDetail,
 	
 // 	// filterForm,
 // 	pageContainer,
@@ -134,8 +156,21 @@ app.append(
 // 	)
 
 
+router.resolve();
 
 
+app.innerHTML = ""
+app.append(
+	headerSection, 
+	
+	// filterForm,
+	mainContaner,
+	footerBlock,
+	)
+
+
+
+// router.resolve();
 // let seconds = 1000 * 3
 // let timerImg = setInterval(() =>slowSlider(), seconds);
 
@@ -257,6 +292,7 @@ function slowSliderclients() {
 	// };
 	
 };
+
 
 
 // slowSliderclients()
