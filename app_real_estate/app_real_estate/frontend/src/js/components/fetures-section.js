@@ -9,8 +9,7 @@ import { getListProperties } from "./list-properties.js"
 // import { heroSection } from "../components/hero.js"
 // import { mainSiteData } from "../main.js"
 import { mainContainer } from '../pages/main-page.js'
-import { pageContainer } from '../main.js'
-import { router } from '../main.js'
+import { router, pageContainer } from '../../index.js'
 
 
 export async function feturesSection(page = 1, params = {}) {
@@ -84,8 +83,8 @@ export async function feturesSection(page = 1, params = {}) {
         let divFeaturePic = document.createElement("div")
         divFeaturePic.classList.add("feature-pic")
         divFeaturePic.classList.add("set-bg")
-        divFeaturePic.setAttribute("data-setbg", element["photo"][0])
-        divFeaturePic.setAttribute("style", `background-image: url(${element["photo"][0]});`)
+        divFeaturePic.setAttribute("data-setbg", `/src${element["photo"][0]}`)
+        divFeaturePic.setAttribute("style", `background-image: url(/src${element["photo"][0]});`)
 
         let divSale = document.createElement("div")
         if (element["status"] == "sale") {

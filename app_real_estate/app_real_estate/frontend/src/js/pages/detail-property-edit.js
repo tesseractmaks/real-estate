@@ -7,52 +7,52 @@ import { upload } from "../components/upload.js"
 // Slider features Detail
 
 export async function detailNew(detailData) {
-    
+
     // let filter = document.querySelector(".filter-search")
     // console.log(filter)
     // filter.classList.add("filter-search-hide")
     let containerForm = document.createElement("div")
     containerForm.classList.add("container")
-    
+
 
     let divSingleList = document.createElement("div")
     divSingleList.classList.add("single-list-content")
-    
+
 
     let divRow = document.createElement("div")
     divRow.classList.add("row")
     divRow.classList.add("edit-contaner")
-    
+
 
     let buttonSave = await buttonElement("сохранить", ["saveButton"], "save")
 
-   
+
     const formElem = formElement(buttonSave)
     formElem.classList.add("form-edit")
     formElem.classList.add("col-lg-8")
     formElem.classList.add("single-list-page")
-    
+
     let uploadElem = await upload(["input-form"], ["uploadBtn"], {
         accept: [".png", ".jpg", ".jpeg", ".gif"]
     })
     // console.log(uploadElem)
 
     let listContent = [
-        {"описание": detailData.description, "id": "description"},
-        {"улица": detailData.street, "id": "srteet"},
-        {"город": detailData.city, "id": "city"},
-        {"область": detailData.state, "id": "state"},
-        {"индекс": detailData.postal_code, "id": "postal_code"},
-        {"цена": detailData.price, "id": "price"},
-        {"площадь": detailData.house_area, "id": "house_area"},
-        {"количество комнат": detailData.bedrooms, "id": "bedrooms"},
-        {"количество гаражей": detailData.garages, "id": "garages"},
-        {"категория": detailData.category_id, "id": "title"},
-        {"количество ванных комнат": detailData.bathrooms, "id": "bathrooms"},
-        {"возраст": detailData.age, "id": "age"},
+        { "описание": detailData.description, "id": "description" },
+        { "улица": detailData.street, "id": "srteet" },
+        { "город": detailData.city, "id": "city" },
+        { "область": detailData.state, "id": "state" },
+        { "индекс": detailData.postal_code, "id": "postal_code" },
+        { "цена": detailData.price, "id": "price" },
+        { "площадь": detailData.house_area, "id": "house_area" },
+        { "количество комнат": detailData.bedrooms, "id": "bedrooms" },
+        { "количество гаражей": detailData.garages, "id": "garages" },
+        { "категория": detailData.category_id, "id": "title" },
+        { "количество ванных комнат": detailData.bathrooms, "id": "bathrooms" },
+        { "возраст": detailData.age, "id": "age" },
     ]
 
-    listContent.forEach(function(item){
+    listContent.forEach(function (item) {
         let idElement = Object.values(item)[1]
         let labelText = Object.keys(item)[0]
         let typeName = Object.values(item)[1]
@@ -60,35 +60,35 @@ export async function detailNew(detailData) {
         let inputElem;
         let typeInput;
 
-        if (["postal_code", "price", "house_area", "bedrooms", "garages", "bathrooms", "age"].includes(Object.values(item)[1])){
+        if (["postal_code", "price", "house_area", "bedrooms", "garages", "bathrooms", "age"].includes(Object.values(item)[1])) {
             typeInput = "number"
-            }
-            else {
-                typeInput = "text"
-            }
-            inputElem = formInputElement(
-                idElement, 
-                labelText, 
-                typeInput,
-                typeName,
-                placeholderTitle
-                )
-            
+        }
+        else {
+            typeInput = "text"
+        }
+        inputElem = formInputElement(
+            idElement,
+            labelText,
+            typeInput,
+            typeName,
+            placeholderTitle
+        )
+
         if (Object.values(item)[1] == "description") {
             inputElem = textareaElement(
-                idElement, 
-                labelText, 
+                idElement,
+                labelText,
                 typeName,
                 placeholderTitle
-                )
-            };
+            )
+        };
         formElem.prepend(inputElem)
-        
+
     })
     formElem.prepend(uploadElem)
     divRow.append(formElem)
 
-    
+
 
     // let divCol8 = document.createElement("div")
     // divCol8.classList.add("col-xl-8")
@@ -315,7 +315,7 @@ function accordionPlan(detailData) {
         divPanelBody.classList.add("panel-body")
 
         let img = document.createElement("img")
-        img.setAttribute("src", "../img/plan-sketch.jpg")
+        img.setAttribute("src", "/src/img/plan-sketch.jpg")
         img.setAttribute("alt", "img")
         divPanelBody.append(img)
         divCollapse.append(divPanelBody)
@@ -326,10 +326,10 @@ function accordionPlan(detailData) {
 
     };
 
-    for(let panel of divAccordion.querySelectorAll(".panel")){
+    for (let panel of divAccordion.querySelectorAll(".panel")) {
 
-        panel.children[0].children[0].addEventListener("click", function(e) {
-        
+        panel.children[0].children[0].addEventListener("click", function (e) {
+
             panel.children[0].children[0].classList.toggle('active')
             panel.children[1].classList.toggle("show")
             e.preventDefault();
@@ -454,7 +454,7 @@ export async function slDetailFeatures() {
         detailData["photo"].forEach(function (elem) {
             let divImg = document.createElement("img")
             divImg.classList.add("img-item")
-            divImg.setAttribute("src", `${elem}`)
+            divImg.setAttribute("src", `/src${elem}`)
             // divImg.setAttribute("src", elem)
             divImg.setAttribute("alt", "img")
             divImg.setAttribute("alt", "img")
@@ -471,7 +471,7 @@ export async function slDetailFeatures() {
         containerDetail.append(rowDetail)
         sectionDetail.append(containerDetail)
 
-        
+
         pointsSlider(divArrowLeft, divArrowRight, divPoint, divImgArea)
         // pointsSlider()
 
@@ -528,11 +528,11 @@ function pointsSlider(leftBtn, rightBtn, pointsRow, imagesRow) {
     let points = pointsRow.children
     let images = imagesRow.children
 
-// export function pointsSlider() {
-//     let leftBtn = document.querySelector("#left-btn")
-//     let rightBtn = document.querySelector("#right-btn")
-//     let points = document.querySelectorAll(".point")
-//     let images = document.querySelectorAll(".img-item")
+    // export function pointsSlider() {
+    //     let leftBtn = document.querySelector("#left-btn")
+    //     let rightBtn = document.querySelector("#right-btn")
+    //     let points = document.querySelectorAll(".point")
+    //     let images = document.querySelectorAll(".img-item")
 
     points[0].classList.add("point-active")
     images[0].classList.add("active-image")

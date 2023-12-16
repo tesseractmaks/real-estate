@@ -87,7 +87,7 @@ export function mainMenu(main_site) {
     aLogo.classList.add("site-logo")
 
     let imgLogo = document.createElement("img")
-    imgLogo.setAttribute("src", "../img/logo.png")
+    imgLogo.setAttribute("src", "/src/img/logo.png")
     imgLogo.setAttribute("alt", "logo")
     aLogo.append(imgLogo)
 

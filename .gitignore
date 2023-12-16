@@ -23,3 +23,6 @@ auth.py
 *.env
 p.py
 practic/
+node_*/
+dist/
+img/

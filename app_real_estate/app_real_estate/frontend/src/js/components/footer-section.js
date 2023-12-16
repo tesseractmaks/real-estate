@@ -7,16 +7,16 @@ export async function footerSection(main_site) {
     let element = main_site["footer"]
     let footer = document.createElement("footer")
     footer.classList.add("footer-section", "set-bg")
-    footer.setAttribute("data-setbg", "../img/footer-bg.jpg")
-    footer.setAttribute("style", "background-image: url(../img/footer-bg.jpg)")
+    footer.setAttribute("data-setbg", "/src/img/footer-bg.jpg")
+    footer.setAttribute("style", "background-image: url(/src/img/footer-bg.jpg)")
 
     let footerContainer = document.createElement("div")
     footerContainer.classList.add("container")
 
     let rowElement = document.createElement("div")
     rowElement.classList.add("row")
-    
-    
+
+
 
     for (let idx = 0; idx < 4; idx++) {
         let divCol = document.createElement("div")
@@ -27,9 +27,11 @@ export async function footerSection(main_site) {
         if (idx == 0) {
 
             let img = document.createElement("img")
-            img.setAttribute("src", "../img/logo.png")
-            // img.setAttribute("src", element["image"])
+            let aimg = document.createElement("a")
+            aimg.href = "/"
+            img.setAttribute("src", "/src/img/logo.png")
             img.setAttribute("alt", "logo")
+            aimg.append(img)
 
             let p = document.createElement("p")
             p.textContent = element["p"]
@@ -50,7 +52,7 @@ export async function footerSection(main_site) {
                 a.append(i)
                 divLinks.append(a)
             });
-            divCol.append(img, p, divLinks)
+            divCol.append(aimg, p, divLinks)
         };
         rowElement.append(divCol)
 
@@ -192,7 +194,7 @@ async function footerBottom(main_site) {
     element["footerBottom"].forEach(function (elem, idx) {
         let li = document.createElement("li");
         let a = document.createElement("a");
-        a.setAttribute("href", "../img/logo.png")
+        a.setAttribute("href", "/src/img/logo.png")
         // a.setAttribute("href", elem["link"])
         a.textContent = elem["text"]
         li.append(a)

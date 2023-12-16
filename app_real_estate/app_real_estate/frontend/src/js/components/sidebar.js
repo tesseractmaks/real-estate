@@ -19,7 +19,7 @@ export async function sidebarAgent() {
 };
 
 
-export async function authorCard(){
+export async function authorCard() {
 
     let divAuthor = document.createElement("div")
     divAuthor.classList.add("author-card")
@@ -27,8 +27,8 @@ export async function authorCard(){
     let divAuthorImg = document.createElement("div")
     divAuthorImg.classList.add("author-img")
     divAuthorImg.classList.add("set-bg")
-    divAuthorImg.setAttribute("data-setbg", "../img/author.jpg")
-    divAuthorImg.setAttribute("style", `background-image: url(../img/author.jpg);`)
+    divAuthorImg.setAttribute("data-setbg", "/src/img/author.jpg")
+    divAuthorImg.setAttribute("style", `background-image: url(/src/img/author.jpg);`)
 
     let divAuthorInfo = document.createElement("div")
     divAuthorInfo.classList.add("author-info")
@@ -46,7 +46,7 @@ export async function authorCard(){
 
     let pPhone = pIelements("fa-phone", "(567) 666 121 2233")
     let pEnvelope = pIelements("fa-envelope", "ginawesley26@gmail.com")
-    
+
     divAuthorContact.append(pPhone, pEnvelope)
 
     divAuthor.append(divAuthorImg, divAuthorInfo, divAuthorContact)
@@ -54,7 +54,7 @@ export async function authorCard(){
 }
 
 
-export async function contactFormCard(){
+export async function contactFormCard() {
 
     let divContact = document.createElement("div")
     divContact.classList.add("contact-form-card")
@@ -70,14 +70,14 @@ export async function contactFormCard(){
         "text",
         "your-name",
         "Your name"
-        )
+    )
     let formInputEmail = formInputElement(
-        "your-email", 
-        "", 
+        "your-email",
+        "",
         "text",
         "your-email",
         "Your email"
-        )
+    )
     let sendButton = document.createElement("button")
     sendButton.textContent = "SEND"
 
@@ -96,7 +96,7 @@ export async function contactFormCard(){
     formInputEmail.querySelector("label").remove()
 
 
-  
+
     let block = document.createElement("div")
     block.classList.add("input-form-sidebar")
     block.style.minWidth = "270px"
@@ -105,7 +105,7 @@ export async function contactFormCard(){
 
 
     formElem.append(block)
-   
+
     divContact.append(divH5, formElem)
 
     return divContact
@@ -124,47 +124,47 @@ export async function relatedProperties() {
     propertyData.forEach(function (element) {
 
         // for(let i=0; i < 4; i++){
-            
-            let divItem = document.createElement("div")
-            divItem.classList.add("rp-item")
 
-            let divPic = document.createElement("div")
-            divPic.classList.add("rp-pic")
-            divPic.classList.add("set-bg")
+        let divItem = document.createElement("div")
+        divItem.classList.add("rp-item")
 
-            divPic.setAttribute("data-setbg", `${element["photo"][0]}`)
-            divPic.setAttribute("style", `background-image: url(${element["photo"][0]});`)
+        let divPic = document.createElement("div")
+        divPic.classList.add("rp-pic")
+        divPic.classList.add("set-bg")
 
-            let divSale = document.createElement("div")
-            if (element["status"] == "sale") {
-                divSale.classList.add("sale-notic")
-                divSale.textContent = "FOR SALE"
-            };
-            if (element["status"] == "rent") {
-                divSale.classList.add("rent-notic")
-                divSale.textContent = "FOR RENT"
-            };
+        divPic.setAttribute("data-setbg", `/src${element["photo"][0]}`)
+        divPic.setAttribute("style", `background-image: url(/src${element["photo"][0]});`)
 
-            divPic.append(divSale)
+        let divSale = document.createElement("div")
+        if (element["status"] == "sale") {
+            divSale.classList.add("sale-notic")
+            divSale.textContent = "FOR SALE"
+        };
+        if (element["status"] == "rent") {
+            divSale.classList.add("rent-notic")
+            divSale.textContent = "FOR RENT"
+        };
 
-            let divInfo = document.createElement("div")
-            divInfo.classList.add("rp-info")
+        divPic.append(divSale)
 
-            let infoH5 = document.createElement("h5")
-            infoH5.textContent = element["street"]
+        let divInfo = document.createElement("div")
+        divInfo.classList.add("rp-info")
 
-            let address = ` ${element["city"]}, ${element["state"]} ${element["postal_code"]}`
+        let infoH5 = document.createElement("h5")
+        infoH5.textContent = element["street"]
 
-            let pAdr = pIelements("fa-map-marker", address)
+        let address = ` ${element["city"]}, ${element["state"]} ${element["postal_code"]}`
 
-            divInfo.append(infoH5, pAdr)
-            
-            let btn = aElements(element["id"], "rp-price", element["price"])
+        let pAdr = pIelements("fa-map-marker", address)
 
-            divItem.append(divPic, divInfo, btn)
+        divInfo.append(infoH5, pAdr)
 
-            
-            divProperties.append(divItem)
+        let btn = aElements(element["id"], "rp-price", element["price"])
+
+        divItem.append(divPic, divInfo, btn)
+
+
+        divProperties.append(divItem)
         // };
     });
 

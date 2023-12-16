@@ -8,7 +8,7 @@
  import { servicesSection } from "../components/services.js"
 //  import { heroSection } from "../components/hero.js"
 
- import { mainSiteData } from "../main.js"
+ import { mainSiteData } from "../../index.js"
 //  import { footerSection } from "./components/footer-section.js"
 //  import { footerSection } from "./components/footer-section.js"
  

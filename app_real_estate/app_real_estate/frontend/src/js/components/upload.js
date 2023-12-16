@@ -14,14 +14,14 @@ function formatBytes(bytes) {
 }
 // function noop() {}
 
-export async function upload(classesDiv = [], classesBtn = [], options = {}){
+export async function upload(classesDiv = [], classesBtn = [], options = {}) {
     let classDiv;
     let classBtn;
     let files = []
     // const onUpload = options.onUpload ?? noop
     const preview = await anyElement("div", ["preview"])
-    
-    
+
+
     if (classesDiv) {
         classDiv = classesDiv
     }
@@ -46,13 +46,13 @@ export async function upload(classesDiv = [], classesBtn = [], options = {}){
     }
 
 
-    open.addEventListener("click", function(event) {
+    open.addEventListener("click", function (event) {
         event.preventDefault()
         input.click()
     })
 
-    input.addEventListener("change", function(event) {
-        
+    input.addEventListener("change", function (event) {
+
         if (!event.target.files.length) {
             return
         }
@@ -65,21 +65,21 @@ export async function upload(classesDiv = [], classesBtn = [], options = {}){
             if (!file.type.match("image")) {
                 return
             }
-        
+
             const reader = new FileReader()
 
-            reader.onload = async ev =>{
+            reader.onload = async ev => {
                 // console.log(ev)
                 let src = ev.target.result
                 const previewImg = await anyElement("div", ["preview-image"])
                 let previewRemove = await anyElement("div", ["preview-remove"])
-                previewRemove.setAttribute("data-name",file.name)
+                previewRemove.setAttribute("data-name", file.name)
                 previewRemove.innerHTML = "&times;"
 
                 let previewInfo = await anyElement("div", ["preview-info"])
                 let previewSpanName = await anyElement("span", [], file.name)
                 let previewSpanSize = await anyElement("span", [], formatBytes(file.size))
-                
+
                 previewInfo.append(previewSpanName, previewSpanSize)
 
                 const img = await imgElement(src, file.name)
@@ -88,20 +88,20 @@ export async function upload(classesDiv = [], classesBtn = [], options = {}){
             }
 
             // const block = preview.querySelector(`[data-name="${name}"]`).closest(".preview-image")
-            
+
             // console.log(preview.dataset.name)
 
             reader.readAsDataURL(file)
 
-            
+
         })
     })
 
-    preview.addEventListener("click", function(event) {
+    preview.addEventListener("click", function (event) {
         if (!event.target.dataset.name) {
             return
         }
-        const {name} = event.target.dataset
+        const { name } = event.target.dataset
         files = files.filter(file => file.name !== name)
 
         if (!files.length) {
@@ -113,11 +113,11 @@ export async function upload(classesDiv = [], classesBtn = [], options = {}){
         setTimeout(() => block.remove(), 300)
     })
 
-    upload.addEventListener("click", function(event) {
+    upload.addEventListener("click", function (event) {
         if (!event.target.dataset.name) {
             return
         }
-        const {name} = event.target.dataset
+        const { name } = event.target.dataset
         files = files.filter(file => file.name !== name)
         const block = preview.querySelector(`[data-name="${name}"]`).closest(".preview-image")
         block.classList.add("removing")
@@ -128,17 +128,17 @@ export async function upload(classesDiv = [], classesBtn = [], options = {}){
     const clearPreview = el => {
         el.style.bottom = "0"
         el.innerHTML = '<div class="preview-info-progress"></div>'
-        }
-    
+    }
 
 
-    upload.addEventListener("click", async function(event) {
+
+    upload.addEventListener("click", async function (event) {
         event.preventDefault()
         Array.from(preview.querySelectorAll(".preview-remove")).forEach(e => e.remove())
 
         let previewInfo = preview.querySelectorAll(".preview-info")
         Array.from(previewInfo).forEach(clearPreview)
-        
+
         await onUpload(files, previewInfo)
 
     })

@@ -1,6 +1,6 @@
 import { feturesSection } from "./fetures-section.js"
 import { mainContainer } from '../pages/main-page.js'
-import { pageContainer } from '../main.js'
+import { pageContainer } from '../../index.js'
 
 
 

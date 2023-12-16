@@ -10,9 +10,9 @@ export async function reviewSection() {
     const sectionReview = document.createElement("section")
     sectionReview.classList.add("review-section", "set-bg")
     // sectionReview.setAttribute("data-setbg", `${element["image"]}`)
-    sectionReview.setAttribute("data-setbg", `../img/review-bg.jpg`)
+    sectionReview.setAttribute("data-setbg", `/src/img/review-bg.jpg`)
     // sectionReview.setAttribute("style", `background-image: url(${element["image"]});`)
-    sectionReview.setAttribute("style", `background-image: url(../img/review-bg.jpg);`)
+    sectionReview.setAttribute("style", `background-image: url(/src/img/review-bg.jpg);`)
 
     let divContaner = document.createElement("div")
     divContaner.classList.add("container")
@@ -60,8 +60,8 @@ export async function reviewSection() {
 
         div.classList.add("clint-pic")
         div.classList.add("set-bg")
-        div.setAttribute("data-setbg", `../img/review/1.jpg`)
-        div.setAttribute("style", `background-image: url(../img/review/1.jpg);`)
+        div.setAttribute("data-setbg", `/src/img/review/1.jpg`)
+        div.setAttribute("style", `background-image: url(/src/img/review/1.jpg);`)
         // div.setAttribute("data-setbg", `${elem["image"]}`)
         // div.setAttribute("style", `background-image: url(${elem["image"]});`)
         div3.append(div2, p, h5, span, div)

@@ -5,8 +5,8 @@ export async function servicesSection(main_site) {
     // console.log(main_site)
     const sectionServices = document.createElement("section")
     sectionServices.classList.add("services-section", "spad", "set-bg")
-    sectionServices.setAttribute("data-setbg", "../img/service-bg.jpg")
-    sectionServices.setAttribute("style", "background-image: url(../img/service-bg.jpg);")
+    sectionServices.setAttribute("data-setbg", "/src/img/service-bg.jpg")
+    sectionServices.setAttribute("style", "background-image: url(/src/img/service-bg.jpg);")
 
     let containerServices = document.createElement("container")
     containerServices.classList.add("container")
@@ -17,10 +17,10 @@ export async function servicesSection(main_site) {
     let col6Services = document.createElement("div")
     col6Services.classList.add("col-lg-6")
 
-    
+
     let img = document.createElement("img")
     // img.setAttribute("src", element["image"])
-    img.setAttribute("src", "../img/service.jpg")
+    img.setAttribute("src", "/src/img/service.jpg")
     img.setAttribute("alt", "service")
     col6Services.append(img)
 

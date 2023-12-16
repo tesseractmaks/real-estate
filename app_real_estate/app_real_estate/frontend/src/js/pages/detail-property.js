@@ -5,7 +5,7 @@ import { aIelements, anyIelements, buttonElement } from "../components/elements.
 
 import { deleteOnePropery } from "../components/list-properties.js"
 // import { pageContainer } from "../main.js"
-import { router } from "../main.js"
+import { router } from "../../index.js"
 // Slider features Detail
 
 function singleList(detailData) {
@@ -242,7 +242,7 @@ function accordionPlan(detailData) {
         divPanelBody.classList.add("panel-body")
 
         let img = document.createElement("img")
-        img.setAttribute("src", "../img/plan-sketch.jpg")
+        img.setAttribute("src", "/src/img/plan-sketch.jpg")
         img.setAttribute("alt", "img")
         divPanelBody.append(img)
         divCollapse.append(divPanelBody)
@@ -394,7 +394,7 @@ export async function slDetailFeatures(detailData) {
         detailData["photo"].forEach(function (elem) {
             let divImg = document.createElement("img")
             divImg.classList.add("img-item")
-            divImg.setAttribute("src", `${elem}`)
+            divImg.setAttribute("src", `/src${elem}`)
             // divImg.setAttribute("src", elem)
             divImg.setAttribute("alt", "img")
             divImg.setAttribute("alt", "img")
