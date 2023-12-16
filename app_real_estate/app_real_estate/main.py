@@ -33,9 +33,8 @@ app.include_router(
 origins = [
     "http://127.0.0.1",
     "https://127.0.0.1",
-    "http://127.0.0.1:8000",
-    "http://127.0.0.1:5050",
-    "https://127.0.0.1:5050",
+    "http://127.0.0.1:1234",
+    "https://127.0.0.1:1234",
 ]
 
 app.add_middleware(

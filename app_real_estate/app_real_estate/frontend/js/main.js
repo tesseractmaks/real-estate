@@ -46,6 +46,7 @@ export async function mainSiteData() {
 	return mainData
 };
 
+
 const mainSite = await mainSiteData()
 
 const app = document.querySelector("#app")

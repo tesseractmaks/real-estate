@@ -105,13 +105,13 @@ async def create_property(
 )
 async def upload_file_profile(
         _property: PropertySchema = Depends(property_by_id),
-        # session: AsyncSession = Depends(db_helper.scoped_session_dependency),
+        session: AsyncSession = Depends(db_helper.scoped_session_dependency),
         photos: List[UploadFile] = File(...)
 ):
 
     # print(property_by_id)
     # print(_property)
-    # print(photos.filename)
+    print(photos)
     # cwd = os.getcwd()
     # print(files)
 
