@@ -2,7 +2,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, update, func
 from sqlalchemy.engine import Result
 from fastapi_pagination.ext.sqlalchemy import paginate
-
+from sqlalchemy.ext.asyncio import AsyncResult
 from app_real_estate.models import Property
 from app_real_estate.schemas import (
     PropertySchema,
@@ -31,16 +31,10 @@ async def read_properties_db(session: AsyncSession, property_filter: PropertyFil
 
 
 async def sidebar_properties_db(session: AsyncSession) -> list[PropertySchema]:
-    query = select(Property).order_by(Property.time_published).limit(3)
-    result: Result = await session.execute(query)
-    properties = result.scalars().all()
+    query = select(Property).order_by(Property.time_published).limit(6)
+    result: AsyncResult = await session.execute(query)
+    properties = result.unique().scalars().all()
     return list(properties)
-
-# async def read_properties_db(session: AsyncSession):
-#     stmt = select(Property).order_by(Property.id)
-#     result: Result = await session.execute(stmt)
-#     properties = result.scalars().all()
-#     return list(properties)
 
 
 async def read_property_by_id_db(session: AsyncSession, property_id: int) -> PropertySchema | None:

@@ -59,10 +59,21 @@ export function headerTopRight(main_site) {
     };
 
     let divUserPanel = document.createElement("div")
+    // const auth =  registrationForm()
+    // const login =  loginForm()
+    // divUserPanel.append(auth, login)
     divUserPanel.classList.add("user-panel")
-    let aRegister = aIelements("#", "fa-user-circle-o", " Register")
-    let aLogin = aIelements("#", "fa-sign-in", " Login")
+    let aRegister = aIelements("/auth", "fa-user-circle-o", " Register")
+    
+    let aLogin = aIelements("/login", "fa-sign-in", " Login")
     divUserPanel.append(aRegister, aLogin)
+
+    
+
+    // aLogin.addEventListener("click", async function (elem) {
+    //     elem.preventDefault();
+    //     router.navigate("/login")
+    // });
 
 
     topRight.append(topSocial, divUserPanel)

@@ -3,7 +3,7 @@ import { jsonToData, setStorageData, deleteStorageData } from "../utils.js"
 import { sidebarAgent } from "../components/sidebar.js"
 import { aIelements, anyIelements, buttonElement } from "../components/elements.js"
 
-import { deleteOnePropery } from "../components/list-properties.js"
+import { deleteOneProperty } from "../components/list-properties.js"
 // import { pageContainer } from "../main.js"
 import { router } from "../../index.js"
 // Slider features Detail
@@ -394,7 +394,7 @@ export async function slDetailFeatures(detailData) {
         detailData["photo"].forEach(function (elem) {
             let divImg = document.createElement("img")
             divImg.classList.add("img-item")
-            divImg.setAttribute("src", `/src${elem}`)
+            divImg.setAttribute("src", `${elem}`)
             // divImg.setAttribute("src", elem)
             divImg.setAttribute("alt", "img")
             divImg.setAttribute("alt", "img")
@@ -431,7 +431,7 @@ export async function slDetailFeatures(detailData) {
     buttonDelete.addEventListener("click", async function (elem) {
         elem.preventDefault();
         console.log(detailData["id"], "=====")
-        await deleteOnePropery(detailData["id"])
+        await deleteOneProperty(detailData["id"])
         router.navigate("/")
         window.location.reload();
     });
@@ -440,10 +440,6 @@ export async function slDetailFeatures(detailData) {
         elem.preventDefault();
         router.navigate("/edit/property/" + `${detailData["id"]}`)
     });
-
-
-
-
 
     return sectionDetail
 
@@ -496,7 +492,6 @@ function pointsSlider(leftBtn, rightBtn, pointsRow, imagesRow) {
     points[0].classList.add("point-active")
     images[0].classList.add("active-image")
 
-
     let counter = 0;
 
     for (let i = 0; i < points.length; i++) {
@@ -517,7 +512,7 @@ function pointsSlider(leftBtn, rightBtn, pointsRow, imagesRow) {
     let counterPoints = 0;
 
     leftBtn.addEventListener("click", () => {
-        console.log("---")
+        // console.log("---")
         for (let i = 0; i < images.length; i++) {
             for (let p = 0; p < points.length; p++) {
                 points[p].classList.remove("point-active")

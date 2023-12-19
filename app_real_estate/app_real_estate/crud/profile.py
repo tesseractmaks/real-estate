@@ -1,7 +1,7 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.engine import Result
 from sqlalchemy import select, update
-
+from sqlalchemy.ext.asyncio import AsyncResult
 from app_real_estate.models import Profile
 from app_real_estate.schemas import (
     ProfileSchema,
@@ -13,13 +13,24 @@ from app_real_estate.schemas import (
 
 async def read_profiles_db(session: AsyncSession) -> list[ProfileSchema]:
     stmt = select(Profile).order_by(Profile.id)
-    result: Result = await session.execute(stmt)
-    profiles = result.scalars().all()
+    result: AsyncResult = await session.execute(stmt)
+    profiles = result.unique().scalars().all()
     return list(profiles)
 
 
 async def read_profile_by_id_db(session: AsyncSession, profile_id: int) -> ProfileSchema | None:
     return await session.get(Profile, profile_id)
+
+# async def read_profile_by_id_db(
+#         session: AsyncSession,
+#         profile_id: int
+# ) -> ProfileSchema | None:
+#     stmt = select(Profile).where(Profile.id == profile_id)
+#     # stmt = select(User).order_by(User.id)
+#     result: Result = await session.execute(stmt)
+#     profile = result.scalar()
+#     return profile
+
 
 
 async def create_profile_db(

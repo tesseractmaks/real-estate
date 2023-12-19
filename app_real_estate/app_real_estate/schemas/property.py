@@ -4,6 +4,7 @@ from . import UserSchema, UserResponseSchema
 
 
 class CitiesSchema(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
     cities: list[tuple]
 
 
@@ -24,6 +25,8 @@ class PropertySchema(BaseModel):
     postal_code: int | None = 0
     price: int | None = 0
     photo: list[str] | None = None
+    # photo_file: list[str] | None = None
+    photo_plan: list[str] | None = None
     # photo: list[str] | None = None
     status: str | None = None
     house_area: int | None = 0
@@ -42,6 +45,7 @@ class PropertySchema(BaseModel):
 
 
 class PropertyResponseSchema(PropertySchema):
+    model_config = ConfigDict(from_attributes=True)
     users: UserResponseSchema
     categories: CategorySchema
 
@@ -55,5 +59,7 @@ class PropertyUpdateSchema(PropertySchema):
 
 
 class PropertyUpdatePartialSchema(PropertySchema):
-    agent: int | None = None
-    category: int | None = None
+    model_config = ConfigDict(from_attributes=True)
+    id: int | None = None
+    agent_id: int | None = None
+    category_id: int | None = None

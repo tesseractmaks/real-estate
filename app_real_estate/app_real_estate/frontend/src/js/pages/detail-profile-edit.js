@@ -7,7 +7,7 @@ import { upload } from "../components/upload.js"
 
 // Features Detail Edits
 
-export async function detailNew(detailData) {
+export async function profileNew(detailData) {
 
     let containerForm = document.createElement("div")
     containerForm.classList.add("container")
@@ -23,7 +23,6 @@ export async function detailNew(detailData) {
     let divRow = document.createElement("div")
     divRow.classList.add("row")
     divRow.classList.add("edit-contaner")
-
 
     let buttonSave = await buttonElement("сохранить", ["saveButton"], "save")
     buttonSave.disabled = true
@@ -41,41 +40,23 @@ export async function detailNew(detailData) {
             accept: [".png", ".jpg", ".jpeg", ".gif"]
         },
         "file-photo",
-        detailData.photo
+        [detailData.avatar]
     )
     let labelElem = anyElement("label", [], "фото")
     labelElem.setAttribute("for", "file")
     uploadElem.prepend(labelElem)
 
-    let uploadElemPlan = await upload(["input-form", "input-file"], ["uploadBtn"], {
-        accept: [".png", ".jpg", ".jpeg", ".gif"]
-    },
-        "input-plan",
-        detailData.photo_plan)
-
-    let labelElemPlan = anyElement("label", [], "фото плана")
-    labelElemPlan.setAttribute("for", "file-plan")
-    uploadElemPlan.prepend(labelElemPlan)
-
-    // console.log(uploadElem)
 
     let listContent = [
-        { "описание": detailData.description, "id": "description" },
-        { "улица": detailData.street, "id": "street" },
-        { "город": detailData.city, "id": "city" },
-        { "область": detailData.state, "id": "state" },
-        { "индекс": detailData.postal_code, "id": "postal_code" },
-        { "цена": detailData.price, "id": "price" },
-        { "площадь": detailData.house_area, "id": "house_area" },
-        { "количество комнат": detailData.bedrooms, "id": "bedrooms" },
-        { "количество гаражей": detailData.garages, "id": "garages" },
-        { "категория": detailData.category_id, "id": "title" },
-        { "количество ванных комнат": detailData.bathrooms, "id": "bathrooms" },
-        { "возраст": detailData.age, "id": "age" },
+        {"имя": detailData.first_name, "id": "first_name"},
+        {"фамилия": detailData.last_name, "id": "last_name"},
+        {"роль": detailData.role, "id": "role"},
+        {"никнейм": detailData.nickname, "id": "nickname"},
+        {"телефон": detailData.phone, "id": "phone"},
+        {"должность": detailData.post, "id": "post"}
     ]
     // console.log(detailData)
     listContent.forEach(function (item) {
-
         // console.log(Object.values(item)[0])
         let idElement = Object.values(item)[1]
         let labelText = Object.keys(item)[0]
@@ -83,15 +64,8 @@ export async function detailNew(detailData) {
         let placeholderTitle = Object.keys(item)[0]
         let valueData = Object.values(item)[0]
         let inputElem;
-        let typeInput;
+        let typeInput = "text"
 
-
-        if (["postal_code", "price", "house_area", "bedrooms", "garages", "bathrooms", "age"].includes(Object.values(item)[1])) {
-            typeInput = "number"
-        }
-        else {
-            typeInput = "text"
-        }
         inputElem = formInputElement(
             idElement,
             labelText,
@@ -100,32 +74,17 @@ export async function detailNew(detailData) {
             placeholderTitle,
             valueData
         )
-
-        if (Object.values(item)[1] == "description") {
-            inputElem = textareaElement(
-                idElement,
-                labelText,
-                typeName,
-                placeholderTitle,
-                valueData
-            )
-        };
         formElem.prepend(inputElem)
-
     })
 
-    formElem.prepend(uploadElem, uploadElemPlan)
+    formElem.prepend(uploadElem)
     divRow.append(formElem)
-
 
     containerForm.append(divRow)
     divSingleList.append(containerForm)
 
 
-
     let elementsForm = Array.from(formElem.querySelectorAll('input'))
-    elementsForm.push(formElem.querySelector('textarea'))
-
 
     // console.log(elementsForm)
     elementsForm.forEach(function (e) {
@@ -138,33 +97,19 @@ export async function detailNew(detailData) {
             buttonSave.classList.remove("button-disabled");
         })
     })
-
+    console.log(detailData)
 
     formElem.addEventListener('submit', async function (e) {
         e.preventDefault();
-        let photoUls = []
-        let planUls = []
         buttonSave.disabled = true
         buttonSave.classList.add("button-disabled")
-        // console.log(formElem)
+        
 
-        let imgPhoto = this.querySelectorAll(".file-photo img")
-        let imgPlan = this.querySelectorAll(".input-plan img")
-
-        Array.from(imgPhoto).forEach(function (e) {
-            const url = new URL(e.src)
-            photoUls.push(url.pathname)
-        })
-
-        Array.from(imgPlan).forEach(function (e) {
-            const url = new URL(e.src)
-            planUls.push(url.pathname)
-        })
+        let imgPhoto = formElem.querySelector(".file-photo img")
 
         let collectResponse = {}
-        collectResponse["photo"] = photoUls
-        collectResponse["photo_plan"] = planUls
 
+        collectResponse["avatar"] = imgPhoto.src
 
         elementsForm.forEach(function (e) {
             for (let item of listContent) {
@@ -180,26 +125,20 @@ export async function detailNew(detailData) {
         // console.log(collectResponse, "--")
 
 
-        const response = await fetch('http://127.0.0.1:8000/api/v1/properties/' + detailData.id,
+        const response = await fetch('http://127.0.0.1:8000/api/v1/profiles/' + detailData.id,
             {
                 method: 'PATCH',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(
+
                     {
-                        "description": collectResponse.description,
-                        "street": collectResponse.street,
-                        "city": collectResponse.city,
-                        "state": collectResponse.state,
-                        "postal_code": collectResponse.postal_code,
-                        "price": collectResponse.price,
-                        "house_areahouse_area": e.house_areahouse_area,
-                        "bedrooms": collectResponse.bedrooms,
-                        "garages": collectResponse.garages,
-                        "category_id": collectResponse.category_id,
-                        "bathrooms": collectResponse.bathrooms,
-                        "age": collectResponse.age,
-                        "photo": collectResponse.photo,
-                        "photo_plan": collectResponse.photo_plan,
+                        "last_name": collectResponse.last_name,
+                        "first_name": collectResponse.first_name,
+                        "phone": collectResponse.phone,
+                        "nickname": collectResponse.nickname,
+                        "post": collectResponse.post,
+                        "role": collectResponse.role,
+                        "avatar": collectResponse.avatar,
                     })
             });
         const data = await response.json();
@@ -220,8 +159,8 @@ async function breadcrumb(detailData) {
     let containerBread = document.createElement("div")
     containerBread.classList.add("container")
     let a = aIelements("/", "fa-home", "Home")
-    let aDetail = aElements("/detail/" + `${detailData["id"]}`, false, "Detail")
-    let spanDetail = anyIelements("span", "fa-angle-right", "Single Listing")
+    let aDetail = aElements("/profile/" + `${detailData["id"]}`, false)
+    let spanDetail = anyIelements("span", "fa-angle-right", "Profile")
     spanDetail.style.color = "black"
     let span = anyIelements("span", "fa-angle-right", "Edit")
 

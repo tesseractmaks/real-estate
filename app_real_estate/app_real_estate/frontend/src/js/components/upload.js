@@ -1,5 +1,6 @@
 import { anyElement, buttonElement, imgElement } from "./elements.js"
 import { onUpload } from "./list-properties.js"
+import { previewElem } from "./preview-image.js"
 
 function formatBytes(bytes) {
     if (!+bytes) return '0 Bytes'
@@ -14,12 +15,12 @@ function formatBytes(bytes) {
 }
 // function noop() {}
 
-export async function upload(classesDiv = [], classesBtn = [], options = {}) {
+export async function upload(classesDiv = [], classesBtn = [], options = {}, idElem="file", filesBd=[]) {
     let classDiv;
     let classBtn;
     let files = []
     // const onUpload = options.onUpload ?? noop
-    const preview = await anyElement("div", ["preview"])
+    const preview = await anyElement("div", ["preview", idElem])
 
 
     if (classesDiv) {
@@ -38,11 +39,22 @@ export async function upload(classesDiv = [], classesBtn = [], options = {}) {
 
     const input = await anyElement("input")
     input.type = "file"
-    input.id = "file"
+    input.id = idElem
     input.multiple = true
 
     if (options.accept && Array.isArray(options.accept)) {
         input.accept = options.accept.join(",")
+    }
+
+  
+    if (filesBd) {
+
+        filesBd.forEach(async file => {
+        preview.innerHTML = ""
+        
+       
+        let previewImgs = await previewElem(file, file.split("/")[4])
+        preview.append(previewImgs)})
     }
 
 
@@ -101,6 +113,7 @@ export async function upload(classesDiv = [], classesBtn = [], options = {}) {
         if (!event.target.dataset.name) {
             return
         }
+
         const { name } = event.target.dataset
         files = files.filter(file => file.name !== name)
 
@@ -109,7 +122,8 @@ export async function upload(classesDiv = [], classesBtn = [], options = {}) {
         }
 
         const block = preview.querySelector(`[data-name="${name}"]`).closest(".preview-image")
-        block.classList.add("removing")
+       
+        // block.classList.add("removing")
         setTimeout(() => block.remove(), 300)
     })
 
@@ -133,6 +147,7 @@ export async function upload(classesDiv = [], classesBtn = [], options = {}) {
 
 
     upload.addEventListener("click", async function (event) {
+        covsole.log("============")
         event.preventDefault()
         Array.from(preview.querySelectorAll(".preview-remove")).forEach(e => e.remove())
 

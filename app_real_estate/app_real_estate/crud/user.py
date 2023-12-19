@@ -2,6 +2,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.engine import Result
 from sqlalchemy import select
 
+from sqlalchemy.ext.asyncio import AsyncResult
 from app_real_estate.db import db_helper
 from app_real_estate.models import User
 from app_real_estate.schemas import UserSchema, UserUpdateSchema, UserUpdatePartialSchema, UserCreateSchema
@@ -9,13 +10,25 @@ from app_real_estate.schemas import UserSchema, UserUpdateSchema, UserUpdatePart
 
 async def read_users_db(session: AsyncSession) -> list[UserSchema]:
     stmt = select(User).order_by(User.id)
-    result: Result = await session.execute(stmt)
-    users = result.scalars().all()
+    result: AsyncResult = await session.execute(stmt)
+    # result: Result = await session.execute(stmt)
+    users = result.unique().scalars().all()
     return list(users)
 
 
 async def read_user_by_id_db(session: AsyncSession, user_id: int) -> UserSchema | None:
     return await session.get(User, user_id)
+
+
+# async def read_user_by_id_db(
+#         session: AsyncSession,
+#         user_id: int
+# ) -> UserSchema | None:
+#     stmt = select(User).where(User.id == user_id)
+#     # stmt = select(User).order_by(User.id)
+#     result: Result = await session.execute(stmt)
+#     user = result.scalar()
+#     return user
 
 
 async def read_user_by_username_db(

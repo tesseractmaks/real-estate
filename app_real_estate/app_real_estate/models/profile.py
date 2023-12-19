@@ -14,8 +14,8 @@ if TYPE_CHECKING:
 
 class Profile(Base):
 
-    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"), unique=True, nullable=False)
-    users = relationship("User", uselist=False, back_populates="profile", lazy="joined")
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"), nullable=False)
+    users = relationship("User", uselist=False, lazy="joined", back_populates="profile")
     # properties = relationship("Property", uselist=False, back_populates="profile_agent", lazy="joined")
 
     # users: Mapped[list["User"]] = relationship(secondary="associate_feedbacks", back_populates="profiles")
@@ -28,7 +28,6 @@ class Profile(Base):
 
     # feedback = relationship("UserFeedback", backref=backref("profiles", lazy="select"))
     # user_feedbacks_id: Mapped[list[int]] = mapped_column(ForeignKey("associate_feedbacks.id"), nullable=True)
-
 
     @aggregated('users_rating', Column(Integer, default=0))
     def rating_count(self):

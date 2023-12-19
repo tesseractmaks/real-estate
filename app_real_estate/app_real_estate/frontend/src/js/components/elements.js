@@ -30,12 +30,16 @@ export function aIelements(link, faClass, textPart1="", textPart2="") {
     return a
 };
 
-export function aElements(link, aClass, textPart1="", textPart2="") {
-    let a = document.createElement("a")
-    a.classList.add(aClass)
-    a.href = link
-    a.textContent = textPart1 + textPart2
-    return a
+export function aElements(link, classes = [], textPart1="", textPart2="") {
+    let node = document.createElement("a")
+    
+    if (classes.length) {
+        node.classList.add(...classes)
+    }
+    
+    node.href = link
+    node.textContent = textPart1 + textPart2
+    return node
 };
 
 export function Ielement(faClass, textPart1="", textPart2="") {
@@ -46,7 +50,7 @@ export function Ielement(faClass, textPart1="", textPart2="") {
     return i
 };
 
-export function ulAelement(ulClass="", collection="") {
+export function ulAelement(ulClass="", collection=[]) {
     let ul = document.createElement("ul")
     ul.classList.add(ulClass)
 

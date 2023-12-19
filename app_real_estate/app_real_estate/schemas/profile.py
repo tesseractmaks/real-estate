@@ -8,6 +8,7 @@ from app_real_estate.schemas import UserProfileSchema
 
 
 class ProfileSchema(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
     user_id:  int | None = None
     # user_feedbacks_id: list[int] | None = None
     rating_count: int | None = 0
@@ -30,7 +31,8 @@ class ProfileSchema(BaseModel):
 
 
 class ProfileResponseSchema(ProfileSchema):
-
+    model_config = ConfigDict(from_attributes=True)
+    id: int | None = None
     users: UserProfileSchema
 
 
@@ -43,5 +45,6 @@ class ProfileUpdateSchema(ProfileSchema):
 
 
 class ProfileUpdatePartialSchema(ProfileSchema):
+    model_config = ConfigDict(from_attributes=True)
     ...
 

@@ -39,7 +39,7 @@ async def read_profiles(
 
 @router.get(
     "/{profile_id}/",
-    response_model=ProfileSchema
+    response_model=ProfileResponseSchema
 )
 async def read_profile_by_id(
         product: ProfileSchema = Depends(profile_by_id)

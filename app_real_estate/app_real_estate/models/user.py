@@ -18,7 +18,7 @@ class User(Base):
     profile = relationship("Profile", uselist=False, back_populates="users", lazy="joined")
     # profile = relationship("Profile", uselist=False, back_populates="users", lazy="joined")
 
-    properties = relationship("Property", uselist=False, back_populates="users", lazy="joined")
+    properties = relationship("Property",  back_populates="users", lazy="joined")
     #
     ratings: Mapped[list["AssociateRatings"]] = relationship(back_populates="user")
     #

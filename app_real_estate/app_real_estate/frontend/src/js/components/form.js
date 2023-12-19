@@ -4,7 +4,8 @@ export function formInputElement(
     labelText="", 
     typeInput="",
     typeName="",
-    placeholderTitle=""
+    placeholderTitle="",
+    valueData=""
     ) {
 
     let divInput = document.createElement("div")
@@ -13,6 +14,7 @@ export function formInputElement(
     labelElement.setAttribute("for", idElement)
     labelElement.textContent = labelText
     let inputElement = document.createElement("input")
+    inputElement.value = valueData
     inputElement.setAttribute("id", idElement)
     inputElement.setAttribute("type", typeInput)
     inputElement.setAttribute("name", typeName)
@@ -22,14 +24,19 @@ export function formInputElement(
     return divInput
 }
 
-export function formElement(buttonElement){
+export function formElement(buttonElement, classes = []){
     const form = document.createElement("form")
     form.setAttribute("action", "")
 
+
     let divInput = document.createElement("div")
-    divInput.classList.add("input-form")
+
+    if (classes.length) {
+        divInput.classList.add(...classes)
+    }
 
     divInput.append(buttonElement)
+    
     form.append(divInput)
     return form
 }
@@ -38,7 +45,8 @@ export function textareaElement(
     idElement, 
     labelText, 
     typeName,
-    placeholderTitle
+    placeholderTitle,
+    valueData
     ) {
 
     let divTextarea = document.createElement("div")
@@ -48,6 +56,7 @@ export function textareaElement(
     labelElement.setAttribute("for", idElement)
     labelElement.textContent = labelText
     let textareaElement = document.createElement("textarea")
+    textareaElement.value = valueData
     textareaElement.setAttribute("id", idElement)
     textareaElement.setAttribute("name", typeName)
     textareaElement.setAttribute("autocomplete", "off")

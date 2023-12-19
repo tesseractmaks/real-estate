@@ -39,7 +39,7 @@ class Property(Base):
     # agent_id: Mapped[int] = mapped_column(nullable=True)
     # profile_id: Mapped[int] = mapped_column(ForeignKey("profiles.id"))
 
-    users = relationship("User", uselist=False, back_populates="properties")
+    users = relationship("User", back_populates="properties", lazy="joined")
     # users: Mapped[int] = mapped_column(nullable=True)
 
     category_id: Mapped[int] = mapped_column(ForeignKey("categories.id"))
@@ -52,6 +52,7 @@ class Property(Base):
     postal_code: Mapped[int] = mapped_column(nullable=True)
     price: Mapped[int] = mapped_column(nullable=True)
     photo: Mapped[list | None] = mapped_column(ARRAY(String))
+    photo_plan: Mapped[list | None] = mapped_column(ARRAY(String))
     status: Mapped[str] = mapped_column(default="", server_default="")
     house_area: Mapped[int] = mapped_column(nullable=True)
     bedrooms: Mapped[int] = mapped_column(nullable=True)
