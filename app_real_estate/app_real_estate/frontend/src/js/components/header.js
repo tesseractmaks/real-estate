@@ -63,7 +63,7 @@ export function headerTopRight(main_site) {
     // const login =  loginForm()
     // divUserPanel.append(auth, login)
     divUserPanel.classList.add("user-panel")
-    let aRegister = aIelements("/auth", "fa-user-circle-o", " Register")
+    let aRegister = aIelements("/registration", "fa-user-circle-o", " Register")
     
     let aLogin = aIelements("/login", "fa-sign-in", " Login")
     divUserPanel.append(aRegister, aLogin)
@@ -141,5 +141,6 @@ export async function getHeader(main_site) {
     divContainerHeader.append(divRowHeader)
     divHeader.append(divContainerHeader, headerMainMenu)
     headerElement.append(divHeader)
+    
     return headerElement
 };

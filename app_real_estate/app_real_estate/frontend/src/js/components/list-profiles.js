@@ -15,7 +15,18 @@ export async function getRelatedProperties() {
 };
 
 export async function getOneProfile(idNum) {
-  let response = await fetch(`http://127.0.0.1:8000/api/v1/profiles/${idNum}/`);
+  let response = await fetch(`http://127.0.0.1:8000/api/v1/profiles/${idNum}/`,
+  {
+    // credentials: "same-origin"
+    
+  
+    // headers: {
+    //   'Accept': 'application/json',
+    //   'Content-Type': 'application/json',
+    //   'Cache': 'no-cache'
+    // },
+    // credentials: 'include'
+  });
 
   const profileData = await response.json();
   return profileData

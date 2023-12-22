@@ -38,7 +38,6 @@ async def read_user_by_username_db(
     stmt = select(User).where(User.email == username)
     # stmt = select(User).order_by(User.id)
     result: Result = await session.execute(stmt)
-
     user = result.scalar()
     return user
 
@@ -48,6 +47,7 @@ async def create_user_db(session: AsyncSession, user_in: UserCreateSchema) -> Us
     session.add(user)
     await session.commit()
     # await session.refresh(product)
+    print(user)
     return user
 
 

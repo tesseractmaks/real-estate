@@ -17,15 +17,18 @@ export async function registrationForm() {
          "",
          "text",
          "username",
-         "username"
+         "username",
+         "one@mail.ru1"
          )
+
 
     const passwordInput = formInputElement(
     "reg-password",
         "",
         "text",
         "password",
-        "password"
+        "password",
+        "qwerty"
         )
 
     const passwordReInput = formInputElement(
@@ -33,8 +36,10 @@ export async function registrationForm() {
             "",
             "text",
             "password-re",
-            "re-password"
+            "re-password",
+            "qwerty"
             )
+
 
     formElem.prepend(usernameInput, passwordInput, passwordReInput)
 

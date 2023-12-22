@@ -1,4 +1,5 @@
-from fastapi import APIRouter, status, Depends
+from typing import Any
+from fastapi import APIRouter, status, Depends, Cookie, Form
 from sqlalchemy.ext.asyncio import AsyncSession
 from passlib.context import CryptContext
 
@@ -21,16 +22,21 @@ from app_real_estate.auth import get_current_active_user
 
 router = APIRouter(tags=["Users"])
 
+# one@mail.ru1
+# qwerty
+
 
 @router.get(
     "/",
     response_model=list[UserResponseSchema]
 )
 async def read_users(
-        # current_user=Depends(get_current_active_user),
+        access_token: str | None = Cookie(default=None),
+        current_user=Depends(get_current_active_user),
         session: AsyncSession = Depends(db_helper.scoped_session_dependency),
 
 ):
+    print(access_token, "-------", current_user)
     return await read_users_db(session=session)
 
 
@@ -47,16 +53,20 @@ async def read_user_by_id(
 
 @router.post(
     "/",
-    response_model=UserResponseSchema,
+    # response_model=UserResponseSchema,
     status_code=status.HTTP_201_CREATED
 )
 async def create_user(
+
         user_in: UserCreateSchema,
-        session: AsyncSession = Depends(db_helper.scoped_session_dependency)
+
+        session: AsyncSession = Depends(db_helper.scoped_session_dependency),
+        # current_user=Depends(get_current_active_user),
 ):
-    pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-    user_in.password = pwd_context.hash(user_in.password)
-    return await create_user_db(session=session, user_in=user_in)
+    print("-=-=-=-------", user_in)
+    # pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+    # user_in.password = pwd_context.hash(user_in.password)
+    # return await create_user_db(session=session, user_in=user_in)
 
 
 @router.put(

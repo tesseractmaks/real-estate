@@ -6,6 +6,7 @@ __all__ = (
     # "AssociateFeedback",
     "AssociateRatings",
     "Post",
+    "RefreshKey"
 
 )
 
@@ -16,3 +17,4 @@ from .user import User
 # from .feedback_user import AssociateFeedback
 from .rating_user import AssociateRatings
 from .posts_user import Post
+from .refresh import RefreshKey

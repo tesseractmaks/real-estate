@@ -30,6 +30,7 @@ import { mainContainer  } from "./js/pages/main-page.js"
 import { footerSection } from "./js/components/footer-section.js"
 
 export const router = new Navigo('/');
+// export let myHeaders;
 
 // var window_w = $(window).innerWidth();
 // $(window).on('load', function () {
@@ -133,7 +134,12 @@ router.on('/', function () {
 // Property
 
 router.on('/detail/:id', async function (e) {
-	console.log(e.data.id)
+
+	let ca = document.cookie;
+		
+		// myHeaders = `Bearer ${token.access_token}`;
+	console.log(ca, "=-")
+
 	mainContaner.innerHTML = ""
 	pageContainer.innerHTML = ""
 	const detailData = await getOneProperty(e.data.id)
@@ -161,6 +167,7 @@ router.on('/edit/property/:id', async function (e) {
 
 router.on('/profile/:id', async function (e) {
 	// console.log(e.data.id)
+
 	mainContaner.innerHTML = ""
 	pageContainer.innerHTML = ""
 	const profileData = await getOneProfile(e.data.id)
@@ -198,23 +205,57 @@ router.on('/kabinet/:id', async function (e) {
 
 //   Registration/login
 
-router.on('/auth', async function (e) {
+router.on('/registration', async function (e) {
 	// console.log(e.data.id)
 	mainContaner.innerHTML = ""
 	pageContainer.innerHTML = ""
-	const auth = await registrationForm()
+	const reg = await registrationForm()
 	// let authModal = headerSection.querySelector(".modal")
-	auth.classList.add("open")
+	reg.classList.add("open")
 	// authModal.classList.add("open")
-	pageContainer.append(auth)
+	pageContainer.append(reg)
 	mainContaner.append(heroBlock, pageContainer)
 
-	let regBtn = document.querySelector("#reg-Btn")
+	let regForm = document.querySelector(".modal form")
 
-	regBtn.addEventListener("click", async function (elem) {
+	regForm.addEventListener("submit", async function (elem) {
 	let modalElem = document.querySelector(".modal")
 	modalElem.classList.remove("open")
 	elem.preventDefault();
+
+	let regUsername = document.querySelectorAll(".modal #reg-username")
+	let regPassword = document.querySelectorAll(".modal #reg-password")
+
+	//  one@mail.ru1
+	//  qwerty
+
+	// Array.from(regForm).forEach(async function (e) {
+
+	console.log(regUsername[0].value, regPassword[0].value)
+
+	let formData = new FormData()
+	
+	
+    formData.append('email', regUsername[0].value);
+    formData.append('password', regPassword[0].value)
+    formData.append('is_active', true)
+
+
+	const response = await fetch('http://127.0.0.1:8000/api/v1/users/',
+		{
+			method: 'POST',
+			body: formData,
+			headers: {'Content-Type': 'multipart/form-data'},
+            })
+        const data = await response.json();
+		console.log(data)
+		// let ca = document.cookie;
+		
+		// // myHeaders = `Bearer ${token.access_token}`;
+		// console.log(ca, "=-")
+
+	
+	
 	router.navigate("/")
 });
   });
@@ -228,17 +269,50 @@ router.on('/login', async function (e) {
 	pageContainer.append(login)
 	mainContaner.append(heroBlock, pageContainer)
 
-	let regBtn = document.querySelector("#reg-Btn")
+
+	// let regBtn = document.querySelector("#reg-Btn")
 
 	regBtn.addEventListener("click", async function (elem) {
 		let modalElem = document.querySelector(".modal")
 		modalElem.classList.remove("open")
 		elem.preventDefault();
-		router.navigate("/")});
+		
+		let loginUsername = document.querySelectorAll(".modal #login-username")
+		let loginPassword = document.querySelectorAll(".modal #login-password")
+
+		//  one@mail.ru1
+		//  qwerty
+
+		// Array.from(regForm).forEach(async function (e) {
+
+		console.log(loginUsername[0].value, loginPassword[0].value)
+
+		let formData = new FormData()
+		formData.append('username', loginUsername[0].value);
+		formData.append('password', loginPassword[0].value)
+		
+		const response = await fetch('http://127.0.0.1:8000/token',
+			{
+				method: 'POST',
+				body: formData,
+				headers: {"Authorization": "Bearer fgh" },
+				credentials: 'include'
+				})
+			const token = await response.json();
+			console.log(token.access_token)
+			router.navigate("/")
+
+		});
   });
 
 
 
+window.addEventListener("keydown", (e)=>{
+	if (e.key === "Escape") {
+		let modalObj = document.querySelector(".modal")
+		modalObj.classList.remove("open")
+	}
+})
 
 // app.innerHTML = ""
 // app.append(
@@ -262,7 +336,6 @@ app.append(
 	mainContaner,
 	footerBlock,
 	)
-
 
 
 // router.resolve();

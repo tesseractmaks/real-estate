@@ -6,7 +6,7 @@ from typing import Any, List, Annotated, Optional
 from fastapi import APIRouter, status, Depends, UploadFile, File
 from fastapi_pagination import add_pagination
 
-from fastapi import Request
+from fastapi import Request, Cookie, Response
 
 from app_real_estate.core import Page
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -15,6 +15,7 @@ from fastapi_filter import FilterDepends
 from urllib.parse import urlparse
 
 from app_real_estate.schemas import PropertyFilter, CitiesSchema
+from app_real_estate.auth import get_current_active_user
 
 from app_real_estate.crud import (
     read_properties_db,
@@ -79,9 +80,13 @@ async def read_property_sidebar(
     response_model=PropertySchema
 )
 async def read_property_by_id(
-        product: PropertySchema = Depends(property_by_id)
+        request: Request,
+        response: Response,
+        refresh_token: str | None = Cookie(default=None),
+        property_: PropertySchema = Depends(property_by_id),
+        current_user=Depends(get_current_active_user)
 ):
-    return product
+    return property_
 
 
 @router.post(
@@ -94,21 +99,16 @@ async def create_property(
         property_in: Any,
         session: AsyncSession = Depends(db_helper.scoped_session_dependency)
 ):
-    print(property_in)
+    # print(property_in)
 
-    # return await create_property_db(session=session, property_in=property_in)
+    return await create_property_db(session=session, property_in=property_in)
 
-
-@router.patch(
-    "/upload/{property_id}/"
-    # status_code=status.HTTP_201_CREATED
-)
+@router.patch("/upload/{property_id}/", status_code=status.HTTP_201_CREATED)
 async def upload_file_profile(
         _property: PropertySchema = Depends(property_by_id),
         session: AsyncSession = Depends(db_helper.scoped_session_dependency),
         photos: List[UploadFile] = File(...)
 ):
-
     # print(property_by_id)
     # print(_property)
     print(photos)

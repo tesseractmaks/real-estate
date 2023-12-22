@@ -31,15 +31,24 @@ export async function getSidebarProperties() {
 };
 
 export async function getOneProperty(idNum) {
-  let response = await fetch(`http://127.0.0.1:8000/api/v1/properties/${idNum}/`);
+  
+  let response = await fetch(`http://127.0.0.1:8000/api/v1/properties/${idNum}/`,
+  {
+    method: "GET",
+    headers: {"Authorization": 'Bearer myHeaders'},
+    credentials: 'include'
+  }
+  );
 
   const propertyData = await response.json();
+  console.log(propertyData.headers, "-==-")
+  // console.log(myHeaders, "+++")
   return propertyData
 };
 
 
 export async function deleteOneProperty(idNum) {
-  console.log(idNum, "------")
+  // console.log(idNum, "------")
   await fetch(`http://127.0.0.1:8000/api/v1/properties/${idNum}`, {
     method: "DELETE",
   });
@@ -47,7 +56,7 @@ export async function deleteOneProperty(idNum) {
 
 
 export async function onUpload(files, blocks) {
-  console.log(files)
+  // console.log(files)
   const formData = new FormData();
 
   for (let i = 0; i < files.length; i++) {

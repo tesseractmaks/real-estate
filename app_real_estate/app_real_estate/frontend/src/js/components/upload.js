@@ -147,7 +147,7 @@ export async function upload(classesDiv = [], classesBtn = [], options = {}, idE
 
 
     upload.addEventListener("click", async function (event) {
-        covsole.log("============")
+        // covsole.log("============")
         event.preventDefault()
         Array.from(preview.querySelectorAll(".preview-remove")).forEach(e => e.remove())
 

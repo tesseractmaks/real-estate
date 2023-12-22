@@ -100,7 +100,7 @@ async def add_test_user_data():
         for _ in range(1, 4):
             values_data = {
                 "email": f"one@mail.ru{_}",
-                "password": "qwerty",
+                "password": "$2b$12$ApY3jQ1m3FyNmJ305FHcqufutbf0cVV5oOUWIXgp7TakmlY.d21bC",  # qwerty
                 "is_active": True,
             }
 
