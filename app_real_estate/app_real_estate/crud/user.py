@@ -43,6 +43,7 @@ async def read_user_by_username_db(
 
 
 async def create_user_db(session: AsyncSession, user_in: UserCreateSchema) -> User:
+    # user = User(**user_in)
     user = User(**user_in.model_dump())
     session.add(user)
     await session.commit()

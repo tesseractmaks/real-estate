@@ -84,7 +84,7 @@ async def read_property_by_id(
         response: Response,
         refresh_token: str | None = Cookie(default=None),
         property_: PropertySchema = Depends(property_by_id),
-        current_user=Depends(get_current_active_user)
+        # current_user=Depends(get_current_active_user)
 ):
     return property_
 

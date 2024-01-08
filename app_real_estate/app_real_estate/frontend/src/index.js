@@ -29,6 +29,7 @@ import { mainContainer  } from "./js/pages/main-page.js"
 
 import { footerSection } from "./js/components/footer-section.js"
 
+
 export const router = new Navigo('/');
 // export let myHeaders;
 
@@ -98,7 +99,14 @@ export const heroBlockDetail =await heroSectionDetail()
 // Feature section
 const mainPage = await mainContainer()
 
-// console.log(feturesBlock,"-=-=")
+// Chat 
+
+
+// console.log(chatBlock)
+
+
+
+
 
 // // Review section
 // const reviewBlock = await reviewSection()
@@ -245,7 +253,7 @@ router.on('/registration', async function (e) {
 		{
 			method: 'POST',
 			body: formData,
-			headers: {'Content-Type': 'multipart/form-data'},
+			// headers: {'Content-Type': 'multipart/form-data'},
             })
         const data = await response.json();
 		console.log(data)
@@ -305,7 +313,7 @@ router.on('/login', async function (e) {
 		});
   });
 
-
+router.resolve();
 
 window.addEventListener("keydown", (e)=>{
 	if (e.key === "Escape") {
@@ -313,6 +321,11 @@ window.addEventListener("keydown", (e)=>{
 		modalObj.classList.remove("open")
 	}
 })
+
+
+
+
+
 
 // app.innerHTML = ""
 // app.append(
@@ -325,7 +338,7 @@ window.addEventListener("keydown", (e)=>{
 // 	)
 
 
-router.resolve();
+
 
 
 app.innerHTML = ""
@@ -334,8 +347,11 @@ app.append(
 	
 	// filterForm,
 	mainContaner,
+	
 	footerBlock,
 	)
+
+
 
 
 // router.resolve();

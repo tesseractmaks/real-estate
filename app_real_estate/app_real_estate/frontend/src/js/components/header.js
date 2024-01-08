@@ -1,4 +1,4 @@
-
+import { chatForm, wSocket } from "./chat.js";
 import { ulAelement, pIelements, aIelements, Ielement } from "./elements.js"
 
 export function headerTopLeft(main_site) {
@@ -81,6 +81,10 @@ export function headerTopRight(main_site) {
 };
 
 export function mainMenu(main_site) {
+
+    let  ws = new WebSocket("ws://127.0.0.1:8000/api/v1/users/ws/")
+    
+
     const divContainer = document.createElement("div")
     divContainer.classList.add("container")
 
@@ -113,12 +117,46 @@ export function mainMenu(main_site) {
     divNavbar.append(aLogo, divNaSwich, ulMenu)
     divCol12.append(divNavbar)
     divRow.append(divCol12)
-    divContainer.append(divRow)
+    const chatBlock = chatForm()
+    divContainer.append(divRow, chatBlock)
+
+    // Chat section
+    const chatFormElem = chatBlock.querySelector('#cht-form');
+
+    ws.onmessage = function(evt) {
+        let recived_msg = evt.data
+        let chatForm = document.querySelector("#cht-form")
+
+        const rowSnd = document.createElement("div")
+        const rowRsv = document.createElement("div")
+
+        const dots = document.querySelector('#dots')
+
+        rowRsv.classList.add("chat-msg-rsv")
+      
+        if (recived_msg) {
+            rowRsv.textContent = recived_msg
+            dots.append(rowRsv)
+        }
+
+        // rowSnd.classList.add("chat-msg-send")
+        // rowSnd.textContent = chatForm.msg.value
+        // dots.append(rowSnd)
+        // chatForm.prepend(dots)
+        chatForm.msg.value = ""
+  }
+
+     chatFormElem.addEventListener("submit", async function(e) {
+        await wSocket(ws)
+        e.preventDefault()
+
+    })
     return divContainer
 };
 
 
 export async function getHeader(main_site) {
+
     // let main_site = await mainSite()
 
     const headerElement = document.createElement("header")
@@ -141,6 +179,25 @@ export async function getHeader(main_site) {
     divContainerHeader.append(divRowHeader)
     divHeader.append(divContainerHeader, headerMainMenu)
     headerElement.append(divHeader)
+
+  
+    
+    headerElement.querySelector("#btn-chat").addEventListener("click", function(e){
+        // let myForm = chatBlock.querySelector("#myForm").setAttribute("style", "display:block")
+        // let btnChat = chatBlock.querySelector("#btn-chat").setAttribute("style", "display:none")
+        headerElement.querySelector("#myForm").setAttribute("style", "display:block")
+        headerElement.querySelector("#btn-chat").setAttribute("style", "display:none")
+        // console.log(chatBlock)
+    })
+
+    headerElement.querySelector("#close-chat").addEventListener("click", function(e){
+        headerElement.querySelector("#myForm").setAttribute("style", "display:none")
+        headerElement.querySelector("#btn-chat").setAttribute("style", "display:block")
+        // console.log(chatBlock)
+    })
+
+     
+    
     
     return headerElement
 };

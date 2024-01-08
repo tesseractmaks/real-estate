@@ -137,19 +137,19 @@ export async function kabinet(detailData) {
         colSlider.classList.add("col-lg-6")
         colSlider.classList.add("lk-col")
         
-        let colSlider2 = document.createElement("div")
-        colSlider2.classList.add("col-lg-6")
-        colSlider2.classList.add("lk-col-2")
+        // let colSlider2 = document.createElement("div")
+        // colSlider2.classList.add("col-lg-6")
+        // colSlider2.classList.add("lk-col-2")
 
-        let colSlider2H3 = document.createElement("h4")
-        colSlider2H3.textContent = "заявки от клиентов"
-        colSlider2H3.classList.add("moder-h3")
+        // let colSlider2H3 = document.createElement("h4")
+        // colSlider2H3.textContent = "заявки от клиентов"
+        // colSlider2H3.classList.add("moder-h3")
 
-        let messDiv = anyElement("div", ["message-lk"])
-        let messP = anyElement("p")
-        messP.textContent = "-fgkj=======----"
-        messDiv.append(messP)
-        colSlider2.append(colSlider2H3, messDiv)
+        // let messDiv = anyElement("div", ["message-lk"])
+        // let messP = anyElement("p")
+        // messP.textContent = "-fgkj=======----"
+        // messDiv.append(messP)
+        // colSlider2.append(colSlider2H3, messDiv)
 
         let colSlider3 = document.createElement("div")
         colSlider3.classList.add("col-lg-6")
@@ -187,7 +187,8 @@ export async function kabinet(detailData) {
         colSlider3.prepend(singleListContent2)
         colStaff.prepend(staffList)
 
-        rowDetail.append(colSlider, colSlider2)
+        // rowDetail.append(colSlider, colSlider2)
+        rowDetail.append(colSlider)
         
         rowDetail2.append(colSlider3, colSlider4)
         rowStaff.append(colStaff)
