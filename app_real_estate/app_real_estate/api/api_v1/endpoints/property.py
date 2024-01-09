@@ -47,6 +47,7 @@ def get_tail_url(url):
     return url_tail_url[-1]
 
 
+@logger.catch
 @router.get("/count-sities", response_model=CitiesSchema)
 @router.get(
     "/",
@@ -57,25 +58,43 @@ async def read_properties(
         session: AsyncSession = Depends(db_helper.scoped_session_dependency),
         property_filter: PropertyFilter = FilterDepends(PropertyFilter),
 ) -> list | list[tuple]:
-
     if get_tail_url(request.scope["route"].path) == "count-sities":
-       cities = await count_cities_db(session=session)
-       return cities
+        cities = await count_cities_db(session=session)
+        if cities is None:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                headers={"X-Error": "Url format wrong"},
+            )
+        return cities
     # print(property_filter, "=====-----")
 
     properties = await read_properties_db(session=session, property_filter=property_filter)
+    if properties is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            headers={"X-Error": "Url format wrong"},
+        )
     return await properties
+
 
 add_pagination(router)
 
 
+@logger.catch
 @router.get("/sidebar", response_model=list[PropertySchema])
 async def read_property_sidebar(
         session: AsyncSession = Depends(db_helper.scoped_session_dependency)
 ):
-    return await sidebar_properties_db(session=session)
+    sidebar = await sidebar_properties_db(session=session)
+    if sidebar is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            headers={"X-Error": "Url format wrong"},
+        )
+    return sidebar
 
 
+@logger.catch
 @router.get(
     "/{property_id}/",
     response_model=PropertySchema
@@ -87,9 +106,15 @@ async def read_property_by_id(
         property_: PropertySchema = Depends(property_by_id),
         # current_user=Depends(get_current_active_user)
 ):
+    if property_ is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            headers={"X-Error": "Url format wrong"},
+        )
     return property_
 
 
+@logger.catch
 @router.post(
     "/",
     # response_model=PropertySchema,
@@ -100,16 +125,28 @@ async def create_property(
         property_in: Any,
         session: AsyncSession = Depends(db_helper.scoped_session_dependency)
 ):
+    if property_in is None:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            headers={"X-Error": "Empty data"},
+        )
     # print(property_in)
 
     return await create_property_db(session=session, property_in=property_in)
 
+
+@logger.catch
 @router.patch("/upload/{property_id}/", status_code=status.HTTP_201_CREATED)
 async def upload_file_profile(
         _property: PropertySchema = Depends(property_by_id),
         session: AsyncSession = Depends(db_helper.scoped_session_dependency),
         photos: List[UploadFile] = File(...)
 ):
+    if photos is None:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            headers={"X-Error": "Empty data"},
+        )
     # print(property_by_id)
     # print(_property)
     print(photos)
@@ -137,6 +174,7 @@ async def upload_file_profile(
         # )
 
 
+@logger.catch
 @router.put(
     "/{property_id}",
     response_model=PropertySchema
@@ -146,6 +184,11 @@ async def update_property(
         _property: PropertySchema = Depends(property_by_id),
         session: AsyncSession = Depends(db_helper.scoped_session_dependency)
 ):
+    if property_update is None:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            headers={"X-Error": "Empty data"},
+        )
     return await update_property_db(
         session=session,
         _property=_property,
@@ -153,6 +196,7 @@ async def update_property(
     )
 
 
+@logger.catch
 @router.patch(
     "/{property_id}",
     response_model=PropertySchema
@@ -162,6 +206,11 @@ async def update_property_partial(
         _property: PropertySchema = Depends(property_by_id),
         session: AsyncSession = Depends(db_helper.scoped_session_dependency)
 ):
+    if property_update is None:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            headers={"X-Error": "Empty data"},
+        )
     return await update_property_db(
         session=session,
         _property=_property,
@@ -170,9 +219,15 @@ async def update_property_partial(
     )
 
 
+@logger.catch
 @router.delete("/{property_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_property(
         _property: PropertySchema = Depends(property_by_id),
         session: AsyncSession = Depends(db_helper.scoped_session_dependency)
 ) -> None:
+    if _property is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            headers={"X-Error": "Url format wrong"},
+        )
     await delete_property_db(_property=_property, session=session)
