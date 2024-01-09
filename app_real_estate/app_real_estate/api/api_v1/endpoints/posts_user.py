@@ -1,5 +1,6 @@
-from fastapi import APIRouter, status, Depends
+from fastapi import APIRouter, status, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
+from app_real_estate.core import logger
 
 from app_real_estate.crud import (
     read_posts_db,
@@ -26,7 +27,13 @@ router = APIRouter(tags=["Posts"])
 async def read_categories(
         session: AsyncSession = Depends(db_helper.scoped_session_dependency)
 ):
-    return await read_posts_db(session=session)
+    posts = await read_posts_db(session=session)
+    if posts is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            headers={"X-Error": "Url format wrong"},
+        )
+    return posts
 
 
 @router.get(
@@ -34,9 +41,14 @@ async def read_categories(
     response_model=PostSchema
 )
 async def read_post_by_id(
-        product: PostSchema = Depends(post_by_id)
+        post: PostSchema = Depends(post_by_id)
 ):
-    return product
+    if post is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            headers={"X-Error": "Url format wrong"},
+        )
+    return post
 
 
 @router.post(
@@ -48,6 +60,11 @@ async def create_post(
         post_in: PostCreateSchema,
         session: AsyncSession = Depends(db_helper.scoped_session_dependency)
 ):
+    if post_in is None:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            headers={"X-Error": "Empty data"},
+        )
     return await create_post_db(session=session, post_in=post_in)
 
 
@@ -60,6 +77,11 @@ async def update_post(
         post: PostSchema = Depends(post_by_id),
         session: AsyncSession = Depends(db_helper.scoped_session_dependency)
 ):
+    if post_update is None:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            headers={"X-Error": "Empty data"},
+        )
     return await update_post_db(
         session=session,
         post=post,
@@ -76,6 +98,11 @@ async def update_post_partial(
         post: PostSchema = Depends(post_by_id),
         session: AsyncSession = Depends(db_helper.scoped_session_dependency)
 ):
+    if post_update is None:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            headers={"X-Error": "Empty data"},
+        )
     return await update_post_db(
         session=session,
         post=post,
@@ -89,4 +116,9 @@ async def delete_post(
         post: PostSchema = Depends(post_by_id),
         session: AsyncSession = Depends(db_helper.scoped_session_dependency)
 ) -> None:
+    if post is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            headers={"X-Error": "Url format wrong"},
+        )
     await delete_post_db(post=post, session=session)
