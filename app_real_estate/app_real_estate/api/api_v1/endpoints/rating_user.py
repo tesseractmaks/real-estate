@@ -1,6 +1,6 @@
-from fastapi import APIRouter, status, Depends
+from fastapi import APIRouter, status, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
-
+from app_real_estate.core import logger
 from app_real_estate.crud import (
     read_ratings_db,
     create_rating_db,
@@ -16,6 +16,7 @@ from .depends_endps import rating_by_id
 router = APIRouter(tags=["Ratings"])
 
 
+@logger.catch
 @router.get(
     "/",
     response_model=list[RatingSchema]
@@ -23,9 +24,16 @@ router = APIRouter(tags=["Ratings"])
 async def read_ratings(
         session: AsyncSession = Depends(db_helper.scoped_session_dependency)
 ):
-    return await read_ratings_db(session=session)
+    rating = await read_ratings_db(session=session)
+    if rating is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            headers={"X-Error": "Url format wrong"},
+        )
+    return rating
 
 
+@logger.catch
 @router.get(
     "/{rating_id}/",
     response_model=RatingSchema
@@ -33,9 +41,15 @@ async def read_ratings(
 async def read_rating_by_id(
         rating: RatingSchema = Depends(rating_by_id)
 ):
+    if rating is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            headers={"X-Error": "Url format wrong"},
+        )
     return rating
 
 
+@logger.catch
 @router.post(
     "/",
     response_model=RatingSchema,
@@ -45,9 +59,15 @@ async def create_rating(
         rating_in: RatingSchema,
         session: AsyncSession = Depends(db_helper.scoped_session_dependency)
 ):
+    if rating_in is None:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            headers={"X-Error": "Empty data"},
+        )
     return await create_rating_db(session=session, rating_in=rating_in)
 
 
+@logger.catch
 @router.put(
     "/{rating_id}",
     response_model=RatingSchema
@@ -57,6 +77,12 @@ async def update_rating(
         rating: RatingSchema = Depends(rating_by_id),
         session: AsyncSession = Depends(db_helper.scoped_session_dependency)
 ):
+    if rating_update is None:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            headers={"X-Error": "Empty data"},
+        )
+
     return await update_rating_db(
         session=session,
         rating=rating,
@@ -64,6 +90,7 @@ async def update_rating(
     )
 
 
+@logger.catch
 @router.patch(
     "/{rating_id}",
     response_model=RatingSchema
@@ -73,6 +100,11 @@ async def update_rating_partial(
         rating: RatingSchema = Depends(rating_by_id),
         session: AsyncSession = Depends(db_helper.scoped_session_dependency)
 ):
+    if rating_update is None:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            headers={"X-Error": "Empty data"},
+        )
     return await update_rating_db(
         session=session,
         rating=rating,
@@ -81,9 +113,15 @@ async def update_rating_partial(
     )
 
 
+@logger.catch
 @router.delete("/{rating_id}/", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_rating(
         rating: RatingSchema = Depends(rating_by_id),
         session: AsyncSession = Depends(db_helper.scoped_session_dependency)
 ) -> None:
+    if rating is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            headers={"X-Error": "Url format wrong"},
+        )
     await delete_rating_db(rating=rating, session=session)

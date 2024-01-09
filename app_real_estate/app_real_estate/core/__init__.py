@@ -3,9 +3,12 @@ __all__ = (
     "blog_validator",
     "author_validator",
     "Page",
-    "Params"
+    "Params",
+    "logger",
 )
 
-from .config import settings
+from .config import settings, logger
 from .validators import blog_validator, author_validator
 from .custom_paginate import Page, Params
+
+

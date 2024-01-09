@@ -5,12 +5,22 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from starlette.middleware.cors import CORSMiddleware
+from fastapi.exceptions import RequestValidationError, ResponseValidationError
+from fastapi.exception_handlers import request_validation_exception_handler
+import sentry_sdk
 
 from api import router as router_v1
 from api import router_token
 from app_real_estate.core import settings
 from app_real_estate.db import connect_create_if_exist
 from app_real_estate.db import init_db
+from app_real_estate.core import logger
+
+sentry_sdk.init(
+    dsn="https://38757782f71b29860b09bcce80d3fae9@o4505432482316288.ingest.sentry.io/4506538578673664",
+    traces_sample_rate=1.0,
+    profiles_sample_rate=1.0,
+)
 
 
 @asynccontextmanager
@@ -21,6 +31,22 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(lifespan=lifespan)
+
+
+@logger.catch
+@app.exception_handler(ResponseValidationError)
+async def validation_exception_handler(request, exc):
+    logger.error(exc)
+    return await request_validation_exception_handler(request, exc)
+
+
+@logger.catch
+@app.exception_handler(RequestValidationError)
+async def validation_exception_handler(request, exc):
+    logger.error(exc)
+    return await request_validation_exception_handler(request, exc)
+
+
 app.mount("/img", StaticFiles(directory="frontend", html=True), name="img")
 app.include_router(
     router=router_v1,

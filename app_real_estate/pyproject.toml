@@ -6,7 +6,8 @@ authors = ["tesseract <tesseractmaks@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "3.11.7"
+python = "^3.10"
+
 fastapi = "^0.105.0"
 sqlalchemy = "^2.0.23"
 hypercorn = "^0.15.0"
@@ -22,7 +23,8 @@ pymongo = "^4.6.1"
 sqlalchemy-utils = "^0.41.1"
 pydantic = {extras = ["email"], version = "^2.5.2"}
 websockets = "^12.0"
-
+loguru = "^0.7.2"
+sentry-sdk = {extras = ["fastapi"], version = "^1.39.1"}
 
 [build-system]
 requires = ["poetry-core"]

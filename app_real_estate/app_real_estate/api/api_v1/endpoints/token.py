@@ -6,7 +6,7 @@ from typing import Annotated
 from fastapi import Request
 from jose import JWTError, jwt
 from fastapi import Cookie, Response
-
+from app_real_estate.core import logger
 from app_real_estate.db import db_helper
 from app_real_estate.schemas import Token, RefreshKeySchema
 from app_real_estate.auth import (
@@ -30,13 +30,18 @@ router = APIRouter(tags=["Token"])
 #  one@mail.ru1
 #  qwerty
 
-
+@logger.catch
 @router.post("/token", response_model=Token)
 async def login_for_access_token(
         response: Response,
         form_data: OAuth2PasswordRequestForm = Depends(),
         session: AsyncSession = Depends(db_helper.scoped_session_dependency)
 ):
+    if form_data is None:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            headers={"X-Error": "Empty data"},
+        )
     # response.set_cookie(key="access_token", value="Bearer 123}", httponly=True)
     # print("-=-=-=-------", form_data.username)
 
