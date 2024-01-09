@@ -6,7 +6,7 @@ from typing import Any, List, Annotated, Optional
 from fastapi import APIRouter, status, Depends, UploadFile, File
 from fastapi_pagination import add_pagination
 
-from fastapi import Request, Cookie, Response
+from fastapi import Request, Cookie, Response, HTTPException
 
 from app_real_estate.core import Page
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -16,6 +16,7 @@ from urllib.parse import urlparse
 
 from app_real_estate.schemas import PropertyFilter, CitiesSchema
 from app_real_estate.auth import get_current_active_user
+from app_real_estate.core import logger
 
 from app_real_estate.crud import (
     read_properties_db,
