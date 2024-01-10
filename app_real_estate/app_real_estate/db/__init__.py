@@ -4,7 +4,7 @@ __all__ = (
     "connect_create_if_exist",
     "init_db",
     "blog_db",
-    "estate_db"
+    # "estate_db"
 )
 
 from .base_class import Base

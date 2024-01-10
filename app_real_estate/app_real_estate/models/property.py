@@ -35,7 +35,7 @@ class Property(Base):
     __tablename__ = "properties"
     # arbitrary_types_allowed = True
 
-    agent_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
+    agent_id: Mapped[int] = mapped_column(ForeignKey("users.id"), nullable=True)
     # agent_id: Mapped[int] = mapped_column(nullable=True)
     # profile_id: Mapped[int] = mapped_column(ForeignKey("profiles.id"))
 

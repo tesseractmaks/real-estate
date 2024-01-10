@@ -15,8 +15,7 @@ class CategorySchema(BaseModel):
 
 class PropertySchema(BaseModel):
     model_config = ConfigDict(extra="allow", from_attributes=True)
-    id: int
-    agent_id: int
+    agent_id: int | None = None
     category_id: int
     street: str | None = None
     city: str | None = None

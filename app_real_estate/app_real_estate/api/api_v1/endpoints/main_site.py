@@ -1,11 +1,18 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException, status
 
 from app_real_estate.crud import read_data_one_db
+from app_real_estate.core import logger
 
 router = APIRouter(tags=["MainSite"])
 
 
+@logger.catch
 @router.get("/")
 async def read_data():
-    return await read_data_one_db()
-
+    data_one = await read_data_one_db()
+    if data_one is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            headers={"X-Error": "Url format wrong"},
+        )
+    return data_one

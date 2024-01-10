@@ -12,6 +12,7 @@ from sqlalchemy import insert, inspect
 from app_real_estate.models import User, Profile, Category, Property, Post
 from .base_class import Base
 from .db_helper import db_helper
+from ..core import settings
 
 
 # from app_real_estate.core import blog_validator, author_validator
@@ -38,8 +39,10 @@ async def init_db():
         if not tables:
             await conn.run_sync(Base.metadata.create_all)
 
-    await add_test_user_data()
     await add_test_post_data()
+    await add_test_profile_data()
+    await add_test_user_data()
+
     await add_test_categories_data()
     await add_test_profile_data()
     await add_test_property_data()
@@ -78,7 +81,7 @@ async def add_test_profile_data():
     async with db_helper.engine.begin() as conn:
         for i in range(1, 4):
             values_data = {
-                "user_id": i,
+                # "user_id": i,
                 "rating_count": i,
                 "nickname": "string",
                 "deals_count": 0,
@@ -97,9 +100,10 @@ async def add_test_profile_data():
 
 async def add_test_user_data():
     async with db_helper.engine.begin() as conn:
-        for _ in range(1, 4):
+        for i in range(1, 4):
             values_data = {
-                "email": f"one@mail.ru{_}",
+                "profile_id": i,
+                "email": f"one@mail.ru{i}",
                 "password": "$2b$12$ApY3jQ1m3FyNmJ305FHcqufutbf0cVV5oOUWIXgp7TakmlY.d21bC",  # qwerty
                 "is_active": True,
             }
@@ -166,6 +170,8 @@ async def add_test_property_data():
 #     return list(items)
 
 # uri = "mongodb+srv://admin:qwerty1@cluster0.b7f96.mongodb.net/?retryWrites=true&w=majority"
+
+
 uri = "mongodb://localhost:27017/"
 
 client = MongoClient(uri)
@@ -230,55 +236,14 @@ def insert_test_bulk_data(blog_db=blog_db):
             "published": str(datetime.now()),
             "category": ["mustbea", "date", "andisrequired"],
             "comments": [],
-            #     {
-            #         "_id": ObjectId(),
-            #         "author": blog_db.author.find_one({"_id": author_id}, {"first_name": 1}),
-            #         "published": str(datetime.now()),
-            #         "content": "mustbea date,andisrequired",
-            #         "likes": 1,
-            #         "replay": [
-            #             {
-            #                 "_id": ObjectId(),
-            #                 "author": blog_db.author.find_one({"_id": author_id}, {"first_name": 1}),
-            #                 "comment_id": ObjectId(),
-            #                 "published": str(datetime.now()),
-            #                 "content": "mustbea date,andisrequired",
-            #                 "likes": 3,
-            #             },
-            #             {
-            #                 "_id": ObjectId(),
-            #                 "author": blog_db.author.find_one({"_id": author_id}, {"first_name": 1}),
-            #                 "replay_id": ObjectId(),
-            #                 "published": str(datetime.now()),
-            #                 "content": "mustbea date,andisrequired",
-            #                 "likes": 2,
-            #             }
-            #         ]
-            #     },
 
-            # {"author": author_ids[1], "content": "mustbea date,andisrequired"},
-            # {"author": author_ids[0], "content": "stbea at,andisr"},
-            # ],
             "tags": ["mustbea", "date", "andisrequired"],
             "views": 6,
             "likes": 2,
         },
-        #     # {
-        #     "author": author_ids[1],
-        #     "content": "2mustbea date andisrequired",
-        #     "photo": "2mustbea date andisrequired",
-        #     "published": datetime.now(),
-        #     "category": ["mustbea", "date", "andisrequired"],
-        #     "comments": [
-        #         {"author": author_ids[0], "content": "mustbea date,andisrequired"},
-        #         {"author": author_ids[1], "content": "stbea at,andisr"},
-        #     ],
-        #     "tags": ["2mustbea", "date", "andisrequired"],
-        #     "views": 7,
-        #     "likes": 3,
-        # }
+
     ]
-    #
+
     posts_collection = blog_db.post
     posts_collection.insert_many(posts)
 
@@ -290,12 +255,15 @@ def insert_test_data(filename):
     main_collection.insert_one(data)
 
 
-create_author_collection()
-create_post_collection()
-create_main_collection()
-insert_test_bulk_data()
-filename = os.path.abspath("./db/main_site.json")
-insert_test_data(filename)
+# create_author_collection()
+# create_post_collection()
+# create_main_collection()
+# insert_test_bulk_data()
+# filename = os.path.abspath("./db/main_site.json")
+# # filename = os.path.abspath("..app_real_estate/db/main_site.json")
+# insert_test_data(filename)
+
+
 
 # async def add_test_property_data2():
 #     async with db_helper.engine.begin() as conn:

@@ -121,8 +121,7 @@ async def read_property_by_id(
     status_code=status.HTTP_201_CREATED
 )
 async def create_property(
-        # property_in: PropertyCreateSchema,
-        property_in: Any,
+        property_in: PropertyCreateSchema,
         session: AsyncSession = Depends(db_helper.scoped_session_dependency)
 ):
     if property_in is None:
@@ -130,8 +129,6 @@ async def create_property(
             status_code=status.HTTP_400_BAD_REQUEST,
             headers={"X-Error": "Empty data"},
         )
-    # print(property_in)
-
     return await create_property_db(session=session, property_in=property_in)
 
 

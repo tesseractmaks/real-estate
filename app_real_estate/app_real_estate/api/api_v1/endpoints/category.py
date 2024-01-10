@@ -1,5 +1,6 @@
-from fastapi import APIRouter, status, Depends
+from fastapi import APIRouter, status, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
+from app_real_estate.core import logger
 
 from app_real_estate.crud import (
     read_categories_db,
@@ -19,6 +20,7 @@ from .depends_endps import category_by_id
 router = APIRouter(tags=["Categories"])
 
 
+@logger.catch
 @router.get(
     "/",
     response_model=list[CategorySchema]
@@ -26,19 +28,32 @@ router = APIRouter(tags=["Categories"])
 async def read_categories(
         session: AsyncSession = Depends(db_helper.scoped_session_dependency)
 ):
-    return await read_categories_db(session=session)
+    categories = await read_categories_db(session=session)
+    if categories is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            headers={"X-Error": "Url format wrong"},
+        )
+    return categories
 
 
+@logger.catch
 @router.get(
     "/{category_id}/",
     response_model=CategorySchema
 )
 async def read_category_by_id(
-        product: CategorySchema = Depends(category_by_id)
+        category: CategorySchema = Depends(category_by_id)
 ):
-    return product
+    if category is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            headers={"X-Error": "Url format wrong"},
+        )
+    return category
 
 
+@logger.catch
 @router.post(
     "/",
     response_model=CategorySchema,
@@ -48,9 +63,15 @@ async def create_category(
         category_in: CategoryCreateSchema,
         session: AsyncSession = Depends(db_helper.scoped_session_dependency)
 ):
+    if category_in is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            headers={"X-Error": "Url format wrong"},
+        )
     return await create_category_db(session=session, category_in=category_in)
 
 
+@logger.catch
 @router.put(
     "/{category_id}",
     response_model=CategorySchema
@@ -60,6 +81,11 @@ async def update_category(
         category: CategorySchema = Depends(category_by_id),
         session: AsyncSession = Depends(db_helper.scoped_session_dependency)
 ):
+    if category_update is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            headers={"X-Error": "Url format wrong"},
+        )
     return await update_category_db(
         session=session,
         category=category,
@@ -67,6 +93,7 @@ async def update_category(
     )
 
 
+@logger.catch
 @router.patch(
     "/{category_id}",
     response_model=CategorySchema
@@ -76,6 +103,11 @@ async def update_category_partial(
         category: CategorySchema = Depends(category_by_id),
         session: AsyncSession = Depends(db_helper.scoped_session_dependency)
 ):
+    if category_update is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            headers={"X-Error": "Url format wrong"},
+        )
     return await update_category_db(
         session=session,
         category=category,
@@ -84,9 +116,15 @@ async def update_category_partial(
     )
 
 
+@logger.catch
 @router.delete("/{category_id}/", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_category(
         category: CategorySchema = Depends(category_by_id),
         session: AsyncSession = Depends(db_helper.scoped_session_dependency)
 ) -> None:
+    if category is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            headers={"X-Error": "Url format wrong"},
+        )
     await delete_category_db(category=category, session=session)

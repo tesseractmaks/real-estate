@@ -9,7 +9,6 @@ from app_real_estate.schemas import UserProfileSchema
 
 class ProfileSchema(BaseModel):
     model_config = ConfigDict(from_attributes=True)
-    user_id:  int | None = None
     # user_feedbacks_id: list[int] | None = None
     rating_count: int | None = 0
     nickname: str | None = None

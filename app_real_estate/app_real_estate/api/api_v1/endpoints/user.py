@@ -1,3 +1,5 @@
+import json
+
 from fastapi import APIRouter, status, Depends, Cookie, Request, WebSocket, WebSocketDisconnect, HTTPException, WebSocketException
 from sqlalchemy.ext.asyncio import AsyncSession
 from passlib.context import CryptContext
@@ -73,22 +75,25 @@ async def read_user_by_id(
 )
 async def create_user(
         request: Request,
-        # user_in: UserCreateSchema,
+        user_in: UserCreateSchema,
         session: AsyncSession = Depends(db_helper.scoped_session_dependency),
         # current_user=Depends(get_current_active_user),
 ):
-    form_data = await request.form()
-    user_in = jsonable_encoder(form_data)
-    # print(user_in["password"])
+    # form_data = await request.form()
+    # user_in_data = jsonable_encoder(form_data)
+    # print(user_in_data)
+    print(user_in, "--")
+    print(type(user_in))
+    print(user_in.password,"=")
     # x= json.dumps(form_data)
     # print("-=-=-=-------", x["password"])
     pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-    user_in["password"] = pwd_context.hash(user_in["password"])
+    user_in.password = pwd_context.hash(user_in.password)
     # print(type(user_in))
-    # print(user_in)
-    user_in = UserCreateSchema(**user_in)
+    # print(user_in,"--")
+    user_in = UserCreateSchema(**user_in.__dict__)
     # user_in = json.dumps(user_in)
-    if form_data is None:
+    if user_in is None:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             headers={"X-Error": "Empty data"},
@@ -150,6 +155,7 @@ async def delete_user(
         # current_user=Depends(get_current_active_user),
         session: AsyncSession = Depends(db_helper.scoped_session_dependency)
 ) -> None:
+    print(user,"--")
     if user is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,

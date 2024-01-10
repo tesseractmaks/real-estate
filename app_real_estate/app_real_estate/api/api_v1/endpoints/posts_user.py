@@ -20,6 +20,7 @@ from .depends_endps import post_by_id
 router = APIRouter(tags=["Posts"])
 
 
+@logger.catch
 @router.get(
     "/",
     response_model=list[PostSchema]
@@ -36,6 +37,7 @@ async def read_categories(
     return posts
 
 
+@logger.catch
 @router.get(
     "/{post_id}/",
     response_model=PostSchema
@@ -51,6 +53,7 @@ async def read_post_by_id(
     return post
 
 
+@logger.catch
 @router.post(
     "/",
     response_model=PostSchema,
@@ -68,6 +71,7 @@ async def create_post(
     return await create_post_db(session=session, post_in=post_in)
 
 
+@logger.catch
 @router.put(
     "/{post_id}",
     response_model=PostSchema
@@ -89,6 +93,7 @@ async def update_post(
     )
 
 
+@logger.catch
 @router.patch(
     "/{post_id}",
     response_model=PostSchema
@@ -111,6 +116,7 @@ async def update_post_partial(
     )
 
 
+@logger.catch
 @router.delete("/{post_id}/", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_post(
         post: PostSchema = Depends(post_by_id),
