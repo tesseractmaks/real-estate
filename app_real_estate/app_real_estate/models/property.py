@@ -42,7 +42,7 @@ class Property(Base):
     users = relationship("User", back_populates="properties", lazy="joined")
     # users: Mapped[int] = mapped_column(nullable=True)
 
-    category_id: Mapped[int] = mapped_column(ForeignKey("categories.id"))
+    category_id: Mapped[int] = mapped_column(ForeignKey("categories.id"), nullable=True)
     categories = relationship("Category", back_populates="properties")
 
     street: Mapped[str] = mapped_column(default="", server_default="")
