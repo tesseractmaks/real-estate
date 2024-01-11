@@ -81,7 +81,7 @@ async def add_test_profile_data():
     async with db_helper.engine.begin() as conn:
         for i in range(1, 4):
             values_data = {
-                # "user_id": i,
+                # "users": i,
                 "rating_count": i,
                 "nickname": "string",
                 "deals_count": 0,

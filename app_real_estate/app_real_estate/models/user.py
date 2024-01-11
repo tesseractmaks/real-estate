@@ -17,7 +17,7 @@ class User(Base):
 
     profile_id: Mapped[int] = mapped_column(ForeignKey("profiles.id", ondelete="CASCADE"), nullable=True)
 
-    profile = relationship("Profile", uselist=False, back_populates="users", lazy="joined", )
+    profile = relationship("Profile", uselist=False, back_populates="users", lazy="joined")
     # profile = relationship("Profile", uselist=False, back_populates="users", lazy="joined")
 
     properties = relationship("Property",  back_populates="users", lazy="joined")

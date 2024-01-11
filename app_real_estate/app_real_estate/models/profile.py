@@ -15,7 +15,7 @@ if TYPE_CHECKING:
 class Profile(Base):
 
     # user_id: Mapped[int] = mapped_column(ForeignKey("users.id"), nullable=False)
-    users = relationship("User", uselist=False, lazy="joined", back_populates="profile")
+    users = relationship("User", uselist=False, back_populates="profile", lazy="joined")
     # properties = relationship("Property", uselist=False, back_populates="profile_agent", lazy="joined")
 
     # users: Mapped[list["User"]] = relationship(secondary="associate_feedbacks", back_populates="profiles")

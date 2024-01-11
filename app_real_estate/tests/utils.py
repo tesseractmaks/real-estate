@@ -39,3 +39,17 @@ values_update = {
     "video": "string",
     "map": "string"
 }
+
+values_profile = {
+                "rating_count": 1,
+                "nickname": "string",
+                "deals_count": 0,
+                "phone": "string",
+                "avatar": "/src/img/author.jpg",
+                "first_name": "string",
+                "last_name": "string",
+                "role": "string",
+                "post": 1,
+                # "users": 1
+
+            }

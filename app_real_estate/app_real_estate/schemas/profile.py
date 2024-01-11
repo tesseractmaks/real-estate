@@ -4,7 +4,9 @@ from pydantic import BaseModel, Field, ConfigDict
 from typing import Annotated
 
 
-from app_real_estate.schemas import UserProfileSchema
+class UserProfileSchema(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+    email: str
 
 
 class ProfileSchema(BaseModel):
@@ -31,7 +33,7 @@ class ProfileSchema(BaseModel):
 
 class ProfileResponseSchema(ProfileSchema):
     model_config = ConfigDict(from_attributes=True)
-    id: int | None = None
+    # id: int | None = None
     users: UserProfileSchema
 
 
