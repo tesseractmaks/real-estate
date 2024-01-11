@@ -23,9 +23,9 @@ settings = Setting()
 
 
 logger.add(
-    "runtime_ {time} .json",
-    # sys.stderr,
-    retention="10 days",
+    # "runtime_ {time} .json",
+    sys.stdout,
+    # retention="10 days",
     format="{time} {level} {message}",
     # level="INFO",
     level="ERROR",

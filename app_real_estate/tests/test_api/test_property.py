@@ -7,7 +7,7 @@ from pathlib import Path
 from .utils import values_update
 import pytest
 from httpx import AsyncClient
-from .conftest import client
+from ..conftest import client
 
 
 @pytest.mark.anyio

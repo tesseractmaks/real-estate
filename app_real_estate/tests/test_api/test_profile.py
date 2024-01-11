@@ -5,10 +5,10 @@ import pytest
 from httpx import AsyncClient
 from sqlalchemy.ext.asyncio import AsyncResult
 from sqlalchemy import insert, select
-from .conftest import client
+from ..conftest import client
 from app_real_estate.models import User, Profile, Property, Post, Category
 from sqlalchemy.orm import selectinload, joinedload, strategy_options
-from .conftest import async_session_maker
+from ..conftest import async_session_maker
 
 
 @pytest.mark.anyio

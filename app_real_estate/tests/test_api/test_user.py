@@ -5,10 +5,10 @@ import pytest
 from httpx import AsyncClient
 from sqlalchemy.ext.asyncio import AsyncResult
 from sqlalchemy import insert, select
-from .conftest import client
+from ..conftest import client
 from app_real_estate.models import User, Profile, Property, Post, Category
 from sqlalchemy.orm import selectinload, joinedload, strategy_options
-from .conftest import async_session_maker
+from ..conftest import async_session_maker
 
 
 @pytest.mark.anyio
@@ -51,7 +51,7 @@ async def test_update_user_partial(client: AsyncClient):
 
 @pytest.mark.anyio
 async def test_delete_user(client: AsyncClient):
-    respons = await client.delete('http://127.0.0.1:8000/api/v1/profiles/1/')
+    await client.delete('http://127.0.0.1:8000/api/v1/profiles/1/')
     response = await client.delete("users/1/")
     assert response.status_code == 204
 

@@ -94,29 +94,6 @@ async def update_post(
 
 
 @logger.catch
-@router.patch(
-    "/{post_id}",
-    response_model=PostSchema
-)
-async def update_post_partial(
-        post_update: PostUpdatePartialSchema,
-        post: PostSchema = Depends(post_by_id),
-        session: AsyncSession = Depends(db_helper.scoped_session_dependency)
-):
-    if post_update is None:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            headers={"X-Error": "Empty data"},
-        )
-    return await update_post_db(
-        session=session,
-        post=post,
-        post_update=post_update,
-        partial=True
-    )
-
-
-@logger.catch
 @router.delete("/{post_id}/", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_post(
         post: PostSchema = Depends(post_by_id),

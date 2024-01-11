@@ -1,6 +1,6 @@
 import factory
 from app_real_estate.models import User, Profile, Property
-from .conftest import async_session_maker
+from ..conftest import async_session_maker
 from async_factory_boy.factory.sqlalchemy import AsyncSQLAlchemyFactory
 
 

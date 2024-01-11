@@ -37,7 +37,7 @@ async def read_user_by_username_db(
 ) -> UserSchema | None:
     stmt = select(User).where(User.email == username)
     # stmt = select(User).order_by(User.id)
-    result: Result = await session.execute(stmt)
+    result: AsyncResult = await session.execute(stmt)
     user = result.scalar()
     return user
 

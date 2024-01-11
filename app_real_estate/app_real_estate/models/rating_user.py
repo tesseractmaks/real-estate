@@ -31,7 +31,6 @@ class AssociateRatings(Base):
     user: Mapped["User"] = relationship(back_populates="ratings")
 
 
-
 class ReceivingRating(Base):
     __tablename__ = "receiving_ratings"
 
