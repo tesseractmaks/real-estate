@@ -12,7 +12,7 @@ from .conftest import async_session_maker
 
 
 @pytest.mark.anyio
-@pytest.mark.parametrize("route", ["users/", "/1/"])
+@pytest.mark.parametrize("route", ["users/", "users/1/"])
 async def test_get_users(client: AsyncClient, route):
     response = await client.get(route)
     assert response.status_code == 200
