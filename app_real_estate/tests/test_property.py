@@ -1,5 +1,9 @@
+import os
 import random
+import shutil
 from datetime import datetime
+from pathlib import Path
+
 from .utils import values_update
 import pytest
 from httpx import AsyncClient
@@ -40,11 +44,17 @@ async def test_update_property_partial(client: AsyncClient):
         }
     response = await client.patch("properties/1", json=values_data)
     assert response.status_code == 200
-#
-#
-# @pytest.mark.anyio
-# async def test_delete_user(client: AsyncClient):
-#     respons = await client.delete('http://127.0.0.1:8000/api/v1/profiles/1/')
-#     response = await client.delete("/1/")
-#     assert response.status_code == 204
-#
+
+
+@pytest.mark.anyio
+async def test_upload_file_profile(client: AsyncClient):
+    response = await client.patch("properties/upload/1/", files={"photos": ("filename", open("./photo.png", "rb"), "image/png")})
+    shutil.rmtree("./img")
+    assert response.status_code == 201
+
+
+@pytest.mark.anyio
+async def test_delete_property(client: AsyncClient):
+    response = await client.delete("properties/1")
+    assert response.status_code == 204
+
