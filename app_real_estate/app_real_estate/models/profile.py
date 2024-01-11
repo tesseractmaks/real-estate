@@ -50,7 +50,7 @@ class Profile(Base):
     first_name: Mapped[str] = mapped_column(default="", server_default="")
     last_name: Mapped[str] = mapped_column(default="", server_default="")
     role: Mapped[str] = mapped_column(default="", server_default="")
-    post: Mapped[int] = mapped_column(ForeignKey("posts.id"))
+    post: Mapped[int] = mapped_column(ForeignKey("posts.id"), nullable=True)
     posts = relationship("Post", back_populates="profiles")
 
     def __str__(self):

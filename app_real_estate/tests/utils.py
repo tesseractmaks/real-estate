@@ -1,7 +1,7 @@
 import random
 from datetime import datetime
 
-values_update = {
+values_update_property = {
     "agent_id": 1,
     "category_id": random.randint(1, 2),
     "street": "string",

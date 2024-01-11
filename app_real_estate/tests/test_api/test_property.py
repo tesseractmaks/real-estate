@@ -48,7 +48,7 @@ async def test_update_property_partial(client: AsyncClient):
 
 @pytest.mark.anyio
 async def test_upload_file_profile(client: AsyncClient):
-    response = await client.patch("properties/upload/1/", files={"photos": ("filename", open("./photo.png", "rb"), "image/png")})
+    response = await client.patch("properties/upload/1/", files={"photos": ("filename", open("../photo.png", "rb"), "image/png")})
     shutil.rmtree("./img")
     assert response.status_code == 201
 

@@ -21,7 +21,6 @@ async def test_read_users_db():
         result: AsyncResult = await session.execute(stmt)
         users = result.unique().scalars().all()
         assert len(list(users)) > 1
-        assert isinstance(list(users), list)
 
 
 @pytest.mark.anyio
