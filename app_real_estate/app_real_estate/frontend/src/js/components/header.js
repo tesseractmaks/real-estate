@@ -67,7 +67,8 @@ export function headerTopRight(main_site) {
     
     let aLogin = aIelements("/login", "fa-sign-in", " Login")
     divUserPanel.append(aRegister, aLogin)
-
+    
+    console.log(document.cookie)
     
 
     // aLogin.addEventListener("click", async function (elem) {

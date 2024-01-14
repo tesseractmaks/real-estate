@@ -1,6 +1,8 @@
 import json
 
-from fastapi import APIRouter, status, Depends, Cookie, Request, WebSocket, WebSocketDisconnect, HTTPException, WebSocketException
+from fastapi import APIRouter, Response, status, Depends, Cookie, Request, WebSocket, WebSocketDisconnect, \
+    HTTPException, \
+    WebSocketException
 from sqlalchemy.ext.asyncio import AsyncSession
 from passlib.context import CryptContext
 from fastapi.encoders import jsonable_encoder
@@ -34,8 +36,9 @@ router = APIRouter(tags=["Users"])
 @logger.catch
 @router.get("/", response_model=list[UserResponseSchema])
 async def read_users(
+        response: Response,
         access_token: str | None = Cookie(default=None),
-        # current_user=Depends(get_current_active_user),
+        current_user=Depends(get_current_active_user),
         session: AsyncSession = Depends(db_helper.scoped_session_dependency),
 ):
     # print(access_token, "-------", current_user)
@@ -79,12 +82,13 @@ async def create_user(
         session: AsyncSession = Depends(db_helper.scoped_session_dependency),
         # current_user=Depends(get_current_active_user),
 ):
+    print(type(session))
     # form_data = await request.form()
     # user_in_data = jsonable_encoder(form_data)
     # print(user_in_data)
     print(user_in, "--")
     print(type(user_in))
-    print(user_in.password,"=")
+    print(user_in.password, "=")
     # x= json.dumps(form_data)
     # print("-=-=-=-------", x["password"])
     pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -155,7 +159,7 @@ async def delete_user(
         # current_user=Depends(get_current_active_user),
         session: AsyncSession = Depends(db_helper.scoped_session_dependency)
 ) -> None:
-    print(user,"--")
+    print(user, "--")
     if user is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -213,6 +217,3 @@ async def websocket_endpoint(
     except WebSocketDisconnect:
         await manager.disconnect(websocket)
         await manager.broadcast(f"Client #{client_id} left the chat")
-
-
-

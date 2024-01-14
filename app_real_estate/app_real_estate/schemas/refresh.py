@@ -8,4 +8,4 @@ class RefreshKeySchema(BaseModel):
     id: UUID = Field(default_factory=uuid4)
     exp: datetime
     refresh: str
-    sub: str
+    sub: str | None = ""

@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi.security import OAuth2PasswordRequestForm
-from datetime import timedelta
+from datetime import timedelta, datetime
 from typing import Annotated
 from fastapi import Request
 from jose import JWTError, jwt
@@ -51,15 +51,27 @@ async def login_for_access_token(
         session=session,
     )
 
-    access_token, refresh_token = create_token(
+    access_token, refresh_token = await create_token(
         data={"sub": user.email},
+        session=session,
+        response=response
     )
+    # print(refresh_token)
 
 
 
     # response.set_cookie(key="refresh_token", value=f"Bearer {refresh_token}", httponly=True)
+    response.set_cookie(key="access_token", value=f"Bearer {access_token}")
     response.set_cookie(key="refresh_token", value=f"Bearer {refresh_token}", httponly=True)
+    SECRET_KEY = "$2b$12$cZmHQ5w9KXng0Q/XWCn4ReMfPh5JqwzpI6oaEY/XS1ERCHSbJceC."
+
+
+    jwt_access = jwt.decode(access_token, SECRET_KEY)
+    jwt_refresh = jwt.decode(refresh_token, SECRET_KEY)
+    access_token = datetime.utcfromtimestamp(int(jwt_access["exp"])).strftime('%Y-%m-%d %H:%M:%S')
+    refresh_token = datetime.utcfromtimestamp(int(jwt_refresh["exp"])).strftime('%Y-%m-%d %H:%M:%S')
     # print("access_token", access_token)
+    # print("refresh_token", refresh_token)
 
     return {"access_token": access_token, "token_type": "bearer"}
 
