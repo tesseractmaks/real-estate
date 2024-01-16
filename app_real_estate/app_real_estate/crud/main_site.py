@@ -22,6 +22,5 @@ async def read_data_db() -> list:
 async def read_data_one_db():
     collect = estate_db.main.find_one()
     result = await pasre_to_obj(collect)
-    print(result["header"])
     return result
 

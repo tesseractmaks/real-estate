@@ -16,7 +16,7 @@ import { heroSectionDetail } from "./js/components/hero-detail.js"
 // import { feturesSection } from "./components/fetures-section.js"
 // import { reviewSection } from "./components/review-slider.js"
 import { getOneProperty } from "./js/components/list-properties.js"
-import { getOneProfile } from "./js/components/list-profiles.js"
+import { getOneProfileByUser } from "./js/components/list-profiles.js"
 import { registrationForm, loginForm } from "./js/components/form-reg-login.js"
 
 import { detailProfile } from "./js/pages/detail-profile.js"
@@ -46,6 +46,18 @@ export const router = new Navigo('/');
 	/*------------------
 			DOM
 		--------------------*/
+
+function syncLogout (event) {
+	if (event.key === 'logout') {
+	  console.log('logged out from storage!')
+	  router.navigate("/login")
+	  
+	}
+  }
+document.addEventListener('storage', syncLogout) 
+
+
+
 
 export async function mainSiteData() {
 
@@ -144,13 +156,15 @@ router.on('/', function () {
 router.on('/detail/:id', async function (e) {
 
 	let ca = document.cookie;
-		
-		// myHeaders = `Bearer ${token.access_token}`;
 	console.log(ca, "=-")
+		
+	let myHeaders = `Bearer `;
+	// let myHeaders = `Bearer ${document.cookie.refresh_token}`;
+	console.log(e.data.id, "--")
 
 	mainContaner.innerHTML = ""
 	pageContainer.innerHTML = ""
-	const detailData = await getOneProperty(e.data.id)
+	const detailData = await getOneProperty(e.data.id, myHeaders)
 	const detailBlock = await slDetailFeatures(detailData)
 	pageContainer.append(detailBlock)
 	mainContaner.append(heroBlockDetail, pageContainer)
@@ -172,13 +186,13 @@ router.on('/edit/property/:id', async function (e) {
 
 
 // Profiles
-
+// console.log(document.cookie, "--")
 router.on('/profile/:id', async function (e) {
 	// console.log(e.data.id)
 
 	mainContaner.innerHTML = ""
 	pageContainer.innerHTML = ""
-	const profileData = await getOneProfile(e.data.id)
+	const profileData = await getOneProfileByUser(e.data.id)
 
 	const detailBlock = await detailProfile(profileData)
 	pageContainer.append(detailBlock)
@@ -239,31 +253,97 @@ router.on('/registration', async function (e) {
 
 	// Array.from(regForm).forEach(async function (e) {
 
-	console.log(regUsername[0].value, regPassword[0].value)
+	// console.log(regUsername[0].value, regPassword[0].value)
 
 	let formData = new FormData()
 	
 	
-    formData.append('email', regUsername[0].value);
+    formData.append('username', regUsername[0].value);
     formData.append('password', regPassword[0].value)
-    formData.append('is_active', true)
+    // formData.append('is_active', true)
+	// console.log(formData, "+----")
 
 
 	const response = await fetch('http://127.0.0.1:8000/api/v1/users/',
 		{
 			method: 'POST',
-			body: formData,
-			// headers: {'Content-Type': 'multipart/form-data'},
+			body: JSON.stringify(
+				{
+				'email': regUsername[0].value,
+				'password': regPassword[0].value,
+				'is_active': true
+			}
+			),
+			headers: {'Content-Type': 'application/json'},
             })
-        const data = await response.json();
-		console.log(data)
+
+	const data = await response.json();
+	console.log(data, "----")
+
+	// let formData = new FormData()
+	// 	formData.append('username', loginUsername[0].value);
+	// 	formData.append('password', loginPassword[0].value)
+	const currentDate = new Date().toISOString();
+	
+
+	if (data.is_active) {
+		const response = await fetch('http://127.0.0.1:8000/token',
+		{
+			method: 'POST',
+			body: formData,
+			// body: JSON.stringify(
+			// 	{
+			// 	'email': regUsername[0].value,
+			// 	'password': regPassword[0].value,
+			// }),
+			headers: {
+				"Authorization": "Bearer",
+				// 'Content-Type': 'application/json'
+			},
+			credentials: 'include'
+			})
+		const token = await response.json();
+
+		let registerPanel = document.querySelector("#register-panel")
+		let loginPanel = document.querySelector("#login-panel")
+		let profilePanel = document.querySelector("#profile-panel")
+		let LogoutPanel = document.querySelector("#logout-panel")
+
+
+		// let exp = token.access_token.split(" ")
+		// let expToken = `${exp[0]}T${exp[1]}Z`
+		let decodedString = atob(document.cookie.split(".")[1]);
+        let exp = Object.values(JSON.parse(decodedString))[1]
+        let date = new Date(exp * 1000);
+        let expToken = date.toISOString()
+		// window.localStorage.setItem("expToken", expToken)
+		
+		if (currentDate < expToken){
+			registerPanel.classList.remove("profile-panel")
+			registerPanel.classList.add("profile-panel-hide")
+
+			loginPanel.classList.remove("profile-panel")
+			loginPanel.classList.add("profile-panel-hide")
+
+			let cookieId = document.cookie.split(";")[1].split("=")[1]
+			
+			profilePanel.href = `/profile/${cookieId}`
+			profilePanel.classList.remove("profile-panel-hide")
+			profilePanel.classList.add("profile-panel")
+		
+
+			LogoutPanel.classList.remove("profile-panel-hide")
+        	LogoutPanel.classList.add("profile-panel")
+
+			router.navigate("/")
+		}
+
+		router.navigate("/")
+	}
 		// let ca = document.cookie;
 		
 		// // myHeaders = `Bearer ${token.access_token}`;
 		// console.log(ca, "=-")
-
-	
-	
 	router.navigate("/")
 });
   });
@@ -278,7 +358,7 @@ router.on('/login', async function (e) {
 	mainContaner.append(heroBlock, pageContainer)
 
 
-	// let regBtn = document.querySelector("#reg-Btn")
+	let regBtn = document.querySelector("#reg-Btn")
 
 	regBtn.addEventListener("click", async function (elem) {
 		let modalElem = document.querySelector(".modal")
@@ -312,6 +392,39 @@ router.on('/login', async function (e) {
 
 		});
   });
+
+  router.on('/logout', async function (e) {
+	const url = 'http://127.0.0.1:8000/token/auth/logout'
+	const response = await fetch(url, {
+		method: 'POST',
+		credentials: 'include',
+	})
+	window.localStorage.setItem('logout', Date.now())
+
+	let registerPanel = document.querySelector("#register-panel")
+	let loginPanel = document.querySelector("#login-panel")
+	let profilePanel = document.querySelector("#profile-panel")
+	let LogoutPanel = document.querySelector("#logout-panel")
+
+	registerPanel.classList.remove("profile-panel-hide")
+	registerPanel.classList.add("profile-panel")
+
+	loginPanel.classList.remove("profile-panel-hide")
+	loginPanel.classList.add("profile-panel")
+
+	
+	profilePanel.classList.remove("profile-panel")
+	profilePanel.classList.add("profile-panel-hide")
+
+	LogoutPanel.classList.remove("profile-panel")
+	LogoutPanel.classList.add("profile-panel-hide")
+	
+	window.localStorage.removeItem('logout')
+
+	router.navigate("/")
+})
+	
+
 
 router.resolve();
 

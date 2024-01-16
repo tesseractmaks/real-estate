@@ -1,5 +1,9 @@
+from typing import Any, Annotated
+from fastapi import UploadFile, File, Form, Depends
 from pydantic import BaseModel, ConfigDict
 from pydantic import EmailStr
+
+from app_real_estate.models import AppRole
 
 
 class ProfileSchema(BaseModel):
@@ -13,7 +17,6 @@ class ProfileSchema(BaseModel):
     avatar:  str | None = None
     first_name:  str | None = None
     last_name:  str | None = None
-    role:  str | None = None
     post:  int | None = None
 
 
@@ -42,8 +45,13 @@ class UserResponseSchema(BaseModel):
 #     is_active: bool
 
 
-class UserCreateSchema(UserSchema):
-    ...
+class UserCreateSchema(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+    # email: EmailStr
+    email: str
+    password: str
+    is_active: bool
+    roles: list[str] = [AppRole.ROLE_USER]
 
 
 class UserUpdateSchema(UserSchema):
@@ -52,9 +60,10 @@ class UserUpdateSchema(UserSchema):
 
 class UserUpdatePartialSchema(UserSchema):
     model_config = ConfigDict(from_attributes=True)
-    email: EmailStr | None = None
+    email: str | None = None
     password: str | None = None
     is_active: bool | None = None
+    roles: list[AppRole] | None = None
 
 
 class UserInDB(UserSchema):

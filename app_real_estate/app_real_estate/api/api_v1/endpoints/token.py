@@ -21,7 +21,7 @@ from app_real_estate.crud import (
     read_refresh_by_id_db,
     create_refresh_db,
     update_refresh_db,
-    delete_refresh_db,
+    delete_refresh_db, read_refresh_by_name_db,
 )
 
 router = APIRouter(tags=["Token"])
@@ -29,6 +29,24 @@ router = APIRouter(tags=["Token"])
 
 #  one@mail.ru1
 #  qwerty
+
+@logger.catch
+@router.post("/token/auth/logout")
+async def logout_for_access_token(
+        response: Response,
+        session: AsyncSession = Depends(db_helper.scoped_session_dependency),
+        refresh_token: str | None = Cookie(default=None),
+):
+    response.delete_cookie("access_token")
+    response.delete_cookie("refresh_token")
+    response.delete_cookie("user_id")
+
+    refresh_token_clean = refresh_token.replace("Bearer ", "")
+    refresh_key = await read_refresh_by_name_db(session=session, refresh_name=refresh_token_clean)
+
+    await delete_refresh_db(session=session, refresh=refresh_key)
+    return {"access_token": ""}
+
 
 @logger.catch
 @router.post("/token", response_model=Token)
@@ -43,7 +61,7 @@ async def login_for_access_token(
             headers={"X-Error": "Empty data"},
         )
     # response.set_cookie(key="access_token", value="Bearer 123}", httponly=True)
-    # print("-=-=-=-------", form_data.username)
+    print("-=-=-=-------", form_data.username)
 
     user = await authenticate_user(
         form_data.username,
@@ -54,17 +72,15 @@ async def login_for_access_token(
     access_token, refresh_token = await create_token(
         data={"sub": user.email},
         session=session,
-        response=response
+        response=response,
     )
     # print(refresh_token)
-
-
 
     # response.set_cookie(key="refresh_token", value=f"Bearer {refresh_token}", httponly=True)
     response.set_cookie(key="access_token", value=f"Bearer {access_token}")
     response.set_cookie(key="refresh_token", value=f"Bearer {refresh_token}", httponly=True)
+    response.set_cookie(key="user_id", value=user.id)
     SECRET_KEY = "$2b$12$cZmHQ5w9KXng0Q/XWCn4ReMfPh5JqwzpI6oaEY/XS1ERCHSbJceC."
-
 
     jwt_access = jwt.decode(access_token, SECRET_KEY)
     jwt_refresh = jwt.decode(refresh_token, SECRET_KEY)
@@ -74,7 +90,6 @@ async def login_for_access_token(
     # print("refresh_token", refresh_token)
 
     return {"access_token": access_token, "token_type": "bearer"}
-
 
 # async def update_refresh_token(session, username):
 #     refresh_token_expires = timedelta(minutes=REFRESH_TOKEN_EXPIRE_MINUTES)

@@ -32,6 +32,24 @@ export async function getOneProfile(idNum) {
   return profileData
 };
 
+export async function getOneProfileByUser(idNum) {
+  let response = await fetch(`http://127.0.0.1:8000/api/v1/profiles/user_id?user_id=${idNum}`,
+  {
+    // credentials: "same-origin"
+    
+  
+    // headers: {
+    //   'Accept': 'application/json',
+    //   'Content-Type': 'application/json',
+    //   'Cache': 'no-cache'
+    // },
+    // credentials: 'include'
+  });
+
+  const profileData = await response.json();
+  return profileData
+};
+
 
 export async function deleteOneProfile(idNum) {
   console.log(idNum, "------")

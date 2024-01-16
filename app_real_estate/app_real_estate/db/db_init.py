@@ -9,7 +9,7 @@ import asyncpg
 from pymongo.mongo_client import MongoClient
 from sqlalchemy import insert, inspect
 
-from app_real_estate.models import User, Profile, Category, Property, Post
+from app_real_estate.models import User, Profile, Category, Property, Post, AppRole
 from .base_class import Base
 from .db_helper import db_helper
 from ..core import settings
@@ -89,9 +89,7 @@ async def add_test_profile_data():
                 "avatar": "/src/img/author.jpg",
                 "first_name": "string",
                 "last_name": "string",
-                "role": "string",
                 "post": 1,
-
             }
 
             await conn.execute(insert(Profile).values(values_data))
@@ -100,13 +98,18 @@ async def add_test_profile_data():
 
 async def add_test_user_data():
     async with db_helper.engine.begin() as conn:
-        for i in range(1, 4):
+        for i in range(1, 2):
             values_data = {
                 "profile_id": i,
-                "email": f"one@mail.ru{i}",
+                "email": f"one{i}@mail.ru",
                 "password": "$2b$12$ApY3jQ1m3FyNmJ305FHcqufutbf0cVV5oOUWIXgp7TakmlY.d21bC",  # qwerty
                 "is_active": True,
+                "roles": [AppRole.ROLE_USER]
             }
+            if i == 1:
+                values_data["roles"].append(AppRole.ROLE_ADMIN)
+            if i == 2:
+                values_data["roles"].append(AppRole.ROLE_SUPER_ADMIN)
 
             await conn.execute(insert(User).values(values_data))
         await conn.commit()

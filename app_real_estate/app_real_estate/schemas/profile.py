@@ -7,6 +7,7 @@ from typing import Annotated
 class UserProfileSchema(BaseModel):
     model_config = ConfigDict(from_attributes=True)
     email: str
+    id: int
 
 
 class ProfileSchema(BaseModel):
@@ -15,11 +16,10 @@ class ProfileSchema(BaseModel):
     rating_count: int | None = 0
     nickname: str | None = None
     deals_count: int | None = None
-    phone:  str | None = None
-    avatar:  str | None = None
-    first_name:  str | None = None
-    last_name:  str | None = None
-    role:  str | None = None
+    phone: str | None = None
+    avatar: str | None = None
+    first_name: str | None = None
+    last_name: str | None = None
     post:  int | None = None
 
 

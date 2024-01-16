@@ -30,18 +30,18 @@ export async function getSidebarProperties() {
   return propertyData
 };
 
-export async function getOneProperty(idNum) {
-  
+export async function getOneProperty(idNum, myHeaders) {
+  console.log(idNum, "+++")
   let response = await fetch(`http://127.0.0.1:8000/api/v1/properties/${idNum}/`,
   {
     method: "GET",
-    headers: {"Authorization": 'Bearer myHeaders'},
+    headers: {"Authorization": myHeaders},
     credentials: 'include'
   }
   );
 
   const propertyData = await response.json();
-  console.log(propertyData.headers, "-==-")
+  // console.log(propertyData.headers, "-==-")
   // console.log(myHeaders, "+++")
   return propertyData
 };

@@ -8,7 +8,7 @@ from passlib.context import CryptContext
 from sqlalchemy.ext.asyncio import AsyncSession
 from app_real_estate.db.db_helper import db_helper
 import pytest_asyncio
-from app_real_estate.models import User
+from app_real_estate.models import User, AppRole
 from app_real_estate.schemas import UserSchema, TokenData, UserInDB
 from ..conftest import async_session_maker, create_token, client
 
@@ -77,6 +77,13 @@ async def test_get_current_active_user(username: UserSchema = "one@mail.ru1"):
 
 
 @pytest.mark.anyio
+async def test_get_current_active_user_admin(
+        username: UserSchema = "one@mail.ru1"):
+    current_user = await read_user_by_username_db(username=username)
+    assert current_user.roles
+
+
+@pytest.mark.anyio
 async def test_verify_password():
     hashed_password = pwd_context.hash("qwerty")
     assert pwd_context.verify("qwerty", hashed_password)
@@ -106,3 +113,5 @@ async def test_create_token(
     assert jwt_refresh
     payload = jwt.decode(jwt_refresh, SECRET_KEY, algorithms=[ALGORITHM])
     assert payload.get("sub") == "one@mail.ru1"
+
+

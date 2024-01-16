@@ -103,6 +103,7 @@ async def read_property_by_id(
         request: Request,
         response: Response,
         refresh_token: str | None = Cookie(default=None),
+        # access_token: str | None = Cookie(default=None),
         property_: PropertySchema = Depends(property_by_id),
         # current_user=Depends(get_current_active_user)
 ):
@@ -111,6 +112,9 @@ async def read_property_by_id(
             status_code=status.HTTP_404_NOT_FOUND,
             headers={"X-Error": "Url format wrong"},
         )
+    # response.set_cookie(key="access_token", value=f"Bearer {access_token}")
+    response.set_cookie(key="refresh_token", value=f"Bearer {refresh_token}", httponly=True)
+    # print(access_token)
     return property_
 
 

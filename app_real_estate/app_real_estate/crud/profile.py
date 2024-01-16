@@ -1,7 +1,7 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio import AsyncResult
-from app_real_estate.models import Profile
+from app_real_estate.models import Profile, User
 from app_real_estate.schemas import (
     ProfileSchema,
     ProfileUpdatePartialSchema,
@@ -20,15 +20,18 @@ async def read_profiles_db(session: AsyncSession) -> list[ProfileSchema]:
 async def read_profile_by_id_db(session: AsyncSession, profile_id: int) -> ProfileSchema | None:
     return await session.get(Profile, profile_id)
 
-# async def read_profile_by_id_db(
-#         session: AsyncSession,
-#         profile_id: int
-# ) -> ProfileSchema | None:
-#     stmt = select(Profile).where(Profile.id == profile_id)
-#     # stmt = select(User).order_by(User.id)
-#     result: Result = await session.execute(stmt)
-#     profile = result.scalar()
-#     return profile
+
+async def read_profile_by_id_user_db(
+        session: AsyncSession,
+        user_id: int
+) -> ProfileSchema | None:
+
+    stmt = select(Profile).join(Profile.users).where(User.id == user_id)
+    result: AsyncResult = await session.execute(stmt)
+
+    profile = result.unique().scalar_one()
+    print(profile)
+    return profile
 
 
 async def create_profile_db(

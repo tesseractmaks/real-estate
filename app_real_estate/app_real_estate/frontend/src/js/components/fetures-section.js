@@ -52,6 +52,7 @@ export async function feturesSection(page = 1, params = {}) {
     // propertyData = propertyData = await getListProperties(page, params);
     // }
     propertyData = propertyData = await getListProperties(page, params);
+    // console.log(propertyData,"-")
 
     // setStorageData("currentPage", propertyData["items"])
 

@@ -12,7 +12,7 @@ from app_real_estate.crud import (
     update_profile_db,
     delete_profile_db
 )
-from app_real_estate.crud.profile import update_photo_profile
+from app_real_estate.crud.profile import update_photo_profile, read_profile_by_id_user_db
 from app_real_estate.db import db_helper
 
 from app_real_estate.schemas import (
@@ -58,6 +58,19 @@ async def read_profile_by_id(
             status_code=status.HTTP_404_NOT_FOUND,
             headers={"X-Error": "Url format wrong"},
         )
+    return profile
+
+
+@logger.catch
+@router.get(
+    "/user_id",
+    response_model=ProfileResponseSchema
+)
+async def read_profile_by_user_id(
+        user_id: int,
+        session: AsyncSession = Depends(db_helper.scoped_session_dependency)
+):
+    profile = await read_profile_by_id_user_db(session=session, user_id=user_id)
     return profile
 
 

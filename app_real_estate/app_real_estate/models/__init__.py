@@ -3,6 +3,7 @@ __all__ = (
     "Property",
     "Category",
     "User",
+    "AppRole",
     # "AssociateFeedback",
     "AssociateRatings",
     "Post",
@@ -13,7 +14,7 @@ __all__ = (
 from .profile import Profile
 from .property import Property
 from .category import Category
-from .user import User
+from .user import User, AppRole
 # from .feedback_user import AssociateFeedback
 from .rating_user import AssociateRatings
 from .posts_user import Post

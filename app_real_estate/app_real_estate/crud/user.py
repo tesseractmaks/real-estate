@@ -1,10 +1,10 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.engine import Result
-from sqlalchemy import select
+from sqlalchemy import select, insert
 
 from sqlalchemy.ext.asyncio import AsyncResult
 from app_real_estate.db import db_helper
-from app_real_estate.models import User
+from app_real_estate.models import User, Profile
 from app_real_estate.schemas import UserSchema, UserUpdateSchema, UserUpdatePartialSchema, UserCreateSchema
 
 
@@ -46,10 +46,29 @@ async def create_user_db(session: AsyncSession, user_in: UserCreateSchema) -> Us
     # user = User(**user_in)
     user = User(**user_in.model_dump())
     session.add(user)
-    await session.commit()
     # await session.refresh(product)
+    profile = Profile()
+    session.add(profile)
+    await session.commit()
+    user.profile_id = profile.id
+    session.add(user)
 
-    return user
+    await session.commit()
+
+    # values_data = {
+    #     # "users": i,
+    #     "rating_count": i,
+    #     "nickname": "string",
+    #     "deals_count": 0,
+    #     "phone": "string",
+    #     "avatar": "/src/img/author.jpg",
+    #     "first_name": "string",
+    #     "last_name": "string",
+    #     "post": 1,
+    # }
+    # await session.execute(insert(Profile).values(values_data))
+
+    return user.__dict__
 
 
 async def update_user_db(

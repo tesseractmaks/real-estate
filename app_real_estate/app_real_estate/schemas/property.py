@@ -47,6 +47,7 @@ class PropertyResponseSchema(PropertySchema):
     model_config = ConfigDict(from_attributes=True)
     users: UserResponseSchema
     categories: CategorySchema
+    id: int
 
 
 class PropertyCreateSchema(PropertySchema):

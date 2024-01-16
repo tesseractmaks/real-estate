@@ -1,6 +1,7 @@
 import { chatForm, wSocket } from "./chat.js";
 import { ulAelement, pIelements, aIelements, Ielement } from "./elements.js"
 
+
 export function headerTopLeft(main_site) {
     let topLeft = document.createElement("div")
     topLeft.classList.add("col-lg-6")
@@ -64,11 +65,48 @@ export function headerTopRight(main_site) {
     // divUserPanel.append(auth, login)
     divUserPanel.classList.add("user-panel")
     let aRegister = aIelements("/registration", "fa-user-circle-o", " Register")
-    
+    aRegister.classList.add("profile-panel")
+    aRegister.id = "register-panel"
+
     let aLogin = aIelements("/login", "fa-sign-in", " Login")
-    divUserPanel.append(aRegister, aLogin)
+    aLogin.classList.add("profile-panel")
+    aLogin.id = "login-panel"
+
+
+    let cookieId;
+    let expToken;
+    if (document.cookie){
+        cookieId = document.cookie.split(";")[1].split("=")[1]
+
+        let decodedString = atob(document.cookie.split(".")[1]);
+
+        let exp = Object.values(JSON.parse(decodedString))[1]
+
+        let date = new Date(exp * 1000);
+        expToken = date.toISOString()
+        console.log(expToken);
+        // console.log(document.cookie.split(".")[0],  "=====")
+    }
     
-    console.log(document.cookie)
+    let aProfile = aIelements(`/profile/${cookieId}`, "n", "Profile")
+    aProfile.classList.add("profile-panel-hide")
+    aProfile.id = "profile-panel"
+
+    let aLogout = aIelements("/logout", "fa-sign-in", " Logout")
+    aLogout.classList.add("profile-panel-hide")
+    aLogout.id = "logout-panel"
+
+
+    // let myobj = JSON.parse(JSON.stringify(document.cookie.split(";")[1]));
+    
+    
+
+    // console.log(cookieId, "--")
+
+    // aLogout.addEventListener("click", async function (elem) {
+    //     elem.preventDefault();
+    //     router.navigate("/logout")
+    // });
     
 
     // aLogin.addEventListener("click", async function (elem) {
@@ -76,7 +114,42 @@ export function headerTopRight(main_site) {
     //     router.navigate("/login")
     // });
 
+    // aProfile.addEventListener("click", async function (elem) {
+    //     elem.preventDefault();
+    //     router.navigate(`/profile/${document.cookie.user_id}`)
+    // });
 
+    // let registerPanel = document.querySelector("#register-panel")
+    // let loginPanel = document.querySelector("#login-panel")
+    // let userPanel = document.querySelector("#profile-panel")
+
+    
+
+    // console.log(userPanel)
+    // let exp = token.access_token.split(" ")
+    // let expToken = `${exp[0]}T${exp[1]}Z`
+
+    // window.localStorage.setItem("expToken", expToken)
+
+    // let expToken = window.localStorage.getItem("expToken")
+    // console.log(expToken, "-=-=-=")
+    const currentDate = new Date().toISOString();
+    
+    if (currentDate < expToken){
+        aRegister.classList.remove("profile-panel")
+        aRegister.classList.add("profile-panel-hide")
+
+        aLogin.classList.remove("profile-panel")
+        aLogin.classList.add("profile-panel-hide")
+
+        aProfile.classList.remove("profile-panel-hide")
+        aProfile.classList.add("profile-panel")
+
+        aLogout.classList.remove("profile-panel-hide")
+        aLogout.classList.add("profile-panel")
+    }
+
+    divUserPanel.append(aRegister, aLogin, aProfile, aLogout)
     topRight.append(topSocial, divUserPanel)
     return topRight
 };
@@ -85,7 +158,6 @@ export function mainMenu(main_site) {
 
     let  ws = new WebSocket("ws://127.0.0.1:8000/api/v1/users/ws/")
     
-
     const divContainer = document.createElement("div")
     divContainer.classList.add("container")
 
