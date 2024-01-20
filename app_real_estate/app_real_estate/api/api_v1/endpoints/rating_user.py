@@ -1,5 +1,7 @@
 from fastapi import APIRouter, status, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
+
+from app_real_estate.auth import get_current_active_user
 from app_real_estate.core import logger
 from app_real_estate.crud import (
     read_ratings_db,
@@ -22,7 +24,8 @@ router = APIRouter(tags=["Ratings"])
     response_model=list[RatingSchema]
 )
 async def read_ratings(
-        session: AsyncSession = Depends(db_helper.scoped_session_dependency)
+        session: AsyncSession = Depends(db_helper.scoped_session_dependency),
+current_user=Depends(get_current_active_user),
 ):
     rating = await read_ratings_db(session=session)
     if rating is None:
@@ -39,7 +42,8 @@ async def read_ratings(
     response_model=RatingSchema
 )
 async def read_rating_by_id(
-        rating: RatingSchema = Depends(rating_by_id)
+        rating: RatingSchema = Depends(rating_by_id),
+current_user=Depends(get_current_active_user),
 ):
     if rating is None:
         raise HTTPException(
@@ -57,6 +61,7 @@ async def read_rating_by_id(
 )
 async def create_rating(
         rating_in: RatingSchema,
+current_user=Depends(get_current_active_user),
         session: AsyncSession = Depends(db_helper.scoped_session_dependency)
 ):
     if rating_in is None:
@@ -75,6 +80,7 @@ async def create_rating(
 async def update_rating(
         rating_update: RatingSchema,
         rating: RatingSchema = Depends(rating_by_id),
+current_user=Depends(get_current_active_user),
         session: AsyncSession = Depends(db_helper.scoped_session_dependency)
 ):
     if rating_update is None:
@@ -117,6 +123,7 @@ async def update_rating(
 @router.delete("/{rating_id}/", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_rating(
         rating: RatingSchema = Depends(rating_by_id),
+current_user=Depends(get_current_active_user),
         session: AsyncSession = Depends(db_helper.scoped_session_dependency)
 ) -> None:
     if rating is None:

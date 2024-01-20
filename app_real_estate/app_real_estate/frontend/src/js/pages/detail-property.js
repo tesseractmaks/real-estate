@@ -296,8 +296,18 @@ export async function slDetailFeatures(detailData) {
     divButton.classList.add("detailButtons")
 
     spanButtons.append(buttonDelete, buttonEdit)
-    divButton.append(spanButtons)
+    console.log(detailData, "+++")
+    if (document.cookie){
+        let cookieId = document.cookie.split(";")[0].split("=")[1]
+        // console.log(detailData["users"]["roles"], "+---")
+        // console.log(cookieId, "++---")
 
+        if (detailData["users"]["roles"].includes("ROLE_ADMIN") && detailData["agent_id"] == cookieId){
+            divButton.append(spanButtons)
+        }
+    }
+
+   
 
     let containerDetail = document.createElement("div")
     containerDetail.classList.add("container")

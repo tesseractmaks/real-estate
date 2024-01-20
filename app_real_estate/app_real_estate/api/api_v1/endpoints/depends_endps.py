@@ -28,6 +28,7 @@ async def user_by_id(
         user_id: Annotated[int, Path],
         session: AsyncSession = Depends(db_helper.scoped_session_dependency)
 ) -> UserSchema:
+
     user = await read_user_by_id_db(session=session, user_id=user_id)
     if user is not None:
         return user

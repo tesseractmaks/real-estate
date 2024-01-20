@@ -43,12 +43,11 @@
 //     "filterForm": null,
 //     "filterForm": null,
 // }
-export async function mainContainer(feturesBloc, cityName="") {
+export async function mainContainer(feturesBloc, cityName = '', paramsIn={}) {
     const mainPage = document.createElement("container")
     mainPage.classList.add("container")
 
     mainPage.innerHTML = ""
-
 
     // export const mainPage = pageContainer()
     const mainSite = await mainSiteData()
@@ -60,7 +59,9 @@ export async function mainContainer(feturesBloc, cityName="") {
     // const heroBlock = await heroSection(mainSite)
     
     // Filter form section
-    const filterForm = await filterFormSection(cityName)
+    let filterForm = await filterFormSection(paramsIn)
+
+
     
     // Gallery section
     const galleryBlock = await gallerySection()
@@ -75,14 +76,49 @@ export async function mainContainer(feturesBloc, cityName="") {
 
      feturesBlock = await feturesSection()
      const galleryBlock = await gallerySection()
-
+ 
     }else{
-        // let cityName = await gallerySection()
-        let cityElem = filterForm.querySelector("#inCity")
-        cityElem.value = cityName
+        if (!cityName){
+            
+            let cityElem = filterForm.querySelector("#inCity")
+            cityElem.value = paramsIn.city
 
-        feturesBlock = feturesBloc
-        galleryBlock.setAttribute("style", "display: none")};
+            // if (cityName){
+            //     cityElem.value = cityName}
+
+            let inState = filterForm.querySelector("#inState")
+            inState.value = paramsIn.state
+
+            let rentSaleFlat = filterForm.querySelector("#rentSaleFlat")
+            rentSaleFlat.value = paramsIn.status
+
+            let sellFlatHouse = filterForm.querySelector("#sellFlatHouse")
+            let sellRooms = filterForm.querySelector("#sellRooms")
+            
+            if (paramsIn.category == 1) {
+                paramsIn.category = 'flat'
+            };
+            if (paramsIn.category == 2) {
+                paramsIn.category = 'house'
+                sellRooms.setAttribute("disabled", "disabled")
+            };
+            sellFlatHouse.value = paramsIn.category
+
+            sellRooms.value = paramsIn.rooms
+            
+        } else {
+            filterForm = await filterFormSection(cityName)
+            
+            let cityElem = filterForm.querySelector("#inCity")
+            cityElem.value = cityName
+
+        }
+        galleryBlock.setAttribute("style", "display: none")
+        feturesBlock = feturesBloc}
+
+
+    
+    
 
     
     // // Review section
@@ -168,7 +204,7 @@ export async function mainContainer(feturesBloc, cityName="") {
      
          // points[0].classList.add("active-image")
          images[0].classList.add("active-clients")
-         // console.log(images)
+
          
  
          for(let i = 0; i < images.length; i++) {
@@ -214,9 +250,9 @@ export async function mainContainer(feturesBloc, cityName="") {
  // 			e.preventDefault();
  // 			let page = link.childNodes[0].textContent
  // 			window.scrollTo({ top: 1900, behavior: 'smooth' })
- // 			// console.log(page, '+----')
+ // 	
  // 			const feturesBloc = await feturesSection(page = +page)
- // 			console.log(feturesBloc, '----------------')
+ // 	
  // 			app.innerHTML = ""
  // 			app.append(
  // 				headerSection,
@@ -388,7 +424,7 @@ export async function mainContainer(feturesBloc, cityName="") {
      // 	// let accordion = document.querySelector("#accordion")
      // 	// let span = accordion.querySelector("#headingOne .panel-link span")
      // 	// span.textContent = `${detailData.house_area} Square foot`
-     // 	// console.log(span)
+  
  
      // 	let  h3Title = document.createElement("h3")
      // 	h3Title.classList.add("sl-sp-title")
@@ -409,7 +445,7 @@ export async function mainContainer(feturesBloc, cityName="") {
      // 	if(detailData.third_floor_area > 0){
      // 		counterFloors++
      // 	};
-     // 	// console.log(counterFloors)
+
      // 	for(let item = 1; item < counterFloors; item++){
  
      // 		let  divPanel = document.createElement("div")
@@ -499,11 +535,11 @@ export async function mainContainer(feturesBloc, cityName="") {
      // 	else{
      // 		response = await fetch(`http://127.0.0.1:8000/api/v1/properties/${p_url}/`);
      // 		detailData = await response.json();
-     // 		console.log(detailData)
+     //
      // 	};
  
      // 	if (detailData) {
-     // 	// console.log(detailData)
+ 
      
      // 		let colSlider = document.querySelector(".col-lg-8")
      // 		let divslider = document.createElement("div")
@@ -664,7 +700,7 @@ export async function mainContainer(feturesBloc, cityName="") {
      // 		if (counterPoints > points.length-1) {
      // 			counterPoints = 0
      // 		}
-     // 		// console.log(counterPoints,'==')
+
      // 		points[counterPoints].classList.add("active-image")
      // 		counterPoints++
  
@@ -687,7 +723,7 @@ export async function mainContainer(feturesBloc, cityName="") {
      // 		if (counterPoints > points.length-1) {
      // 			counterPoints = 0
      // 		}
-     // 		// console.log(counterPoints,'==')
+   
      // 		points[counterPoints].classList.add("active-image")
      // 		counterPoints++
              
@@ -711,7 +747,7 @@ export async function mainContainer(feturesBloc, cityName="") {
      // // Pagination
  
      // async function pagination(propertyData, currentPage) {
-     // 	// console.log(propertyData["pages"], currentPage, '----')
+
      // 	window.scrollTo({ top: 1900, behavior: 'smooth' })
  
      // 	if (propertyData["pages"] > 0) {

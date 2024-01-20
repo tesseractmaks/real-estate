@@ -1,3 +1,4 @@
+import json
 import os
 import shutil
 import urllib
@@ -15,7 +16,7 @@ from fastapi_filter import FilterDepends
 from urllib.parse import urlparse
 
 from app_real_estate.schemas import PropertyFilter, CitiesSchema
-from app_real_estate.auth import get_current_active_user
+from app_real_estate.auth import get_current_active_user, get_refresh_token
 from app_real_estate.core import logger
 
 from app_real_estate.crud import (
@@ -55,6 +56,7 @@ def get_tail_url(url):
 )
 async def read_properties(
         request: Request,
+        refresh=Depends(get_refresh_token),
         session: AsyncSession = Depends(db_helper.scoped_session_dependency),
         property_filter: PropertyFilter = FilterDepends(PropertyFilter),
 ) -> list | list[tuple]:
@@ -66,15 +68,21 @@ async def read_properties(
                 headers={"X-Error": "Url format wrong"},
             )
         return cities
-    # print(property_filter, "=====-----")
+    print()
+    print(property_filter, "=====-----")
+    print()
 
     properties = await read_properties_db(session=session, property_filter=property_filter)
+    print()
+    x = await properties
+    print(" ----- ", x)
+    print()
     if properties is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             headers={"X-Error": "Url format wrong"},
         )
-    return await properties
+    return x
 
 
 add_pagination(router)
@@ -97,15 +105,14 @@ async def read_property_sidebar(
 @logger.catch
 @router.get(
     "/{property_id}/",
-    response_model=PropertySchema
+    response_model=PropertyResponseSchema
 )
 async def read_property_by_id(
         request: Request,
         response: Response,
+        refresh=Depends(get_refresh_token),
         refresh_token: str | None = Cookie(default=None),
-        # access_token: str | None = Cookie(default=None),
         property_: PropertySchema = Depends(property_by_id),
-        # current_user=Depends(get_current_active_user)
 ):
     if property_ is None:
         raise HTTPException(
@@ -113,7 +120,7 @@ async def read_property_by_id(
             headers={"X-Error": "Url format wrong"},
         )
     # response.set_cookie(key="access_token", value=f"Bearer {access_token}")
-    response.set_cookie(key="refresh_token", value=f"Bearer {refresh_token}", httponly=True)
+    # response.set_cookie(key="refresh_token", value=f"Bearer {refresh_token}", httponly=True)
     # print(access_token)
     return property_
 
@@ -126,6 +133,7 @@ async def read_property_by_id(
 )
 async def create_property(
         property_in: PropertyCreateSchema,
+        current_user=Depends(get_current_active_user),
         session: AsyncSession = Depends(db_helper.scoped_session_dependency)
 ):
     if property_in is None:
@@ -140,6 +148,7 @@ async def create_property(
 @router.patch("/upload/{property_id}/", status_code=status.HTTP_201_CREATED)
 async def upload_file_profile(
         _property: PropertySchema = Depends(property_by_id),
+        refresh=Depends(get_refresh_token),
         session: AsyncSession = Depends(db_helper.scoped_session_dependency),
         photos: List[UploadFile] = File(...)
 ):
@@ -183,6 +192,7 @@ async def upload_file_profile(
 async def update_property(
         property_update: PropertyUpdateSchema,
         _property: PropertySchema = Depends(property_by_id),
+        current_user=Depends(get_current_active_user),
         session: AsyncSession = Depends(db_helper.scoped_session_dependency)
 ):
     if property_update is None:
@@ -205,6 +215,7 @@ async def update_property(
 async def update_property_partial(
         property_update: PropertyUpdatePartialSchema,
         _property: PropertySchema = Depends(property_by_id),
+        refresh=Depends(get_refresh_token),
         session: AsyncSession = Depends(db_helper.scoped_session_dependency)
 ):
     if property_update is None:
@@ -224,6 +235,7 @@ async def update_property_partial(
 @router.delete("/{property_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_property(
         _property: PropertySchema = Depends(property_by_id),
+        current_user=Depends(get_current_active_user),
         session: AsyncSession = Depends(db_helper.scoped_session_dependency)
 ) -> None:
     if _property is None:

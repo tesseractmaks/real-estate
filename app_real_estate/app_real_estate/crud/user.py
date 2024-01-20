@@ -1,7 +1,7 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.engine import Result
 from sqlalchemy import select, insert
-
+from sqlalchemy.orm import selectinload
 from sqlalchemy.ext.asyncio import AsyncResult
 from app_real_estate.db import db_helper
 from app_real_estate.models import User, Profile
@@ -35,7 +35,7 @@ async def read_user_by_username_db(
         session: AsyncSession,
         username: str
 ) -> UserSchema | None:
-    stmt = select(User).where(User.email == username)
+    stmt = select(User).where(User.email == username).options(selectinload(User.properties), selectinload(User.profile))
     # stmt = select(User).order_by(User.id)
     result: AsyncResult = await session.execute(stmt)
     user = result.unique().scalar_one()

@@ -1,5 +1,7 @@
 from fastapi import APIRouter, status, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
+
+from app_real_estate.auth import get_current_active_user
 from app_real_estate.core import logger
 
 from app_real_estate.crud import (
@@ -26,7 +28,9 @@ router = APIRouter(tags=["Posts"])
     response_model=list[PostSchema]
 )
 async def read_categories(
+current_user=Depends(get_current_active_user),
         session: AsyncSession = Depends(db_helper.scoped_session_dependency)
+
 ):
     posts = await read_posts_db(session=session)
     if posts is None:
@@ -43,6 +47,7 @@ async def read_categories(
     response_model=PostSchema
 )
 async def read_post_by_id(
+current_user=Depends(get_current_active_user),
         post: PostSchema = Depends(post_by_id)
 ):
     if post is None:
@@ -61,6 +66,7 @@ async def read_post_by_id(
 )
 async def create_post(
         post_in: PostCreateSchema,
+current_user=Depends(get_current_active_user),
         session: AsyncSession = Depends(db_helper.scoped_session_dependency)
 ):
     if post_in is None:
@@ -78,6 +84,7 @@ async def create_post(
 )
 async def update_post(
         post_update: PostUpdateSchema,
+current_user=Depends(get_current_active_user),
         post: PostSchema = Depends(post_by_id),
         session: AsyncSession = Depends(db_helper.scoped_session_dependency)
 ):
@@ -97,6 +104,7 @@ async def update_post(
 @router.delete("/{post_id}/", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_post(
         post: PostSchema = Depends(post_by_id),
+current_user=Depends(get_current_active_user),
         session: AsyncSession = Depends(db_helper.scoped_session_dependency)
 ) -> None:
     if post is None:

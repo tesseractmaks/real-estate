@@ -122,7 +122,7 @@ export async function profileNew(detailData) {
                 }
             }
         })
-        // console.log(collectResponse, "--")
+        console.log(detailData.id, "999--")
 
 
         const response = await fetch('http://127.0.0.1:8000/api/v1/profiles/' + detailData.id,

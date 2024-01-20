@@ -107,7 +107,7 @@ export async function gallerySection() {
             // await render(feturesBlock)
             pageContainer.innerHTML = ""
     
-            let feturesBlockNew =  await mainContainer(feturesBlock, cityName)
+            let feturesBlockNew =  await mainContainer(feturesBlock, cityName, {})
             pageContainer.append(feturesBlockNew)
             const slow = 2000
             // window.scrollTo({ top: 1000, behavior: 'smooth' })

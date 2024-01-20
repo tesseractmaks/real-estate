@@ -10,11 +10,18 @@ export async function getListProperties(page = 1, params = {}) {
 
 
   if (JSON.stringify(params) === '{}') {
-    response = await fetch(`http://127.0.0.1:8000/api/v1/properties/?page=${page}`);
-
+    response = await fetch(`http://127.0.0.1:8000/api/v1/properties/?page=${page}`,
+    {
+      headers: {"Authorization": "Bearer "},
+      credentials: 'include'
+    })
   } else {
 
-    response = await fetch(`http://127.0.0.1:8000/api/v1/properties/?page=${page}&city=${params["city"]}&state=${params["state"]}&category=${params["category"]}&status=${params["status"]}&bedrooms=${params["rooms"]}`);
+    response = await fetch(`http://127.0.0.1:8000/api/v1/properties/?page=${page}&city=${params["city"]}&state=${params["state"]}&category=${params["category"]}&status=${params["status"]}&bedrooms=${params["rooms"]}`,
+    {
+      headers: {"Authorization": "Bearer "},
+      credentials: 'include'
+    })
   };
 
   const propertyData = await response.json();
@@ -31,7 +38,7 @@ export async function getSidebarProperties() {
 };
 
 export async function getOneProperty(idNum, myHeaders) {
-  console.log(idNum, "+++")
+  // console.log(idNum, "+++")
   let response = await fetch(`http://127.0.0.1:8000/api/v1/properties/${idNum}/`,
   {
     method: "GET",
@@ -42,7 +49,7 @@ export async function getOneProperty(idNum, myHeaders) {
 
   const propertyData = await response.json();
   // console.log(propertyData.headers, "-==-")
-  // console.log(myHeaders, "+++")
+  // console.log(propertyData, "+++")
   return propertyData
 };
 

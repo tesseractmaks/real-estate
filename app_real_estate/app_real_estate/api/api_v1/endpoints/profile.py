@@ -4,6 +4,8 @@ import os
 from fastapi import APIRouter, status, Depends, UploadFile, File, HTTPException
 import shutil
 from sqlalchemy.ext.asyncio import AsyncSession
+
+from app_real_estate.auth import get_refresh_token, get_current_active_user
 from app_real_estate.core import logger
 
 from app_real_estate.crud import (
@@ -51,6 +53,7 @@ async def read_profiles(
     response_model=ProfileResponseSchema
 )
 async def read_profile_by_id(
+        refresh=Depends(get_refresh_token),
         profile: ProfileSchema = Depends(profile_by_id)
 ):
     if profile is None:
@@ -68,6 +71,7 @@ async def read_profile_by_id(
 )
 async def read_profile_by_user_id(
         user_id: int,
+        refresh=Depends(get_refresh_token),
         session: AsyncSession = Depends(db_helper.scoped_session_dependency)
 ):
     profile = await read_profile_by_id_user_db(session=session, user_id=user_id)
@@ -82,6 +86,7 @@ async def read_profile_by_user_id(
 )
 async def create_profile(
         profile_in: ProfileCreateSchema,
+        current_user=Depends(get_current_active_user),
         session: AsyncSession = Depends(db_helper.scoped_session_dependency)
 ):
     if profile_in is None:
@@ -134,6 +139,7 @@ async def upload_photo_profile(
 async def update_profile(
         profile_update: ProfileUpdateSchema,
         profile: ProfileSchema = Depends(profile_by_id),
+        current_user=Depends(get_current_active_user),
         session: AsyncSession = Depends(db_helper.scoped_session_dependency)
 ):
     if profile_update is None:
@@ -156,6 +162,7 @@ async def update_profile(
 async def update_profile_partial(
         profile_update: ProfileUpdatePartialSchema,
         profile: ProfileSchema = Depends(profile_by_id),
+        # current_user=Depends(get_current_active_user),
         session: AsyncSession = Depends(db_helper.scoped_session_dependency)
 ):
     if profile_update is None:
@@ -175,6 +182,7 @@ async def update_profile_partial(
 @router.delete("/{profile_id}/", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_profile(
         profile: ProfileSchema = Depends(profile_by_id),
+        current_user=Depends(get_current_active_user),
         session: AsyncSession = Depends(db_helper.scoped_session_dependency)
 ) -> None:
     if profile is None:

@@ -14,9 +14,44 @@ export async function getRelatedProperties() {
   return propertyData
 };
 
+export async function getOneUser(idNum) {
+  let response = await fetch(`http://127.0.0.1:8000/api/v1/users/${idNum}/`);
+  const userData = await response.json();
+  return userData
+};
+
 export async function getOneProfile(idNum) {
   let response = await fetch(`http://127.0.0.1:8000/api/v1/profiles/${idNum}/`,
   {
+    // credentials: "same-origin"
+    
+  
+    // headers: {
+    //   'Accept': 'application/json',
+    //   'Content-Type': 'application/json',
+    //   'Cache': 'no-cache'
+    // },
+    // credentials: 'include'
+  });
+
+  const profileData = await response.json();
+  return profileData
+};
+
+export async function patchOneProfile(idNum, detailData) {
+  let response = await fetch(`http://127.0.0.1:8000/api/v1/profiles/${idNum}/`,
+  {
+    method:'PATCH',
+    body: JSON.stringify(
+      {
+        "user_id": detailData["users"]["id"],
+
+      }),
+    headers: {
+      'Content-Type': 'application/json',
+       'Accept': 'application/json'
+      }
+
     // credentials: "same-origin"
     
   
@@ -46,14 +81,17 @@ export async function getOneProfileByUser(idNum) {
     // credentials: 'include'
   });
 
+
   const profileData = await response.json();
+  console.log(profileData, "+------")
   return profileData
 };
 
 
 export async function deleteOneProfile(idNum) {
-  console.log(idNum, "------")
-  await fetch(`http://127.0.0.1:8000/api/v1/profiles/${idNum}/`, {
+  
+  // await fetch(`http://127.0.0.1:8000/api/v1/profiles/${idNum}/`, {
+  await fetch(`http://127.0.0.1:8000/api/v1/users/${idNum}/`, {
     method: "DELETE",
   });
 };

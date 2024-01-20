@@ -98,7 +98,7 @@ async def add_test_profile_data():
 
 async def add_test_user_data():
     async with db_helper.engine.begin() as conn:
-        for i in range(1, 2):
+        for i in range(1, 4):
             values_data = {
                 "profile_id": i,
                 "email": f"one{i}@mail.ru",
@@ -107,9 +107,9 @@ async def add_test_user_data():
                 "roles": [AppRole.ROLE_USER]
             }
             if i == 1:
-                values_data["roles"].append(AppRole.ROLE_ADMIN)
-            if i == 2:
-                values_data["roles"].append(AppRole.ROLE_SUPER_ADMIN)
+                values_data["roles"].extend([AppRole.ROLE_SUPER_ADMIN, AppRole.ROLE_ADMIN])
+            # if i == 2:
+            #     values_data["roles"].append(AppRole.ROLE_ADMIN)
 
             await conn.execute(insert(User).values(values_data))
         await conn.commit()
@@ -117,7 +117,7 @@ async def add_test_user_data():
 
 async def add_test_property_data():
     async with db_helper.engine.begin() as conn:
-        for _ in range(1, 154):
+        for _ in range(1, 160):
             values_data = {
                 "agent_id": 1,
                 "category_id": random.randint(1, 2),
@@ -219,6 +219,9 @@ def create_main_collection():
         print(exc)
     filename = os.path.relpath("db/main_site.json")
     insert_data(filename)
+
+
+create_main_collection()
 
 
 def insert_test_bulk_data(blog_db=blog_db):

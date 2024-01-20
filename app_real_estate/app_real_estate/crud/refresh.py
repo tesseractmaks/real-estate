@@ -22,7 +22,6 @@ async def create_refresh_db(
         session: AsyncSession,
         refresh_in: RefreshKeySchema,
 ) -> RefreshKey:
-    print(refresh_in, "================")
     refresh_obj = RefreshKeySchema(**refresh_in)
 
     # print(refresh_obj,"--")
@@ -40,7 +39,7 @@ async def read_refresh_by_name_db(
     query = select(RefreshKey).where(RefreshKey.refresh == refresh_name)
     # stmt = select(User).order_by(User.id)
     result: AsyncResult = await session.execute(query)
-    name = result.scalar_one()
+    name = result.unique().scalar()
     return name
 
 
@@ -48,10 +47,10 @@ async def read_refresh_by_user_name_db(
         session: AsyncSession,
         username: str
 ) -> RefreshKeySchema | None:
-    query = select(RefreshKey.refresh).where(RefreshKey.sub == username)
+    query = select(RefreshKey).where(RefreshKey.sub == username)
     # stmt = select(User).order_by(User.id)
     result: AsyncResult = await session.execute(query)
-    name = result.scalar_one()
+    name = result.unique().scalar()
     return name
 
 

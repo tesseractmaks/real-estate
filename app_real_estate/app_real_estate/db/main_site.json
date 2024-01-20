@@ -10,35 +10,11 @@
       "https://www.linkedin.com"
     ],
     "mainMenu": [
-      {
-        "link": "/",
-        "text": "Home"
-      },
-      {
-        "link": "categories.html",
-        "text": "FEATURED LISTING"
-      },
-      {
-        "link": "about.html",
-        "text": "ABOUT US"
-      },
-      {
-        "link": "single-list.html",
-        "text": "Pages"
-      },
-      {
-        "link": "blog.html",
-        "text": "Blog"
-      },
-      {
-        "link": "contact.html",
-        "text": "Contact"
-      }
     ]
   },
   "hero": {
     "h2": "find your place with our local life style",
-    "p": "Search real estate property records, houses, condos, land and more on leramiz.com®.<br>Find property info from the most comprehensive source data.",
+    "p": "Search real estate property records, houses, condos, land and more. Find property info from the most comprehensive source data.",
     "button": {
       "link": "",
       "text": "VIEW DETAIL"

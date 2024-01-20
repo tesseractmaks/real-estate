@@ -10,7 +10,7 @@ export async function heroSectionDetail() {
 
     let h2 = document.createElement("h2")
 
-    h2.textContent = "Detail- ???"
+    h2.textContent = "Detail-Property"
     container.append(h2)
     section.append(container)
     return section

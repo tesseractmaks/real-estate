@@ -10,7 +10,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from passlib.context import CryptContext
 from fastapi.encoders import jsonable_encoder
 from app_real_estate.core import logger
-
+from fastapi import Request, Cookie, Response, HTTPException
 from app_real_estate.crud import (
     read_users_db,
     create_user_db,
@@ -27,7 +27,7 @@ from app_real_estate.schemas import (
     UserResponseSchema
 )
 from .depends_endps import user_by_id
-from app_real_estate.auth import get_current_active_user, create_token, get_current_active_user_admin
+from app_real_estate.auth import get_current_active_user, create_token, get_current_active_user_admin, get_refresh_token
 import sys
 
 router = APIRouter(tags=["Users"])
@@ -62,21 +62,22 @@ async def read_users(
     response_model=UserResponseSchema
 )
 async def read_user_by_id(
-        # current_user=Depends(get_current_active_user),
-        product: UserSchema = Depends(user_by_id)
+        refresh=Depends(get_refresh_token),
+        user: UserSchema = Depends(user_by_id)
 ):
-    if product is None:
+    if user is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             headers={"X-Error": "Url format wrong"},
         )
-    return product
+    return user
 
 
 @logger.catch
 @router.post(
     "/",
     # response_model=UserResponseSchema,
+
     response_model=UserSchema,
     status_code=status.HTTP_201_CREATED
 )
@@ -85,7 +86,6 @@ async def create_user(
         session: AsyncSession = Depends(db_helper.scoped_session_dependency),
         # current_user=Depends(get_current_active_user),
 ):
-
     # user_in_data = jsonable_encoder(form_data)
     # print(user_in_data, "---=====")
     # x= json.dumps(form_data)
@@ -114,7 +114,7 @@ async def create_user(
 async def update_user(
         user_update: UserUpdateSchema,
         user: UserSchema = Depends(user_by_id),
-        # current_user=Depends(get_current_active_user),
+        current_user=Depends(get_current_active_user),
         session: AsyncSession = Depends(db_helper.scoped_session_dependency)
 ):
     if user_update is None:
@@ -161,7 +161,8 @@ def check_user_permissions(
 async def update_user_partial(
         user_update: UserUpdatePartialSchema,
         user: UserSchema = Depends(user_by_id),
-        current_user=Depends(get_current_active_user),
+        # current_user=Depends(get_current_active_user),
+        current_user=Depends(get_refresh_token),
         session: AsyncSession = Depends(db_helper.scoped_session_dependency)
 ):
     # if not check_user_permissions(
@@ -188,15 +189,9 @@ async def update_user_partial(
 @router.delete("/{user_id}/", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_user(
         user: UserSchema = Depends(user_by_id),
-        current_user=Depends(get_current_active_user),
+        # current_user=Depends(get_current_active_user),
         session: AsyncSession = Depends(db_helper.scoped_session_dependency)
 ) -> None:
-    if not check_user_permissions(
-            target_user=user,
-            current_user=current_user
-    ):
-        raise HTTPException(status_code=403, detail="Forbidden.")
-
     print(user, "--")
     if user is None:
         raise HTTPException(
@@ -212,12 +207,17 @@ async def delete_user(
     response_model=UserUpdatePartialSchema
 )
 async def grant_admin_privilege(
-        # user_update: UserUpdatePartialSchema,
+        # current_user=Depends(get_current_active_user_admin),
+        current_user=Depends(get_refresh_token),
         user: UserSchema = Depends(user_by_id),
-        current_user=Depends(get_current_active_user_admin),
         session: AsyncSession = Depends(db_helper.scoped_session_dependency)
 ):
+    # print("---  ", current_user.email)
+    # current_user = user
+    # print(user.id, "===", refresh_token)
     if not current_user.is_super_admin:
+        raise HTTPException(status_code=403, detail="Forbidden.")
+    if not current_user.is_super_admin and not current_user.is_admin:
         raise HTTPException(status_code=403, detail="Forbidden.")
     if current_user.id == user.id:
         raise HTTPException(status_code=400, detail="Can not manage privileges of itself")
@@ -244,7 +244,8 @@ async def grant_admin_privilege(
 )
 async def revoke_admin_privilege(
         user: UserSchema = Depends(user_by_id),
-        current_user=Depends(get_current_active_user_admin),
+        # current_user=Depends(get_current_active_user_admin),
+        current_user=Depends(get_refresh_token),
         session: AsyncSession = Depends(db_helper.scoped_session_dependency)
 ):
     if not current_user.is_super_admin:
@@ -252,6 +253,8 @@ async def revoke_admin_privilege(
             raise HTTPException(status_code=403, detail="Forbidden.")
         except:
             pass
+    if not current_user.is_super_admin and not current_user.is_admin:
+        raise HTTPException(status_code=403, detail="Forbidden.")
     if current_user.id == user.id:
         raise HTTPException(status_code=400, detail="Can not manage privileges of itself")
     if not user.is_admin or user.is_super_admin:

@@ -61,13 +61,13 @@ async def login_for_access_token(
             headers={"X-Error": "Empty data"},
         )
     # response.set_cookie(key="access_token", value="Bearer 123}", httponly=True)
-    print("-=-=-=-------", form_data.username)
 
     user = await authenticate_user(
         form_data.username,
         form_data.password,
         session=session,
     )
+    # await session.close()
 
     access_token, refresh_token = await create_token(
         data={"sub": user.email},

@@ -20,7 +20,7 @@ export async function sidebarAgent() {
 
 
 export async function authorCard(detailData) {
-    console.log(detailData)
+    
 
     let divAuthor = document.createElement("div")
     divAuthor.classList.add("author-card-profile")
@@ -196,7 +196,8 @@ export async function staffProfiles() {
     divItemPr.classList.add("pr-item")
     
     profilesData.forEach(function (element) {
-
+        if (element["users"]["roles"].includes("ROLE_ADMIN")){
+        
         // for(let i=0; i < 4; i++){
         let divItem = document.createElement("div")
 
@@ -209,7 +210,9 @@ export async function staffProfiles() {
 
         divPic.setAttribute("data-setbg", `${element.avatar}`)
         divPic.setAttribute("style", `background-image: url(${element.avatar});`)
-        
+        console.log(element,"===")
+        console.log(element.id,"===")
+
         let APic = aElements(`/profile/${element.id}`)
         APic.append(divPic)
 
@@ -228,6 +231,7 @@ export async function staffProfiles() {
 
         divItem.append(APic, divInfo)
         divItemPr.append(divItem)
+    }
     });
     divProperties.append(divItemPr)
 

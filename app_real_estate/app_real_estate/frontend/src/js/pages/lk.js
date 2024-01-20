@@ -1,4 +1,5 @@
 import { jsonToData, setStorageData, deleteStorageData } from "../utils.js"
+import { getListProfiles } from "../components/list-profiles.js"
 
 import { authorCard, relatedProperties } from "../components/profile-components.js"
 import { aIelements, anyIelements, aElements, anyElement } from "../components/elements.js"
@@ -163,12 +164,22 @@ export async function kabinet(detailData) {
         colSlider4H3.classList.add("moder-h3")
         colSlider4H3.textContent = "заявки на модерацию"
 
-        let moderDiv = anyElement("div", ["message-lk"])
+        const profilesData = await getListProfiles()
+        colSlider4.append(colSlider4H3)
+    
+        profilesData.forEach(function (element) {
+            // console.log(element,"++")
+            if (!element["users"]["roles"].includes("ROLE_ADMIN")){
+                // console.log(element["users"]["id"],"=-=")
 
-        let moderA = aElements("linkId", ["moder-lk"], "nickname")
-        moderA.style.textDecoration = "none"
-        moderDiv.append(moderA)
-        colSlider4.append(colSlider4H3, moderDiv)
+            let moderDiv = anyElement("div", ["message-lk"])
+            let moderA = aElements(`/profile/${element["users"]["id"]}`, ["moder-lk"], element["nickname"])
+            moderA.style.textDecoration = "none"
+            moderDiv.append(moderA)
+            colSlider4.append(moderDiv)
+        }
+        });
+        
 
         let colStaff = document.createElement("div")
         colStaff.classList.add("col-lg-6")
@@ -190,9 +201,19 @@ export async function kabinet(detailData) {
         // rowDetail.append(colSlider, colSlider2)
         rowDetail.append(colSlider)
         
-        rowDetail2.append(colSlider3, colSlider4)
-        rowStaff.append(colStaff)
-        containerDetail.append(rowDetail, rowDetail2, rowStaff)
+
+        rowDetail2.append(colSlider3)
+        // rowDetail2.append(colSlider3, colSlider4)
+        rowStaff.append(colStaff, colSlider4)
+        // console.log(detailData, "--")
+
+        if (detailData["users"]["roles"].includes("ROLE_SUPER_ADMIN")){
+            containerDetail.append(rowDetail, rowDetail2, rowStaff)
+        }
+        if (detailData["users"]["roles"].includes("ROLE_ADMIN")){
+            containerDetail.append(rowDetail, rowDetail2)
+        }
+
         // console.log(containerDetail)
 
         sectionDetail.append(containerDetail)

@@ -2,7 +2,7 @@ import { jsonToData, setStorageData, deleteStorageData } from "../utils.js"
 
 import { authorCard, relatedProperties } from "../components/profile-components.js"
 import { aIelements, anyIelements, buttonElement } from "../components/elements.js"
-import { deleteOneProfile } from "../components/list-profiles.js"
+import { deleteOneProfile, getOneUser } from "../components/list-profiles.js"
 
 // import { pageContainer } from "../../index.js"
 import { router } from "../../index.js"
@@ -83,10 +83,43 @@ export async function detailProfile(detailData) {
     let buttonEdit = await buttonElement("редактировать", ["editButton"], "edit")
     let buttonDelete = await buttonElement("удалить", ["deleteButton"], "delete")
     let buttonModer = await buttonElement("одобрить", ["moderButton"], "moder")
+    let buttonDeleteRole = await buttonElement("понизить", ["delete-roleButton"], "delete-role")
     let divButton = document.createElement("div")
     divButton.classList.add("detailButtons")
+    buttonDeleteRole.classList.add("profile-panel-hide")
 
-    spanButtons.append(buttonDelete, buttonModer, buttonEdit)
+    
+
+    let cookieId;
+    let detailUser;
+    if (document.cookie){
+        cookieId = document.cookie.split(";")[1].split("=")[1]
+        if(!(+cookieId)){
+            cookieId = document.cookie.split(";")[0].split("=")[1]
+        }
+
+        detailUser = await getOneUser(cookieId)
+        // console.log(detailUser,"----")
+
+        if (detailUser["roles"].includes("ROLE_SUPER_ADMIN")){
+            spanButtons.append(buttonDelete, buttonModer, buttonEdit, buttonDeleteRole)
+        }
+
+        if (detailUser["roles"].includes("ROLE_ADMIN")){
+                spanButtons.append(buttonModer, buttonDeleteRole)
+        }
+    }
+
+    if(detailData["users"]["roles"].includes("ROLE_ADMIN")){
+        buttonModer.classList.add("profile-panel-hide")
+        buttonDeleteRole.classList.remove("profile-panel-hide")
+    } else {
+        buttonModer.classList.remove("profile-panel-hide")
+        buttonDeleteRole.classList.add("profile-panel-hide")
+    };
+
+
+    
     divButton.append(spanButtons)
 
 
@@ -124,10 +157,11 @@ export async function detailProfile(detailData) {
         containerDetail.append(rowDetail)
         sectionDetail.append(containerDetail)
     };
+    // console.log(detailData, "=====")
 
     buttonDelete.addEventListener("click", async function (elem) {
         elem.preventDefault();
-        console.log(detailData["id"], "=====")
+        // console.log(detailData["id"], "=====")
         await deleteOneProfile(detailData["id"])
         router.navigate("/")
         window.location.reload();
@@ -137,6 +171,53 @@ export async function detailProfile(detailData) {
         elem.preventDefault();
         router.navigate("/edit/profile/" + `${detailData["id"]}`)
     });
+
+    buttonModer.addEventListener("click", async function (elem) {
+        elem.preventDefault();
+        // console.log(detailData["users"]["id"], " --- ", detailData)
+
+        let response = await fetch(`http://127.0.0.1:8000/api/v1/users/admin_privilege?user_id=${detailData["users"]["id"]}`,
+        {method:'PATCH',
+        // body: JSON.stringify({"user_id": detailData["users"]["id"]}),
+        
+        headers: {
+             'Content-Type': 'application/json',
+             'Accept': 'application/json',
+             "Authorization": "Bearer ",
+            },
+        credentials: 'include',
+            
+        })
+        // const data = await response.json()
+        buttonModer.classList.remove("profile-panel")
+        buttonModer.classList.add("profile-panel-hide")
+
+        buttonDeleteRole.classList.remove("profile-panel-hide")
+        buttonDeleteRole.classList.add("profile-panel")
+    });
+
+    buttonDeleteRole.addEventListener("click", async function (elem) {
+        elem.preventDefault();
+        // console.log(detailData["users"]["id"], " --- ", detailData)
+
+        let response = await fetch(`http://127.0.0.1:8000/api/v1/users/admin_privilege?user_id=${detailData["users"]["id"]}`,
+        {method:'DELETE',
+        // body: JSON.stringify({"user_id": detailData["users"]["id"]}),
+        headers: {
+            'Content-Type': 'application/json',
+             'Accept': 'application/json',
+             "Authorization": "Bearer ",
+            },
+            credentials: 'include',
+        })
+        // const data = await response.json()
+        buttonDeleteRole.classList.remove("profile-panel")
+        buttonDeleteRole.classList.add("profile-panel-hide")
+
+        buttonModer.classList.remove("profile-panel-hide")
+        buttonModer.classList.add("profile-panel")
+    });
+
     return sectionDetail
 
 };

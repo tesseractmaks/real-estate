@@ -31,11 +31,13 @@ class UserSchema(BaseModel):
 class UserProfileSchema(BaseModel):
     model_config = ConfigDict(from_attributes=True)
     email: str
+    id: int
 
 
 class UserResponseSchema(BaseModel):
     model_config = ConfigDict(from_attributes=True)
     email: str
+    roles: list[str] = [AppRole.ROLE_USER]
     profile: ProfileSchema
 
 
@@ -64,6 +66,7 @@ class UserUpdatePartialSchema(UserSchema):
     password: str | None = None
     is_active: bool | None = None
     roles: list[AppRole] | None = None
+    id: int | None = None
 
 
 class UserInDB(UserSchema):

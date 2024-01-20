@@ -1,5 +1,5 @@
 // import { setStorageData } from "../utils.js"
-// import { filterFormSection } from './filter-form.js'
+import { filterFormSection } from './filter-form.js'
 import { pagination } from "./pagination.js"
 import { getListProperties } from "./list-properties.js"
 
@@ -39,6 +39,7 @@ export async function feturesSection(page = 1, params = {}) {
     let row = document.createElement("div")
     row.classList.add("row")
     let propertyData = params;
+    // console.log("---1---", params)
 
 
 
@@ -46,12 +47,30 @@ export async function feturesSection(page = 1, params = {}) {
     if (JSON.stringify(propertyData) !== '{}' && propertyData["items"]) {
         // page = propertyData["page"]
         params = propertyData["items"]
+        // console.log("---2---", params, propertyData["items"])
         // propertyData = propertyData = await getListProperties(page, params);
     }
     // else{
     // propertyData = propertyData = await getListProperties(page, params);
     // }
-    propertyData = propertyData = await getListProperties(page, params);
+    // console.log("---3---", params)
+    // params = {
+    //     "city": city,
+    //     "state": state,
+    //     "category": flatHouse,
+    //     "status": rentSale,
+    //     "rooms": +rooms
+    // }
+   
+    
+    // console.log("---4---", params)
+    if (params.category == 'flat') {
+        params.category = 1
+    } 
+    if (params.category == 'house') {
+        params.category = 2
+    } 
+    propertyData = await getListProperties(page, params);
     // console.log(propertyData,"-")
 
     // setStorageData("currentPage", propertyData["items"])
@@ -75,7 +94,6 @@ export async function feturesSection(page = 1, params = {}) {
             e.preventDefault()
             router.navigate("/detail/" + `${element["id"]}`)
         })
-
 
 
         let divFeature = document.createElement("div")
@@ -229,6 +247,8 @@ export async function feturesSection(page = 1, params = {}) {
 
 
     // Pagination
+    
+
     let divPagina = await pagination(page, propertyData)
 
     container.append(row, divPagina)
@@ -239,14 +259,12 @@ export async function feturesSection(page = 1, params = {}) {
     let pages = divPagina.childNodes[0].children
     for (let link of pages) {
         link.addEventListener('click', async function (e) {
-            console.log("===")
-
+            
             e.preventDefault();
 
-
-            let cityElem = document.querySelector("#inCity")
-
-            cityElem.value = params.city
+            // let cityElem = document.querySelector("#inCity")
+            // cityElem.value = params.city
+            // console.log("- - - ", cityElem.value, params)
 
             let page = link.childNodes[0].textContent
             const feturesBlock = await feturesSection(page = +page, params)
@@ -254,12 +272,19 @@ export async function feturesSection(page = 1, params = {}) {
             // mainPage.innerHTML= ""
             pageContainer.innerHTML = ""
 
-
-
-            let feturesBlockNew = await mainContainer(feturesBlock, params.city)
+            let paramsIn = {
+                "city": params.city,
+                "state": params.state,
+                "category": params.category,
+                "status": params.status,
+                "rooms": params.rooms
+            }
+            
+            let feturesBlockNew = await mainContainer(feturesBlock, '', paramsIn)
             pageContainer.append(feturesBlockNew)
-
-
+            // let cityElem = pageContainer.querySelector("#inCity")
+            // cityElem.value = paramsIn.city
+            // console.log("++===",cityElem, paramsIn.city)
 
             // const mainPage = pageContainer()
 
@@ -271,7 +296,6 @@ export async function feturesSection(page = 1, params = {}) {
             //      reviewBlock,
             //      servicesBlock,
             //      )
-
 
             window.scrollTo({ top: 1000, behavior: 'smooth' })
             // console.log(mainPage,"=")

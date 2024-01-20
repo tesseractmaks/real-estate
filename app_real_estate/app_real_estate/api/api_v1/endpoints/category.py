@@ -1,5 +1,7 @@
 from fastapi import APIRouter, status, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
+
+from app_real_estate.auth import get_current_active_user
 from app_real_estate.core import logger
 
 from app_real_estate.crud import (
@@ -26,7 +28,8 @@ router = APIRouter(tags=["Categories"])
     response_model=list[CategorySchema]
 )
 async def read_categories(
-        session: AsyncSession = Depends(db_helper.scoped_session_dependency)
+        session: AsyncSession = Depends(db_helper.scoped_session_dependency),
+current_user=Depends(get_current_active_user),
 ):
     categories = await read_categories_db(session=session)
     if categories is None:
@@ -43,6 +46,7 @@ async def read_categories(
     response_model=CategorySchema
 )
 async def read_category_by_id(
+current_user=Depends(get_current_active_user),
         category: CategorySchema = Depends(category_by_id)
 ):
     if category is None:
@@ -61,6 +65,7 @@ async def read_category_by_id(
 )
 async def create_category(
         category_in: CategoryCreateSchema,
+current_user=Depends(get_current_active_user),
         session: AsyncSession = Depends(db_helper.scoped_session_dependency)
 ):
     if category_in is None:
@@ -78,6 +83,7 @@ async def create_category(
 )
 async def update_category(
         category_update: CategoryUpdateSchema,
+current_user=Depends(get_current_active_user),
         category: CategorySchema = Depends(category_by_id),
         session: AsyncSession = Depends(db_helper.scoped_session_dependency)
 ):
@@ -100,6 +106,7 @@ async def update_category(
 )
 async def update_category_partial(
         category_update: CategoryUpdatePartialSchema,
+current_user=Depends(get_current_active_user),
         category: CategorySchema = Depends(category_by_id),
         session: AsyncSession = Depends(db_helper.scoped_session_dependency)
 ):
@@ -120,6 +127,7 @@ async def update_category_partial(
 @router.delete("/{category_id}/", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_category(
         category: CategorySchema = Depends(category_by_id),
+current_user=Depends(get_current_active_user),
         session: AsyncSession = Depends(db_helper.scoped_session_dependency)
 ) -> None:
     if category is None:

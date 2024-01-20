@@ -16,7 +16,7 @@ import { heroSectionDetail } from "./js/components/hero-detail.js"
 // import { feturesSection } from "./components/fetures-section.js"
 // import { reviewSection } from "./components/review-slider.js"
 import { getOneProperty } from "./js/components/list-properties.js"
-import { getOneProfileByUser } from "./js/components/list-profiles.js"
+import { getOneProfileByUser, getOneProfile } from "./js/components/list-profiles.js"
 import { registrationForm, loginForm } from "./js/components/form-reg-login.js"
 
 import { detailProfile } from "./js/pages/detail-profile.js"
@@ -49,14 +49,11 @@ export const router = new Navigo('/');
 
 function syncLogout (event) {
 	if (event.key === 'logout') {
-	  console.log('logged out from storage!')
-	  router.navigate("/login")
+	  router.navigate("/")
 	  
 	}
   }
 document.addEventListener('storage', syncLogout) 
-
-
 
 
 export async function mainSiteData() {
@@ -70,7 +67,6 @@ export async function mainSiteData() {
 
 const mainSite = await mainSiteData()
 // console.log(mainSite)
-
 
 
 const app = document.querySelector("#app")
@@ -116,10 +112,6 @@ const mainPage = await mainContainer()
 
 // console.log(chatBlock)
 
-
-
-
-
 // // Review section
 // const reviewBlock = await reviewSection()
 
@@ -140,6 +132,18 @@ export const footerBlock = await footerSection(mainSite)
 // pageContainer.append(detailBlock)
 // pageContainer.append(detailBlockEdit)
 // pageContainer.append(heroBlockDetail, detailBlock)
+function checkRefreshToken(){
+	if (document.cookie) {
+		const currentDate = new Date().toISOString();
+		let decodedString = atob(document.cookie.split(".")[1]);
+		let exp = Object.values(JSON.parse(decodedString))[1]
+		let date = new Date(exp * 1000);
+		let expToken = date.toISOString()
+		// console.log(currentDate," | ",expToken)
+		if (currentDate > expToken){
+			router.navigate("login/")}
+		}
+}
 
 const mainContaner = document.createElement("contaner")
 router.on('/', function () {
@@ -152,15 +156,15 @@ router.on('/', function () {
 
 
 // Property
-
 router.on('/detail/:id', async function (e) {
+	checkRefreshToken()
 
-	let ca = document.cookie;
-	console.log(ca, "=-")
+	// let ca = document.cookie;
+	// console.log(ca, "=-")
 		
 	let myHeaders = `Bearer `;
 	// let myHeaders = `Bearer ${document.cookie.refresh_token}`;
-	console.log(e.data.id, "--")
+	// console.log(e.data.id, "--")
 
 	mainContaner.innerHTML = ""
 	pageContainer.innerHTML = ""
@@ -171,6 +175,7 @@ router.on('/detail/:id', async function (e) {
   });
 
 router.on('/edit/property/:id', async function (e) {
+	checkRefreshToken()
 	// console.log(e.data.id)
 	mainContaner.innerHTML = ""
 	pageContainer.innerHTML = ""
@@ -180,7 +185,6 @@ router.on('/edit/property/:id', async function (e) {
 	pageContainer.innerHTML = ""
 	
 	pageContainer.append(sectionNewDetail)
-	
 	mainContaner.append(heroBlockDetail, pageContainer)
   });
 
@@ -188,7 +192,8 @@ router.on('/edit/property/:id', async function (e) {
 // Profiles
 // console.log(document.cookie, "--")
 router.on('/profile/:id', async function (e) {
-	// console.log(e.data.id)
+	checkRefreshToken()
+	// console.log(e.data.id,"----======------")
 
 	mainContaner.innerHTML = ""
 	pageContainer.innerHTML = ""
@@ -200,6 +205,7 @@ router.on('/profile/:id', async function (e) {
   });
 
 router.on('/edit/profile/:id', async function (e) {
+	checkRefreshToken()
 	// console.log(e.data.id)
 	mainContaner.innerHTML = ""
 	pageContainer.innerHTML = ""
@@ -215,10 +221,12 @@ router.on('/edit/profile/:id', async function (e) {
 //  Lk
 
 router.on('/kabinet/:id', async function (e) {
-	// console.log(e.data.id)
+	checkRefreshToken()
+	// console.log(e.data.id,"--")
 	mainContaner.innerHTML = ""
 	pageContainer.innerHTML = ""
 	const profileData = await getOneProfile(e.data.id)
+	// console.log(profileData,"--")
 
 	const detailBlock = await kabinet(profileData)
 	pageContainer.append(detailBlock)
@@ -278,7 +286,7 @@ router.on('/registration', async function (e) {
             })
 
 	const data = await response.json();
-	console.log(data, "----")
+	// console.log(data, "----")
 
 	// let formData = new FormData()
 	// 	formData.append('username', loginUsername[0].value);
@@ -307,7 +315,8 @@ router.on('/registration', async function (e) {
 		let registerPanel = document.querySelector("#register-panel")
 		let loginPanel = document.querySelector("#login-panel")
 		let profilePanel = document.querySelector("#profile-panel")
-		let LogoutPanel = document.querySelector("#logout-panel")
+		let accountPanel = document.querySelector("#account-panel")
+		let logoutPanel = document.querySelector("#logout-panel")
 
 
 		// let exp = token.access_token.split(" ")
@@ -330,10 +339,13 @@ router.on('/registration', async function (e) {
 			profilePanel.href = `/profile/${cookieId}`
 			profilePanel.classList.remove("profile-panel-hide")
 			profilePanel.classList.add("profile-panel")
-		
 
-			LogoutPanel.classList.remove("profile-panel-hide")
-        	LogoutPanel.classList.add("profile-panel")
+			accountPanel.href = `/kabinet/${cookieId}`
+			accountPanel.classList.remove("profile-panel-hide")
+			accountPanel.classList.add("profile-panel")
+		
+			logoutPanel.classList.remove("profile-panel-hide")
+        	logoutPanel.classList.add("profile-panel")
 
 			router.navigate("/")
 		}
@@ -373,7 +385,7 @@ router.on('/login', async function (e) {
 
 		// Array.from(regForm).forEach(async function (e) {
 
-		console.log(loginUsername[0].value, loginPassword[0].value)
+		// console.log(loginUsername[0].value, loginPassword[0].value)
 
 		let formData = new FormData()
 		formData.append('username', loginUsername[0].value);
@@ -383,12 +395,51 @@ router.on('/login', async function (e) {
 			{
 				method: 'POST',
 				body: formData,
-				headers: {"Authorization": "Bearer fgh" },
+				headers: {"Authorization": "Bearer"},
 				credentials: 'include'
 				})
 			const token = await response.json();
-			console.log(token.access_token)
+			// console.log(token.access_token)
+
+		let registerPanel = document.querySelector("#register-panel")
+		let loginPanel = document.querySelector("#login-panel")
+		let profilePanel = document.querySelector("#profile-panel")
+		let accountPanel = document.querySelector("#account-panel")
+		let logoutPanel = document.querySelector("#logout-panel")
+
+
+		// let exp = token.access_token.split(" ")
+		// let expToken = `${exp[0]}T${exp[1]}Z`
+		const currentDate = new Date().toISOString();
+
+		let decodedString = atob(document.cookie.split(".")[1]);
+        let exp = Object.values(JSON.parse(decodedString))[1]
+        let date = new Date(exp * 1000);
+        let expToken = date.toISOString()
+		// window.localStorage.setItem("expToken", expToken)
+		
+		if (currentDate < expToken){
+			registerPanel.classList.remove("profile-panel")
+			registerPanel.classList.add("profile-panel-hide")
+
+			loginPanel.classList.remove("profile-panel")
+			loginPanel.classList.add("profile-panel-hide")
+
+			let cookieId = document.cookie.split(";")[1].split("=")[1]
+			
+			profilePanel.href = `/profile/${cookieId}`
+			profilePanel.classList.remove("profile-panel-hide")
+			profilePanel.classList.add("profile-panel")
+
+			accountPanel.href = `/kabinet/${cookieId}`
+			accountPanel.classList.remove("profile-panel-hide")
+			accountPanel.classList.add("profile-panel")
+
+			logoutPanel.classList.remove("profile-panel-hide")
+        	logoutPanel.classList.add("profile-panel")
+
 			router.navigate("/")
+		}
 
 		});
   });
@@ -404,26 +455,29 @@ router.on('/login', async function (e) {
 	let registerPanel = document.querySelector("#register-panel")
 	let loginPanel = document.querySelector("#login-panel")
 	let profilePanel = document.querySelector("#profile-panel")
-	let LogoutPanel = document.querySelector("#logout-panel")
+	let accountPanel = document.querySelector("#account-panel")
+	let logoutPanel = document.querySelector("#logout-panel")
 
 	registerPanel.classList.remove("profile-panel-hide")
 	registerPanel.classList.add("profile-panel")
 
 	loginPanel.classList.remove("profile-panel-hide")
 	loginPanel.classList.add("profile-panel")
-
 	
 	profilePanel.classList.remove("profile-panel")
 	profilePanel.classList.add("profile-panel-hide")
 
-	LogoutPanel.classList.remove("profile-panel")
-	LogoutPanel.classList.add("profile-panel-hide")
+	accountPanel.classList.remove("profile-panel")
+	accountPanel.classList.add("profile-panel-hide")
+
+	logoutPanel.classList.remove("profile-panel")
+	logoutPanel.classList.add("profile-panel-hide")
 	
 	window.localStorage.removeItem('logout')
 
 	router.navigate("/")
 })
-	
+
 
 
 router.resolve();
@@ -434,10 +488,6 @@ window.addEventListener("keydown", (e)=>{
 		modalObj.classList.remove("open")
 	}
 })
-
-
-
-
 
 
 // app.innerHTML = ""

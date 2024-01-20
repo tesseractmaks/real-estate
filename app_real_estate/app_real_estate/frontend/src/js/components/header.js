@@ -77,17 +77,27 @@ export function headerTopRight(main_site) {
     let expToken;
     if (document.cookie){
         cookieId = document.cookie.split(";")[1].split("=")[1]
+        // console.log(cookieId,  "===1===", +cookieId, !(+cookieId))
+        if(!(+cookieId)){
+            cookieId = document.cookie.split(";")[0].split("=")[1]
+            // console.log(cookieId,  "===2===", +cookieId)
+        }
 
         let decodedString = atob(document.cookie.split(".")[1]);
-
+        
         let exp = Object.values(JSON.parse(decodedString))[1]
 
         let date = new Date(exp * 1000);
         expToken = date.toISOString()
-        console.log(expToken);
+        // console.log(expToken,"---3---");
         // console.log(document.cookie.split(".")[0],  "=====")
     }
+  
     
+    let aAccount = aIelements(`/kabinet/${cookieId}`, "n", "Account")
+    aAccount.classList.add("profile-panel-hide")
+    aAccount.id = "account-panel"
+
     let aProfile = aIelements(`/profile/${cookieId}`, "n", "Profile")
     aProfile.classList.add("profile-panel-hide")
     aProfile.id = "profile-panel"
@@ -145,11 +155,14 @@ export function headerTopRight(main_site) {
         aProfile.classList.remove("profile-panel-hide")
         aProfile.classList.add("profile-panel")
 
+        aAccount.classList.remove("profile-panel-hide")
+        aAccount.classList.add("profile-panel")
+
         aLogout.classList.remove("profile-panel-hide")
         aLogout.classList.add("profile-panel")
     }
 
-    divUserPanel.append(aRegister, aLogin, aProfile, aLogout)
+    divUserPanel.append(aRegister, aLogin, aAccount, aProfile, aLogout)
     topRight.append(topSocial, divUserPanel)
     return topRight
 };

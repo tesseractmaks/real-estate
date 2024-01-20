@@ -3,11 +3,14 @@ import json
 from pydantic import BaseModel, Field, ConfigDict
 from typing import Annotated
 
+from app_real_estate.models import AppRole
+
 
 class UserProfileSchema(BaseModel):
     model_config = ConfigDict(from_attributes=True)
     email: str
     id: int
+    roles: list[str] = [AppRole.ROLE_USER]
 
 
 class ProfileSchema(BaseModel):
@@ -33,7 +36,7 @@ class ProfileSchema(BaseModel):
 
 class ProfileResponseSchema(ProfileSchema):
     model_config = ConfigDict(from_attributes=True)
-    # id: int | None = None
+    id: int
     users: UserProfileSchema
 
 

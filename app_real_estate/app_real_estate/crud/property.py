@@ -1,9 +1,10 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, update, func
 from sqlalchemy.engine import Result
+from sqlalchemy.orm import selectinload
 from fastapi_pagination.ext.sqlalchemy import paginate
 from sqlalchemy.ext.asyncio import AsyncResult
-from app_real_estate.models import Property
+from app_real_estate.models import Property, User
 from app_real_estate.schemas import (
     PropertySchema,
     PropertyCreateSchema,
@@ -25,8 +26,10 @@ async def read_properties_db(session: AsyncSession, property_filter: PropertyFil
         property_filter.category_id = None
     if property_filter.bedrooms == 0:
         property_filter.bedrooms = None
+    print("--1--", property_filter)
 
-    stmt = property_filter.filter(select(Property))
+    stmt = property_filter.filter(select(Property).options(selectinload(Property.users), selectinload(Property.categories)))
+    # stmt = property_filter.filter(select(Property))
     return paginate(session, stmt)
 
 
@@ -38,7 +41,11 @@ async def sidebar_properties_db(session: AsyncSession) -> list[PropertySchema]:
 
 
 async def read_property_by_id_db(session: AsyncSession, property_id: int) -> PropertySchema | None:
-    return await session.get(Property, property_id)
+
+    query = select(Property).where(Property.id == property_id).options(selectinload(Property.users), selectinload(Property.categories))
+    result: AsyncResult = await session.execute(query)
+    property_ = result.unique().scalar_one()
+    return property_
 
 
 async def create_property_db(session: AsyncSession, property_in: PropertyCreateSchema) -> Property:

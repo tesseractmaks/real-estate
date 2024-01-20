@@ -203,9 +203,10 @@ export async function detailNew(detailData) {
                     })
             });
         const data = await response.json();
-        // console.log(data)
-        router.navigate("/")
-        window.location.reload();
+        console.log(collectResponse.bedrooms,"--.")
+        console.log(data,"-=-")
+        // router.navigate("/")
+        // window.location.reload();
     });
 
 
