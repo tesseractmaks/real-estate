@@ -5,7 +5,7 @@ RUN mkdir "app"
 WORKDIR /app
 
 COPY ./package.json ./package.json
-COPY ./src ./src
+COPY ./src/ ./src/
 
 
 RUN npm i
@@ -17,4 +17,4 @@ RUN npm build
 FROM nginx_estate_app
 
 COPY --from=BUILD /app/ /nginx/static/
-COPY --from=BUILD /app/src /nginx/static/
+COPY --from=BUILD /app/src/ /nginx/static/src/
