@@ -1,10 +1,7 @@
 import { anyIelements, aElements, anyElement } from "../components/elements.js"
 
-
-
 export function chatForm() {
     
-
     let mainDiv = anyElement("div")
     mainDiv.setAttribute("id", "chat-bl")
 
@@ -71,14 +68,38 @@ function closeForm() {
 
 export async function wSocket(ws) {
     let chatForm = document.querySelector("#cht-form")
-        // console.log(chatForm.textarea.value,"=-=")
+    // console.log(chatForm.msg.value,"=-=")
+    let username;
+    if (document.cookie){
+        let decodedString = atob(document.cookie.split(".")[1]);
+        let usernameCookie = Object.values(JSON.parse(decodedString))
+        // console.log(usernameCookie, "--")
+        if(String(usernameCookie).match(/@/)[0]){
+            username = usernameCookie[0]
+            if(!String(usernameCookie[0]).match(/@/)[0]){
+                username = usernameCookie[1]
+            }
+
+         
+            console.log(username)
+        }
+        else {
+                username = "anonymous"
+            };
+    }else {
+        username = "anonymous"
+    };
+    console.log(username)
 
     // ws.send(chatForm.textarea.value)
-    ws.send(chatForm.msg.value)
+    ws.send(JSON.stringify({"message": chatForm.msg.value, "username": username}))
 
    
     ws.onclose = async function() {
         console.log("Close  -Track   Websockett!!!!!!!!11")
     }
 }
+
+
+
 

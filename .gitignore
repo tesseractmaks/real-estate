@@ -8,7 +8,8 @@
 # Ignore Logs
 logs.
 *.log
-
+p.py
+pp.py
 # other
 lesson_api/less_1/probe.py
 __pycache__
@@ -26,3 +27,4 @@ practic/
 node_*/
 dist/
 img/
+tests/

@@ -1,18 +1,19 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = {
     entry: "./src/index.js",
-    mode: 'development',
+    mode: 'production',
     output: {
         filename: "main.js",
         publicPath: "/",
     },
 
-    devServer: {
-        allowedHosts: "127.0.0.1",
-        host: "127.0.0.1",
-        port: 3000,
-      },
+    // devServer: {
+    //     allowedHosts: "127.0.0.1",
+    //     host: "127.0.0.1",
+    //     port: 3000,
+    //   },
     
     module: {
         rules: [
@@ -22,11 +23,12 @@ module.exports = {
             },
             {
                 test: /\.css$/i,
-                use: ["style-loader", "css-loader"],
+                use: [MiniCssExtractPlugin.loader, "css-loader"],
             },
         ]
     },
     plugins: [
-        new HtmlWebpackPlugin()
+        new HtmlWebpackPlugin(),
+        new MiniCssExtractPlugin()
     ],
 };

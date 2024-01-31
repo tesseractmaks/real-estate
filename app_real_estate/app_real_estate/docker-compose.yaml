@@ -1,0 +1,91 @@
+version: "1"
+
+services:
+  real_estate_front_app:
+    build:
+      context: ./frontend/
+    container_name: real-estate-front-api
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
+    stdin_open: true
+    tty: true
+    environment:
+      POSTGRES_DB: "estate_db"
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+
+    env_file:
+      - ./.env
+    depends_on:
+      estate_db:
+        condition: service_healthy
+
+  real_estate_app:
+    build:
+      context: ./
+    container_name: real-estate-api
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
+    stdin_open: true
+    tty: true
+    environment:
+      POSTGRES_DB: "estate_db"
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+  
+    env_file:
+      - ./.env
+    depends_on:
+      estate_db:
+        condition: service_healthy
+
+  estate_db:
+    build:
+      context: ./backend/db_docker-conf/
+    container_name: real-estate
+    environment:
+      POSTGRES_HOST: "estate_db"
+      POSTGRES_DB: "estate_db"
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    env_file:
+      - ./.env
+    ports:
+      - "5433:5432"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -d estate_db -U estate"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - pg_estate_db:/var/lib/postgresql/data
+
+  mongo:
+    image: mongo
+    restart: unless-stopped
+    ports:
+      - "27018:27017"
+    volumes:
+      - ./db_mongo:/data/db
+
+  nginx_estate_app:
+    image: nginx:latest
+    container_name: nginx-estate-app
+    ports:
+      - 81:80
+
+  redis_estate:
+    image: redis:7
+    container_name: estate-redis
+    ports:
+      - 6378:6379
+
+volumes:
+  pg_estate_db:
+  db_mongo:
+
+
+

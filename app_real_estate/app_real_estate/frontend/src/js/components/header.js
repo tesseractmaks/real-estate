@@ -76,6 +76,7 @@ export function headerTopRight(main_site) {
     let cookieId;
     let expToken;
     if (document.cookie){
+
         cookieId = document.cookie.split(";")[1].split("=")[1]
         // console.log(cookieId,  "===1===", +cookieId, !(+cookieId))
         if(!(+cookieId)){
@@ -218,12 +219,24 @@ export function mainMenu(main_site) {
 
         const dots = document.querySelector('#dots')
 
-        rowRsv.classList.add("chat-msg-rsv")
-      
-        if (recived_msg) {
-            rowRsv.textContent = recived_msg
+        
+        let cleanMsg = JSON.parse(recived_msg)
+        rowRsv.textContent = cleanMsg["username"] + ": " + cleanMsg["message"]
+
+        console.log(cleanMsg["is_me"],"++")
+        if (cleanMsg["is_me"]) {
+            console.log(cleanMsg["is_me"],"--")
+            rowRsv.classList.add("chat-msg-send")
             dots.append(rowRsv)
-        }
+           
+        }else{
+            rowRsv.classList.add("chat-msg-rsv")
+            dots.append(rowRsv)
+            
+        };
+            
+        
+        
 
         // rowSnd.classList.add("chat-msg-send")
         // rowSnd.textContent = chatForm.msg.value

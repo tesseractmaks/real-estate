@@ -3,13 +3,14 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "build": "webpack"
+    "build": "webpack --mode=production"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "css-loader": "^6.8.1",
     "html-webpack-plugin": "^5.5.4",
+    "mini-css-extract-plugin": "^2.7.7",
     "navigo": "^8.11.1",
     "style-loader": "^3.3.3",
     "webpack": "^5.89.0",
