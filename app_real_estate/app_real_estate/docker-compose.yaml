@@ -5,13 +5,28 @@ services:
     build:
       context: ./frontend
     container_name: real-estate-front-app
-    ports:
-      - "80:80"
     restart: unless-stopped
+    command: serve -s dist -l 3000
+    stdin_open: true
+    tty: true
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend/src:/usr/src/app/src
     depends_on:
       - real_estate_app
+
+  nginx_estate_app:
+    image: nginx:latest
+    container_name: nginx-estate-app
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    depends_on:
+      - real_estate_front_app
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
+
 
   real_estate_app:
     build:
@@ -66,11 +81,12 @@ services:
     image: redis:7
     container_name: estate-redis
     ports:
-      - 6378:6379
+      - "6378:6379"
 
 volumes:
   pg_estate_db:
   db_mongo:
+  frontend:
 
 
 

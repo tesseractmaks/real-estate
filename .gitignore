@@ -21,10 +21,10 @@ db.*
 media/
 # config  files
 auth.py
-*.env
+#*.env
 p.py
 practic/
 node_*/
-dist/
-img/
+#dist/
+#img/
 tests/

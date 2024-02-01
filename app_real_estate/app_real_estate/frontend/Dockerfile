@@ -1,4 +1,4 @@
-FROM node:18 AS BUILD
+FROM node:18
 
 RUN mkdir "app"
 
@@ -8,12 +8,15 @@ COPY ./package.json ./package.json
 
 RUN npm i
 
+RUN npm i -D webpack webpack-cli
+
+RUN npm i serve -g
+
 COPY ./ ./
 
 RUN npm run build
 
 
-FROM nginx
-COPY --from=BUILD /app/dist /nginx/
-COPY --from=BUILD /app/src /nginx/static/src
+
+
 
